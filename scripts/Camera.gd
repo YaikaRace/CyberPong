@@ -63,3 +63,6 @@ func shake(duration, frequency, amplitude):
 	set_offset(get_offset() - _last_offset)
 	_last_offset = Vector2(0, 0)
 	set_process(true)
+
+func stop_timer():
+	_timer = 0.0

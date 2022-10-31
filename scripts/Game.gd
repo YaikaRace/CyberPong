@@ -3,11 +3,12 @@ onready var ball = $"%Ball"
 onready var up_barrier = $"%up_barrier"
 onready var down_barrier = $"%down_barrier"
 onready var world_environment = $WorldEnvironment
+onready var animation_player = $AnimationPlayer
 
 var started = false
 var initial_player
 var rng = RandomNumberGenerator.new()
-var initial_speed = 100
+var initial_speed = 150
 
 func _ready():
 	up_barrier.modulate = Color(1, 1, 1, 0.5)
@@ -23,7 +24,9 @@ func _physics_process(delta):
 		ball.position
 		if Input.is_action_just_pressed("ui_accept"):
 			started = true
-			ball.linear_velocity = Vector2(1, 1) * initial_speed
+			rng.randomize()
+			var initial_y = rng.randi_range(-initial_speed, initial_speed)
+			ball.linear_velocity = Vector2(initial_speed, initial_y)
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().reload_current_scene()
 
@@ -44,3 +47,18 @@ func randomize_player():
 func _input(event):
 	if event is InputEventScreenTouch:
 		Input.action_press("ui_accept")
+
+
+func _on_Area2D_body_entered(body):
+	$Particles2D.modulate = Color(1.1, 1, 1.05)
+	$Particles2D.global_position.y = ball.global_position.y
+	animation_player.play("explosion1")
+	yield(animation_player, "animation_finished")
+	animation_player.play("end")
+	yield(animation_player, "animation_finished")
+	get_tree().reload_current_scene()
+
+
+func _on_Area2D2_body_entered(body):
+	$Particles2D.global_position.x = 0
+	$Particles2D.modulate = Color(1, 1.08, 1.1)

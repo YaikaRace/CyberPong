@@ -22,6 +22,11 @@ func _physics_process(delta):
 		motion.y = 0
 	move_and_collide(motion)
 
+func hit():
+	var tween = create_tween()
+	var module = modulate + Color(1, 1, 1, 1)
+	tween.parallel().tween_property(self, "modulate", module, 0).connect("finished", self, "_on_modulate_tween_finished", [self])
+
 func _input(event):
 	if event is InputEventScreenDrag:
 		if player == 1:

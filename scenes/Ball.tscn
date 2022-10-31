@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/primitives2d/circle2d.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Ball.gd" type="Script" id=2]
@@ -6,10 +6,25 @@
 [sub_resource type="PhysicsMaterial" id=2]
 bounce = 1.0
 
+[sub_resource type="Curve" id=6]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.125767 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=7]
+curve = SubResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 6.0
+scale_curve = SubResource( 7 )
+
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.0
 
 [node name="Ball" type="RigidBody2D"]
+mode = 2
 physics_material_override = SubResource( 2 )
 gravity_scale = 0.0
 contacts_reported = 1
@@ -17,6 +32,13 @@ contact_monitor = true
 linear_damp = 0.0
 angular_damp = 0.0
 script = ExtResource( 2 )
+
+[node name="Particles2D" type="Particles2D" parent="."]
+modulate = Color( 1.1, 1.1, 1.1, 1 )
+amount = 50
+lifetime = 0.2
+local_coords = false
+process_material = SubResource( 5 )
 
 [node name="Circle2D" type="Node2D" parent="."]
 script = ExtResource( 1 )
@@ -26,19 +48,19 @@ filled = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
-[node name="D" type="RayCast2D" parent="."]
+[node name="D" type="RayCast2D" parent="." groups=["ray"]]
 enabled = true
 cast_to = Vector2( 0, 12 )
 
-[node name="U" type="RayCast2D" parent="."]
+[node name="U" type="RayCast2D" parent="." groups=["ray"]]
 enabled = true
 cast_to = Vector2( 0, -12 )
 
-[node name="R" type="RayCast2D" parent="."]
+[node name="R" type="RayCast2D" parent="." groups=["ray"]]
 enabled = true
 cast_to = Vector2( 12, 0 )
 
-[node name="L" type="RayCast2D" parent="."]
+[node name="L" type="RayCast2D" parent="." groups=["ray"]]
 enabled = true
 cast_to = Vector2( -12, 0 )
 

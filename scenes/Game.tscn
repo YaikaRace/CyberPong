@@ -1,9 +1,29 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scenes/Ball.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/Game.gd" type="Script" id=3]
 [ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Curve" id=8]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=9]
+curve = SubResource( 8 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 141.01
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 720.0
+angle_random = 1.0
+scale = 10.0
+scale_curve = SubResource( 9 )
+hue_variation = 0.1
+hue_variation_random = 0.3
 
 [sub_resource type="Shader" id=3]
 code = "// chromatic aberration
@@ -44,6 +64,128 @@ glow_blend_mode = 0
 glow_bicubic_upscale = true
 glow_high_quality = true
 
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 16, 90 )
+
+[sub_resource type="Animation" id=10]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Particles2D:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("ColorRect2:rect_position:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("ColorRect2:rect_position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=12]
+resource_name = "end"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("ColorRect2:rect_position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( -320, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("ColorRect2:rect_position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5 )
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "explosion1"
+length = 1.5
+tracks/0/type = "method"
+tracks/0/path = NodePath("Camera")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "stop_timer"
+}, {
+"args": [ 0.5, 37.0, 2.0 ],
+"method": "shake"
+}, {
+"args": [ 0.2, 80.0, 5.0 ],
+"method": "shake"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Particles2D:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.8 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "init"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("ColorRect2:rect_position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 320, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("ColorRect2:rect_position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5 )
+}
+
 [node name="Game" type="Node2D"]
 script = ExtResource( 3 )
 
@@ -53,7 +195,22 @@ margin_right = 328.0
 margin_bottom = 180.0
 color = Color( 0, 0, 0, 1 )
 
-[node name="Players" type="Node" parent="."]
+[node name="Particles2D" type="Particles2D" parent="."]
+position = Vector2( 320, 88 )
+emitting = false
+amount = 100
+lifetime = 1.5
+one_shot = true
+explosiveness = 0.8
+process_material = SubResource( 5 )
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+margin_right = 88.0
+margin_bottom = 14.0
+text = "aaaaaaaaaaa"
+
+[node name="Players" type="Node2D" parent="."]
 unique_name_in_owner = true
 
 [node name="Player1" parent="Players" instance=ExtResource( 2 )]
@@ -84,23 +241,18 @@ self_modulate = Color( 0, 0.952941, 1, 1 )
 
 [node name="aberration" type="ColorRect" parent="Players"]
 unique_name_in_owner = true
+visible = false
 material = SubResource( 4 )
 margin_left = -8.0
 margin_right = 328.0
 margin_bottom = 180.0
 color = Color( 1, 1, 1, 0 )
 
-[node name="Ball" parent="." instance=ExtResource( 1 )]
-unique_name_in_owner = true
-modulate = Color( 1.1, 1.1, 1.1, 1 )
-position = Vector2( 26, 88 )
-z_index = 1
-
-[node name="Circle2D" parent="Ball" index="0"]
-modulate = Color( 1.1, 1.1, 1.1, 1 )
-
 [node name="StaticBody2D" type="StaticBody2D" parent="." groups=["barrier"]]
 position = Vector2( 160, -7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 1 )
 
 [node name="up_barrier" type="ColorRect" parent="StaticBody2D"]
 unique_name_in_owner = true
@@ -111,11 +263,11 @@ margin_top = -10.0
 margin_right = 160.0
 margin_bottom = 10.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource( 1 )
-
 [node name="StaticBody2D2" type="StaticBody2D" parent="." groups=["barrier"]]
 position = Vector2( 160, 187 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+shape = SubResource( 1 )
 
 [node name="down_barrier" type="ColorRect" parent="StaticBody2D2"]
 unique_name_in_owner = true
@@ -126,22 +278,51 @@ margin_top = -10.0
 margin_right = 160.0
 margin_bottom = 10.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
-shape = SubResource( 1 )
-
 [node name="Camera" parent="." instance=ExtResource( 4 )]
 unique_name_in_owner = true
-visible = false
 position = Vector2( 160, 90 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 2 )
 
-[node name="Label" type="Label" parent="."]
+[node name="Ball" parent="." instance=ExtResource( 1 )]
 unique_name_in_owner = true
-margin_right = 88.0
-margin_bottom = 14.0
-text = "aaaaaaaaaaa"
+modulate = Color( 1.1, 1.1, 1.1, 1 )
+position = Vector2( 26, 88 )
+
+[node name="Circle2D" parent="Ball" index="1"]
+modulate = Color( 1.1, 1.1, 1.1, 1 )
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2( 337, 88 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0, 2 )
+shape = SubResource( 6 )
+
+[node name="Area2D2" type="Area2D" parent="."]
+position = Vector2( -17, 88 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2"]
+position = Vector2( 0, 2 )
+shape = SubResource( 6 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "init"
+anims/RESET = SubResource( 10 )
+anims/end = SubResource( 12 )
+anims/explosion1 = SubResource( 7 )
+anims/init = SubResource( 11 )
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+anchor_right = 0.802
+margin_right = 320.0
+margin_bottom = 180.0
+color = Color( 0, 0, 0, 1 )
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_entered" from="Area2D2" to="." method="_on_Area2D2_body_entered"]
+[connection signal="body_entered" from="Area2D2" to="." method="_on_Area2D_body_entered"]
 
 [editable path="Players/Player1"]
 [editable path="Players/Player2"]
