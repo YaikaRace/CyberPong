@@ -15,7 +15,7 @@ func _on_CheckButton_toggled(button_pressed):
 
 
 func _on_Button_pressed():
-	get_tree().change_scene("res://scenes/Game.tscn")
+	get_tree().change_scene("res://scenes/Gamecfg.tscn")
 
 
 func _on_CheckButton2_toggled(button_pressed):

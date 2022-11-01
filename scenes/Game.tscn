@@ -1,9 +1,12 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://scenes/Ball.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/Game.gd" type="Script" id=3]
 [ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=4]
+[ext_resource path="res://fonts/dynamic/pixel.tres" type="DynamicFont" id=5]
+[ext_resource path="res://sounds/explosion.wav" type="AudioStream" id=6]
+[ext_resource path="res://scenes/Brick.tscn" type="PackedScene" id=7]
 
 [sub_resource type="Curve" id=8]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
@@ -22,38 +25,12 @@ angle = 720.0
 angle_random = 1.0
 scale = 10.0
 scale_curve = SubResource( 9 )
-hue_variation = 0.1
-hue_variation_random = 0.3
-
-[sub_resource type="Shader" id=3]
-code = "// chromatic aberration
-//---------------------------------
-
-shader_type canvas_item;
-
-uniform vec2 r_displacement = vec2(3.0, 0.0);
-uniform vec2 g_displacement = vec2(0.0, 0.0);
-uniform vec2 b_displacement = vec2(-3.0, 0.0);
-
-
-void fragment()
-{
-	float r = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_displacement), 0.0).r;
-	float g = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_displacement), 0.0).g;
-	float b = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_displacement), 0.0).b;
-	
-	COLOR = vec4(r, g, b, 1.0);
-}"
-
-[sub_resource type="ShaderMaterial" id=4]
-render_priority = 10
-shader = SubResource( 3 )
-shader_param/r_displacement = Vector2( 3, 0 )
-shader_param/g_displacement = Vector2( -3, -5 )
-shader_param/b_displacement = Vector2( 0, 0 )
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 160, 10 )
+
+[sub_resource type="RectangleShape2D" id=14]
+extents = Vector2( 48, 28 )
 
 [sub_resource type="Environment" id=2]
 background_mode = 4
@@ -101,6 +78,18 @@ tracks/2/keys = {
 "points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0 )
 }
+tracks/3/type = "value"
+tracks/3/path = NodePath("Particles2D2:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
 
 [sub_resource type="Animation" id=12]
 resource_name = "end"
@@ -128,7 +117,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id=7]
 resource_name = "explosion1"
-length = 1.5
+length = 0.7
 tracks/0/type = "method"
 tracks/0/path = NodePath("Camera")
 tracks/0/interp = 1
@@ -136,14 +125,11 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "stop_timer"
-}, {
-"args": [ 0.5, 37.0, 2.0 ],
-"method": "shake"
 }, {
 "args": [ 0.2, 80.0, 5.0 ],
 "method": "shake"
@@ -156,7 +142,40 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.8 ),
+"times": PoolRealArray( 0.1 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+
+[sub_resource type="Animation" id=13]
+resource_name = "explosion2"
+length = 0.7
+tracks/0/type = "method"
+tracks/0/path = NodePath("Camera")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "stop_timer"
+}, {
+"args": [ 0.2, 80.0, 5.0 ],
+"method": "shake"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Particles2D2:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.1 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ true ]
@@ -186,6 +205,33 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.5 )
 }
 
+[sub_resource type="Shader" id=3]
+code = "// chromatic aberration
+//---------------------------------
+
+shader_type canvas_item;
+
+uniform vec2 r_displacement = vec2(3.0, 0.0);
+uniform vec2 g_displacement = vec2(0.0, 0.0);
+uniform vec2 b_displacement = vec2(-3.0, 0.0);
+
+
+void fragment()
+{
+	float r = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*r_displacement), 0.0).r;
+	float g = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*g_displacement), 0.0).g;
+	float b = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(SCREEN_PIXEL_SIZE*b_displacement), 0.0).b;
+	
+	COLOR = vec4(r, g, b, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+render_priority = 10
+shader = SubResource( 3 )
+shader_param/r_displacement = Vector2( 3, 0 )
+shader_param/g_displacement = Vector2( -3, -5 )
+shader_param/b_displacement = Vector2( 0, 0 )
+
 [node name="Game" type="Node2D"]
 script = ExtResource( 3 )
 
@@ -196,9 +242,20 @@ margin_bottom = 180.0
 color = Color( 0, 0, 0, 1 )
 
 [node name="Particles2D" type="Particles2D" parent="."]
+modulate = Color( 1.3, 1, 1.2, 1 )
 position = Vector2( 320, 88 )
 emitting = false
-amount = 100
+amount = 50
+lifetime = 1.5
+one_shot = true
+explosiveness = 0.8
+process_material = SubResource( 5 )
+
+[node name="Particles2D2" type="Particles2D" parent="."]
+modulate = Color( 1.1, 1.28, 1.3, 1 )
+position = Vector2( 0, 88 )
+emitting = false
+amount = 50
 lifetime = 1.5
 one_shot = true
 explosiveness = 0.8
@@ -206,9 +263,46 @@ process_material = SubResource( 5 )
 
 [node name="Label" type="Label" parent="."]
 unique_name_in_owner = true
-margin_right = 88.0
-margin_bottom = 14.0
+margin_left = 2.0
+margin_top = 3.0
+margin_right = 90.0
+margin_bottom = 17.0
+custom_fonts/font = ExtResource( 5 )
 text = "aaaaaaaaaaa"
+
+[node name="bricks2" type="Node2D" parent="."]
+
+[node name="Brick" parent="bricks2" instance=ExtResource( 7 )]
+position = Vector2( 330, 18 )
+
+[node name="Brick2" parent="bricks2" instance=ExtResource( 7 )]
+position = Vector2( 330, 54 )
+
+[node name="Brick3" parent="bricks2" instance=ExtResource( 7 )]
+position = Vector2( 330, 90 )
+
+[node name="Brick4" parent="bricks2" instance=ExtResource( 7 )]
+position = Vector2( 330, 126 )
+
+[node name="Brick5" parent="bricks2" instance=ExtResource( 7 )]
+position = Vector2( 330, 162 )
+
+[node name="bricks1" type="Node2D" parent="."]
+
+[node name="Brick" parent="bricks1" instance=ExtResource( 7 )]
+position = Vector2( -10, 18 )
+
+[node name="Brick2" parent="bricks1" instance=ExtResource( 7 )]
+position = Vector2( -10, 54 )
+
+[node name="Brick3" parent="bricks1" instance=ExtResource( 7 )]
+position = Vector2( -10, 90 )
+
+[node name="Brick4" parent="bricks1" instance=ExtResource( 7 )]
+position = Vector2( -10, 126 )
+
+[node name="Brick5" parent="bricks1" instance=ExtResource( 7 )]
+position = Vector2( -10, 162 )
 
 [node name="Players" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -239,15 +333,6 @@ self_modulate = Color( 0, 0.929412, 1, 1 )
 [node name="CollisionShape2D" parent="Players/Player2" index="1"]
 self_modulate = Color( 0, 0.952941, 1, 1 )
 
-[node name="aberration" type="ColorRect" parent="Players"]
-unique_name_in_owner = true
-visible = false
-material = SubResource( 4 )
-margin_left = -8.0
-margin_right = 328.0
-margin_bottom = 180.0
-color = Color( 1, 1, 1, 0 )
-
 [node name="StaticBody2D" type="StaticBody2D" parent="." groups=["barrier"]]
 position = Vector2( 160, -7 )
 
@@ -277,6 +362,21 @@ margin_left = -160.0
 margin_top = -10.0
 margin_right = 160.0
 margin_bottom = 10.0
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." groups=["barrier"]]
+position = Vector2( 160, 92 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+shape = SubResource( 14 )
+
+[node name="middle_barrier" type="ColorRect" parent="StaticBody2D3"]
+unique_name_in_owner = true
+modulate = Color( 1, 1.3, 1.2, 1 )
+self_modulate = Color( 0, 1, 0.486275, 1 )
+margin_left = -48.0
+margin_top = -28.0
+margin_right = 48.0
+margin_bottom = 28.0
 
 [node name="Camera" parent="." instance=ExtResource( 4 )]
 unique_name_in_owner = true
@@ -312,17 +412,41 @@ autoplay = "init"
 anims/RESET = SubResource( 10 )
 anims/end = SubResource( 12 )
 anims/explosion1 = SubResource( 7 )
+anims/explosion2 = SubResource( 13 )
 anims/init = SubResource( 11 )
 
+[node name="Label2" type="Label" parent="."]
+margin_left = 140.0
+margin_top = 5.0
+margin_right = 180.0
+margin_bottom = 13.0
+custom_fonts/font = ExtResource( 5 )
+text = "0 - 0"
+
 [node name="ColorRect2" type="ColorRect" parent="."]
+visible = false
 anchor_right = 0.802
 margin_right = 320.0
 margin_bottom = 180.0
 color = Color( 0, 0, 0, 1 )
 
+[node name="aberration" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+material = SubResource( 4 )
+margin_left = -8.0
+margin_right = 328.0
+margin_bottom = 180.0
+color = Color( 1, 1, 1, 0 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+volume_db = -12.0
+pitch_scale = 0.9
+bus = "Explosion"
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_entered" from="Area2D2" to="." method="_on_Area2D2_body_entered"]
-[connection signal="body_entered" from="Area2D2" to="." method="_on_Area2D_body_entered"]
 
 [editable path="Players/Player1"]
 [editable path="Players/Player2"]

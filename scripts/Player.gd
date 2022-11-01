@@ -6,7 +6,7 @@ export var left = "ui_left"
 export var right = "ui_right"
 export var player = 1
 
-var speed = 3
+var speed = 4.5
 var motion = Vector2(0, 0)
 var section = 160
 

@@ -1,0 +1,63 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/Gamecfg.gd" type="Script" id=1]
+
+[node name="Gamecfg" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+margin_right = 149.0
+margin_bottom = 108.0
+
+[node name="Button" type="Button" parent="ScrollContainer/VBoxContainer"]
+margin_right = 149.0
+margin_bottom = 20.0
+text = "Start"
+
+[node name="Rounds" type="Label" parent="ScrollContainer/VBoxContainer"]
+margin_top = 24.0
+margin_right = 149.0
+margin_bottom = 38.0
+text = "Rounds"
+
+[node name="OptionButton" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
+margin_top = 42.0
+margin_right = 149.0
+margin_bottom = 62.0
+text = "Unlimited"
+items = [ "Best of 3", null, false, 0, null, "First of 3", null, false, 1, null, "Best of 5", null, false, 2, null, "First of 5", null, false, 3, null, "Unlimited", null, false, 4, null ]
+selected = 4
+
+[node name="Modifiers" type="Label" parent="ScrollContainer/VBoxContainer"]
+margin_top = 66.0
+margin_right = 149.0
+margin_bottom = 80.0
+text = "Modifiers"
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
+margin_top = 84.0
+margin_right = 149.0
+margin_bottom = 108.0
+columns = 4
+
+[node name="Obstacle" type="CheckBox" parent="ScrollContainer/VBoxContainer/GridContainer"]
+margin_right = 85.0
+margin_bottom = 24.0
+text = "Obstacle"
+
+[node name="Brick" type="CheckBox" parent="ScrollContainer/VBoxContainer/GridContainer"]
+margin_left = 89.0
+margin_right = 149.0
+margin_bottom = 24.0
+text = "Brick"
+
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/Button" to="." method="_on_Button_pressed"]
+[connection signal="item_selected" from="ScrollContainer/VBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/GridContainer/Obstacle" to="." method="_on_Obstacle_toggled"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/GridContainer/Brick" to="." method="_on_Brick_toggled"]
