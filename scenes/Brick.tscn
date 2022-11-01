@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/Brick.gd" type="Script" id=1]
+[ext_resource path="res://sounds/explosion2.wav" type="AudioStream" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 18, 18 )
@@ -46,3 +47,9 @@ one_shot = true
 explosiveness = 1.0
 local_coords = false
 process_material = SubResource( 4 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+volume_db = -13.0
+pitch_scale = 2.55
+bus = "Breaking"

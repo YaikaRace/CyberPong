@@ -19,4 +19,4 @@ margin_bottom = 7.0
 stream = ExtResource( 2 )
 volume_db = -5.0
 autoplay = true
-bus = "Claps"
+bus = "Sfx"

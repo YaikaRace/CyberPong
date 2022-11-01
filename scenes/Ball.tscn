@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://addons/primitives2d/circle2d.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Ball.gd" type="Script" id=2]
 [ext_resource path="res://sounds/impact2.wav" type="AudioStream" id=3]
+[ext_resource path="res://sounds/plop.wav" type="AudioStream" id=4]
 
 [sub_resource type="PhysicsMaterial" id=2]
 friction = 0.0
@@ -26,6 +27,8 @@ scale_curve = SubResource( 7 )
 radius = 5.0
 
 [node name="Ball" type="RigidBody2D" groups=["ball"]]
+collision_layer = 3
+collision_mask = 3
 mode = 2
 physics_material_override = SubResource( 2 )
 gravity_scale = 0.0
@@ -55,5 +58,11 @@ stream = ExtResource( 3 )
 volume_db = -5.0
 pitch_scale = 1.5
 bus = "Impact"
+
+[node name="barrier_impact" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+volume_db = -20.0
+pitch_scale = 2.0
+bus = "Plop"
 
 [connection signal="body_entered" from="." to="." method="_on_Ball_body_entered"]

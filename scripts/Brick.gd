@@ -33,5 +33,6 @@ func hit():
 			$Particles2D.restart()
 			$Particles2D.emitting
 			$CollisionShape2D.disabled = true
+			$AudioStreamPlayer.play()
 			yield(get_tree().create_timer(2),"timeout")
 			queue_free()

@@ -9,7 +9,8 @@ var config = {
 var game_opt = {
 	rounds = 0,
 	mode = 4,
-	modifiers = []
+	modifiers = [],
+	obstacle = 0
 }
 var player1_points = 0
 var player2_points = 0

@@ -29,15 +29,6 @@ func limit_velocity():
 func _on_Ball_body_entered(body):
 	if body.is_in_group("Player"):
 		$Impact.play()
-		rng.randomize()
-		var exclude = range(-45, 46)
-		var velocity_y = 0
-		while exclude.has(velocity_y):
-			velocity_y = rng.randi_range(-200, 200)
-		if body.name == $"%Player1".name:
-			linear_velocity = Vector2(350, velocity_y)
-		elif body.name == $"%Player2".name:
-			linear_velocity = Vector2(-350, velocity_y)
 	$"%Camera".shake(0.2, abs(linear_velocity.x + 1) / 4, 2)
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_LINEAR)
@@ -45,8 +36,13 @@ func _on_Ball_body_entered(body):
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(-5, -5), 0)
 	if body.is_in_group("barrier"):
 		tween.parallel().tween_property(body.get_child(1), "modulate", Color(1.2, 1.2, 1.2, 1), 0).connect("finished", self, "_on_barrier_tween_finished", [body])
+		$barrier_impact.play()
 	if body.is_in_group("brick"):
 		body.hit()
+		$barrier_impact.play()
+	if body.is_in_group("obstacle"):
+		body.impact()
+		$barrier_impact.play()
 
 func _on_barrier_tween_finished(body):
 	var tween = create_tween()

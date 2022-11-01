@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/Gamecfg.gd" type="Script" id=1]
+[ext_resource path="res://scenes/Game.tscn" type="PackedScene" id=2]
+
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("ViewportContainer/Viewport")
 
 [node name="Gamecfg" type="Control"]
 anchor_right = 1.0
@@ -47,17 +51,60 @@ margin_bottom = 108.0
 columns = 4
 
 [node name="Obstacle" type="CheckBox" parent="ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
 margin_right = 85.0
 margin_bottom = 24.0
 text = "Obstacle"
 
+[node name="obs_sel" type="OptionButton" parent="ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+visible = false
+margin_left = 89.0
+margin_right = 180.0
+margin_bottom = 24.0
+text = "Rectangle"
+items = [ "Rectangle", null, false, 0, null, "U shape", null, false, 1, null, "Stairs", null, false, 2, null, "Cross", null, false, 3, null ]
+selected = 0
+
 [node name="Brick" type="CheckBox" parent="ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
 margin_left = 89.0
 margin_right = 149.0
 margin_bottom = 24.0
 text = "Brick"
 
+[node name="ViewportContainer" type="ViewportContainer" parent="."]
+pause_mode = 1
+margin_left = 321.0
+margin_right = 641.0
+margin_bottom = 180.0
+
+[node name="Viewport" type="Viewport" parent="ViewportContainer"]
+pause_mode = 1
+size = Vector2( 320, 180 )
+size_override_stretch = true
+own_world = true
+handle_input_locally = false
+render_target_v_flip = true
+render_target_update_mode = 3
+gui_disable_input = true
+
+[node name="Game" parent="ViewportContainer/Viewport" instance=ExtResource( 2 )]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = 188.0
+margin_top = 114.0
+margin_right = 320.0
+margin_bottom = 180.0
+texture = SubResource( 1 )
+expand = true
+stretch_mode = 6
+flip_v = true
+
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Button" to="." method="_on_Button_pressed"]
 [connection signal="item_selected" from="ScrollContainer/VBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
+[connection signal="gui_input" from="ScrollContainer/VBoxContainer/GridContainer/Obstacle" to="." method="_on_gui_input"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/GridContainer/Obstacle" to="." method="_on_Obstacle_toggled"]
+[connection signal="item_selected" from="ScrollContainer/VBoxContainer/GridContainer/obs_sel" to="." method="_on_obs_sel_item_selected"]
+[connection signal="gui_input" from="ScrollContainer/VBoxContainer/GridContainer/Brick" to="." method="_on_gui_input"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/GridContainer/Brick" to="." method="_on_Brick_toggled"]

@@ -1,4 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=5 format=2]
+[gd_resource type="AudioBusLayout" load_steps=12 format=2]
 
 [sub_resource type="AudioEffectDelay" id=2]
 resource_name = "Delay"
@@ -19,6 +19,46 @@ wet = 0.15
 resource_name = "Reverb"
 room_size = 0.5
 wet = 0.15
+
+[sub_resource type="AudioEffectReverb" id=6]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 0.6
+wet = 0.3
+
+[sub_resource type="AudioEffectFilter" id=7]
+resource_name = "Filter"
+cutoff_hz = 1000.0
+
+[sub_resource type="AudioEffectLimiter" id=8]
+resource_name = "Limiter"
+ceiling_db = -13.3
+threshold_db = -30.0
+soft_clip_db = 6.0
+
+[sub_resource type="AudioEffectReverb" id=9]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectFilter" id=10]
+resource_name = "Filter"
+resonance = 0.3
+gain = 0.35
+
+[sub_resource type="AudioEffectLimiter" id=11]
+resource_name = "Limiter"
+ceiling_db = -13.3
+threshold_db = -30.0
+soft_clip_db = 0.0
+
+[sub_resource type="AudioEffectCompressor" id=12]
+resource_name = "Compressor"
+threshold = -20.7
+ratio = 13.4
+attack_us = 200.0
+release_ms = 450.0
 
 [resource]
 bus/1/name = "Sfx"
@@ -47,9 +87,29 @@ bus/3/volume_db = 0.0
 bus/3/send = "Sfx"
 bus/3/effect/0/effect = SubResource( 4 )
 bus/3/effect/0/enabled = true
-bus/4/name = "Claps"
+bus/4/name = "Breaking"
 bus/4/solo = false
 bus/4/mute = false
 bus/4/bypass_fx = false
 bus/4/volume_db = 0.0
 bus/4/send = "Sfx"
+bus/4/effect/0/effect = SubResource( 6 )
+bus/4/effect/0/enabled = true
+bus/4/effect/1/effect = SubResource( 7 )
+bus/4/effect/1/enabled = true
+bus/4/effect/2/effect = SubResource( 8 )
+bus/4/effect/2/enabled = true
+bus/5/name = "Plop"
+bus/5/solo = false
+bus/5/mute = false
+bus/5/bypass_fx = false
+bus/5/volume_db = 0.0
+bus/5/send = "Sfx"
+bus/5/effect/0/effect = SubResource( 9 )
+bus/5/effect/0/enabled = true
+bus/5/effect/1/effect = SubResource( 10 )
+bus/5/effect/1/enabled = true
+bus/5/effect/2/effect = SubResource( 11 )
+bus/5/effect/2/enabled = true
+bus/5/effect/3/effect = SubResource( 12 )
+bus/5/effect/3/enabled = true

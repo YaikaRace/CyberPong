@@ -12,6 +12,14 @@ var rng = RandomNumberGenerator.new()
 var initial_speed = 200
 var keys = ["ui_accept", "0"]
 var init_key
+var obstacles = [
+	preload("res://scenes/obstacles/barrier_middle.tscn"),
+	preload("res://scenes/obstacles/midle_u.tscn"),
+	preload("res://scenes/obstacles/Stairs.tscn"),
+	preload("res://scenes/obstacles/Cross.tscn")
+	]
+enum obstacles_idx {RECTANGLE, U, STAIRS, CROSS}
+var can_move = false
 
 onready var mode = Global.game_opt.mode
 onready var modes = Global.modes
@@ -19,11 +27,13 @@ onready var rounds = Global.game_opt.rounds
 onready var player1 = Global.player1_points
 onready var player2 = Global.player2_points
 onready var modifiers = Global.game_opt.modifiers
+onready var obstacle = Global.game_opt.obstacle
 
 func _ready():
+	if get_tree().current_scene.name == "Game":
+		can_move = true
 	up_barrier.modulate = Color(1, 1, 1, 0.5)
 	down_barrier.modulate = Color(1, 1, 1, 0.5)
-	$"%middle_barrier".modulate = Color(1, 1, 1, 0.5)
 	world_environment.environment.glow_enabled = Global.config.hd
 	$"%Label".visible = Global.config.fps
 	$"%aberration".visible = Global.config.shaders
@@ -31,14 +41,15 @@ func _ready():
 	if not "bricks" in modifiers:
 		$bricks1.queue_free()
 		$bricks2.queue_free()
-	if not "obstacle" in modifiers:
-		$"%middle_barrier".queue_free()
+	if "obstacle" in modifiers:
+		add_obstacle()
 	randomize_player()
 	pass
 
 func _physics_process(delta):
-	check_start()
-	check_mode()
+	if can_move:
+		check_start()
+		check_mode()
 	
 
 func _process(delta):
@@ -145,3 +156,10 @@ func mode_first_of():
 		Global.winner = "Player 2"
 	if player1 == rounds or player2 == rounds:
 		get_tree().change_scene("res://scenes/WinnerScreen.tscn")
+
+func add_obstacle():
+	if obstacles.empty():
+		return
+	var new_obstacle = obstacles[obstacle].instance()
+	new_obstacle.position = $obstacle/obstacle_pos.position
+	$obstacle.add_child(new_obstacle)
