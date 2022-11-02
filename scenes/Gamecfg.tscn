@@ -1,60 +1,82 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/Gamecfg.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Game.tscn" type="PackedScene" id=2]
+[ext_resource path="res://theme/UI.tres" type="Theme" id=3]
+[ext_resource path="res://scenes/Modifier.tscn" type="PackedScene" id=7]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("ViewportContainer/Viewport")
 
+[sub_resource type="Environment" id=13]
+background_mode = 4
+glow_enabled = true
+glow_intensity = 5.0
+glow_strength = 0.96
+glow_blend_mode = 0
+glow_hdr_threshold = 0.71
+glow_bicubic_upscale = true
+glow_high_quality = true
+
 [node name="Gamecfg" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = ExtResource( 3 )
 script = ExtResource( 1 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ColorRect" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchor_left = 0.025
+anchor_top = 0.05
+anchor_right = 0.6
+anchor_bottom = 1.0
+margin_top = -1.0
+margin_right = -16.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
-margin_right = 149.0
-margin_bottom = 108.0
+margin_right = 144.0
+margin_bottom = 94.0
 
 [node name="Button" type="Button" parent="ScrollContainer/VBoxContainer"]
-margin_right = 149.0
-margin_bottom = 20.0
+margin_right = 144.0
+margin_bottom = 14.0
 text = "Start"
 
 [node name="Rounds" type="Label" parent="ScrollContainer/VBoxContainer"]
-margin_top = 24.0
-margin_right = 149.0
-margin_bottom = 38.0
+margin_top = 18.0
+margin_right = 144.0
+margin_bottom = 26.0
 text = "Rounds"
 
 [node name="OptionButton" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
-margin_top = 42.0
-margin_right = 149.0
-margin_bottom = 62.0
+margin_top = 30.0
+margin_right = 144.0
+margin_bottom = 42.0
 text = "Unlimited"
 items = [ "Best of 3", null, false, 0, null, "First of 3", null, false, 1, null, "Best of 5", null, false, 2, null, "First of 5", null, false, 3, null, "Unlimited", null, false, 4, null ]
 selected = 4
 
 [node name="Modifiers" type="Label" parent="ScrollContainer/VBoxContainer"]
-margin_top = 66.0
-margin_right = 149.0
-margin_bottom = 80.0
+margin_top = 46.0
+margin_right = 144.0
+margin_bottom = 54.0
 text = "Modifiers"
 
 [node name="GridContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
-margin_top = 84.0
-margin_right = 149.0
-margin_bottom = 108.0
-columns = 4
+margin_top = 58.0
+margin_right = 144.0
+margin_bottom = 94.0
+columns = 2
 
-[node name="Obstacle" type="CheckBox" parent="ScrollContainer/VBoxContainer/GridContainer"]
+[node name="obstacle" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 7 )]
 unique_name_in_owner = true
-margin_right = 85.0
-margin_bottom = 24.0
-text = "Obstacle"
+margin_right = 86.0
+margin_bottom = 16.0
+text = "obstacle"
 
 [node name="obs_sel" type="OptionButton" parent="ScrollContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
@@ -63,15 +85,22 @@ margin_left = 89.0
 margin_right = 180.0
 margin_bottom = 24.0
 text = "Rectangle"
-items = [ "Rectangle", null, false, 0, null, "U shape", null, false, 1, null, "Stairs", null, false, 2, null, "Cross", null, false, 3, null ]
+items = [ "Rectangle", null, false, 0, null, "U shape", null, false, 1, null, "Triangle", null, false, 2, null, "Cross", null, false, 3, null ]
 selected = 0
 
-[node name="Brick" type="CheckBox" parent="ScrollContainer/VBoxContainer/GridContainer"]
+[node name="brick" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 7 )]
 unique_name_in_owner = true
-margin_left = 89.0
-margin_right = 149.0
-margin_bottom = 24.0
-text = "Brick"
+margin_left = 90.0
+margin_right = 144.0
+margin_bottom = 16.0
+text = "brick"
+
+[node name="fast_ball" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 7 )]
+unique_name_in_owner = true
+margin_top = 20.0
+margin_right = 86.0
+margin_bottom = 36.0
+text = "fast ball"
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 pause_mode = 1
@@ -92,19 +121,78 @@ gui_disable_input = true
 [node name="Game" parent="ViewportContainer/Viewport" instance=ExtResource( 2 )]
 
 [node name="TextureRect" type="TextureRect" parent="."]
-margin_left = 188.0
-margin_top = 114.0
-margin_right = 320.0
-margin_bottom = 180.0
+margin_left = 184.0
+margin_top = 110.0
+margin_right = 312.0
+margin_bottom = 176.0
 texture = SubResource( 1 )
 expand = true
 stretch_mode = 6
 flip_v = true
 
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+anchor_left = 0.575
+anchor_top = 0.044
+anchor_right = 0.975
+anchor_bottom = 0.489
+margin_left = -1.52588e-05
+margin_top = 0.0799994
+margin_bottom = -8.02
+custom_constants/separation = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
+margin_right = 128.0
+margin_bottom = 14.0
+
+[node name="Host" type="Button" parent="VBoxContainer2/HBoxContainer"]
+margin_right = 35.0
+margin_bottom = 14.0
+text = "Host"
+
+[node name="Join" type="Button" parent="VBoxContainer2/HBoxContainer"]
+margin_left = 39.0
+margin_right = 74.0
+margin_bottom = 14.0
+text = "Join"
+
+[node name="ip" type="Label" parent="VBoxContainer2"]
+margin_top = 18.0
+margin_right = 128.0
+margin_bottom = 26.0
+text = "Join IP"
+
+[node name="Join_ip" type="LineEdit" parent="VBoxContainer2"]
+margin_top = 30.0
+margin_right = 128.0
+margin_bottom = 43.0
+size_flags_vertical = 3
+text = "444"
+
+[node name="Label" type="Label" parent="VBoxContainer2"]
+margin_top = 47.0
+margin_right = 128.0
+margin_bottom = 55.0
+text = "Join / Host Port"
+
+[node name="join_host_port" type="LineEdit" parent="VBoxContainer2"]
+margin_top = 59.0
+margin_right = 128.0
+margin_bottom = 72.0
+size_flags_vertical = 3
+
+[node name="Back" type="Button" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = -18.0
+margin_right = 44.0
+margin_bottom = -4.0
+text = "Back"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 13 )
+
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Button" to="." method="_on_Button_pressed"]
 [connection signal="item_selected" from="ScrollContainer/VBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
-[connection signal="gui_input" from="ScrollContainer/VBoxContainer/GridContainer/Obstacle" to="." method="_on_gui_input"]
-[connection signal="toggled" from="ScrollContainer/VBoxContainer/GridContainer/Obstacle" to="." method="_on_Obstacle_toggled"]
 [connection signal="item_selected" from="ScrollContainer/VBoxContainer/GridContainer/obs_sel" to="." method="_on_obs_sel_item_selected"]
-[connection signal="gui_input" from="ScrollContainer/VBoxContainer/GridContainer/Brick" to="." method="_on_gui_input"]
-[connection signal="toggled" from="ScrollContainer/VBoxContainer/GridContainer/Brick" to="." method="_on_Brick_toggled"]
+[connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]

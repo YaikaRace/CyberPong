@@ -2,7 +2,7 @@ extends RigidBody2D
 
 onready var aberration = $"%aberration"
 
-const MAX_VELOCITY = 250
+var max_velocity = 250
 var previous_velocity = Vector2.ZERO
 var rng = RandomNumberGenerator.new()
 var started = false
@@ -16,15 +16,15 @@ func _physics_process(delta):
 	limit_velocity()
 
 func limit_velocity():
-	if linear_velocity.x > MAX_VELOCITY:
+	if linear_velocity.x > max_velocity:
 		linear_velocity.x -= 1
-	if linear_velocity.y > MAX_VELOCITY:
+	if linear_velocity.y > max_velocity:
 		linear_velocity.y -= 1
 	if started:
-		if linear_velocity.x >= 0 and linear_velocity.x < MAX_VELOCITY:
-			linear_velocity.x = MAX_VELOCITY
-		if linear_velocity.x <= 0 and linear_velocity.x > -MAX_VELOCITY:
-			linear_velocity.x = -MAX_VELOCITY
+		if linear_velocity.x >= 0 and linear_velocity.x < max_velocity:
+			linear_velocity.x = max_velocity
+		if linear_velocity.x <= 0 and linear_velocity.x > -max_velocity:
+			linear_velocity.x = -max_velocity
 
 func _on_Ball_body_entered(body):
 	if body.is_in_group("Player"):

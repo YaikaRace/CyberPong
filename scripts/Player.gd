@@ -11,6 +11,7 @@ var motion = Vector2(0, 0)
 var section = 160
 var can_move = false
 var rng = RandomNumberGenerator.new()
+var ball_impulse = 350
 
 onready var up_col = $up_col
 onready var middle_col = $middle_col
@@ -61,6 +62,6 @@ func impulse_ball(from: int, to: int, body):
 	rng.randomize()
 	var velocity_y = 0
 	velocity_y = rng.randi_range(from, to)
-	body.linear_velocity = Vector2(350, velocity_y)
+	body.linear_velocity = Vector2(ball_impulse, velocity_y)
 	if self.name == "Player2":
-		body.linear_velocity = Vector2(-350, velocity_y)
+		body.linear_velocity = Vector2(-ball_impulse, velocity_y)

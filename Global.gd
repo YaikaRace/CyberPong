@@ -2,7 +2,7 @@ extends Node
 
 enum modes {BEST3, FIRST3, BEST5, FIRST5, UNLIMITED}
 var config = {
-	hd = true,
+	glow = true,
 	fps = false,
 	shaders = true
 }

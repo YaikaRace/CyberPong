@@ -18,7 +18,7 @@ var obstacles = [
 	preload("res://scenes/obstacles/Stairs.tscn"),
 	preload("res://scenes/obstacles/Cross.tscn")
 	]
-enum obstacles_idx {RECTANGLE, U, STAIRS, CROSS}
+enum obstacles_idx {RECTANGLE, U, TRIANGLE, CROSS}
 var can_move = false
 
 onready var mode = Global.game_opt.mode
@@ -30,19 +30,7 @@ onready var modifiers = Global.game_opt.modifiers
 onready var obstacle = Global.game_opt.obstacle
 
 func _ready():
-	if get_tree().current_scene.name == "Game":
-		can_move = true
-	up_barrier.modulate = Color(1, 1, 1, 0.5)
-	down_barrier.modulate = Color(1, 1, 1, 0.5)
-	world_environment.environment.glow_enabled = Global.config.hd
-	$"%Label".visible = Global.config.fps
-	$"%aberration".visible = Global.config.shaders
-	$Label2.text = String(player1) + " - " + String(player2)
-	if not "bricks" in modifiers:
-		$bricks1.queue_free()
-		$bricks2.queue_free()
-	if "obstacle" in modifiers:
-		add_obstacle()
+	init_game()
 	randomize_player()
 	pass
 
@@ -54,6 +42,25 @@ func _physics_process(delta):
 
 func _process(delta):
 	$"%Label".text = String(1/delta)
+
+func init_game():
+	if get_tree().current_scene.name == "Game":
+		can_move = true
+	up_barrier.modulate = Color(1, 1, 1, 0.5)
+	down_barrier.modulate = Color(1, 1, 1, 0.5)
+	world_environment.environment.glow_enabled = Global.config.glow
+	$"%Label".visible = Global.config.fps
+	$"%aberration".visible = Global.config.shaders
+	$Label2.text = String(player1) + " - " + String(player2)
+	if not "brick" in modifiers:
+		$bricks1.queue_free()
+		$bricks2.queue_free()
+	if "obstacle" in modifiers:
+		add_obstacle()
+	if "fast_ball" in modifiers:
+		ball.max_velocity = 350
+		for player in $Players.get_children():
+			player.ball_impulse = 450
 
 func randomize_player():
 	match Global.scored_player:

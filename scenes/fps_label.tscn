@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/fps_label.gd" type="Script" id=1]
+
+[node name="fps_label" type="Label"]
+unique_name_in_owner = true
+margin_top = 165.0
+margin_right = 88.0
+margin_bottom = 179.0
+text = "aaaaaaaaaaa"
+script = ExtResource( 1 )
