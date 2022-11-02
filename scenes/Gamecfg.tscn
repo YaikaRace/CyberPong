@@ -36,6 +36,7 @@ anchor_right = 0.6
 anchor_bottom = 1.0
 margin_top = -1.0
 margin_right = -16.0
+margin_bottom = -27.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 margin_right = 144.0
@@ -131,6 +132,7 @@ stretch_mode = 6
 flip_v = true
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
+visible = false
 anchor_left = 0.575
 anchor_top = 0.044
 anchor_right = 0.975
@@ -140,9 +142,16 @@ margin_top = 0.0799994
 margin_bottom = -8.02
 custom_constants/separation = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
+[node name="lan_multi" type="Label" parent="VBoxContainer2"]
 margin_right = 128.0
-margin_bottom = 14.0
+margin_bottom = 19.0
+text = "Local Network Multiplayer"
+autowrap = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
+margin_top = 23.0
+margin_right = 128.0
+margin_bottom = 37.0
 
 [node name="Host" type="Button" parent="VBoxContainer2/HBoxContainer"]
 margin_right = 35.0
@@ -156,29 +165,36 @@ margin_bottom = 14.0
 text = "Join"
 
 [node name="ip" type="Label" parent="VBoxContainer2"]
-margin_top = 18.0
+margin_top = 41.0
 margin_right = 128.0
-margin_bottom = 26.0
+margin_bottom = 49.0
 text = "Join IP"
 
 [node name="Join_ip" type="LineEdit" parent="VBoxContainer2"]
-margin_top = 30.0
+margin_top = 53.0
 margin_right = 128.0
-margin_bottom = 43.0
+margin_bottom = 62.0
 size_flags_vertical = 3
 text = "444"
 
 [node name="Label" type="Label" parent="VBoxContainer2"]
-margin_top = 47.0
+margin_top = 66.0
 margin_right = 128.0
-margin_bottom = 55.0
+margin_bottom = 74.0
 text = "Join / Host Port"
 
 [node name="join_host_port" type="LineEdit" parent="VBoxContainer2"]
-margin_top = 59.0
+margin_top = 78.0
 margin_right = 128.0
-margin_bottom = 72.0
+margin_bottom = 87.0
 size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="."]
+margin_left = 220.0
+margin_top = 97.0
+margin_right = 276.0
+margin_bottom = 105.0
+text = "Preview"
 
 [node name="Back" type="Button" parent="."]
 anchor_top = 1.0

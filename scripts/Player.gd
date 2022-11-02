@@ -16,6 +16,7 @@ var ball_impulse = 350
 onready var up_col = $up_col
 onready var middle_col = $middle_col
 onready var down_col = $down_col
+onready var rectangle = $Rectangle2D
 
 
 func _ready():

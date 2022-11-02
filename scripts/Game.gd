@@ -6,6 +6,7 @@ onready var world_environment = $WorldEnvironment
 onready var animation_player = $AnimationPlayer
 onready var explosions = [$Particles2D, $Particles2D2]
 
+
 var started = false
 var initial_player
 var rng = RandomNumberGenerator.new()
@@ -30,11 +31,16 @@ onready var modifiers = Global.game_opt.modifiers
 onready var obstacle = Global.game_opt.obstacle
 
 func _ready():
+	$"%Player1".rectangle.self_modulate = Global.config.Player1.color
+	$"%Player2".rectangle.self_modulate = Global.config.Player2.color
+	$Particles2D.self_modulate = Global.config.Player1.color
+	$Particles2D2.self_modulate = Global.config.Player2.color
 	init_game()
 	randomize_player()
 	pass
 
 func _physics_process(delta):
+	world_environment.environment.glow_enabled = Global.config.glow
 	if can_move:
 		check_start()
 		check_mode()
@@ -123,8 +129,6 @@ func check_start():
 			var initial_y = rng.randi_range(-initial_speed, initial_speed)
 			ball.linear_velocity = Vector2(initial_speed, initial_y)
 			ball.get_child(0).emitting = true
-	if Input.is_action_just_pressed("ui_cancel"):
-		get_tree().reload_current_scene()
 
 func check_mode():
 	match mode:

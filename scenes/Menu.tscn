@@ -30,20 +30,26 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -40.0
-margin_top = -31.0
-margin_right = 40.0
-margin_bottom = 31.0
+margin_left = -45.5
+margin_top = -25.0
+margin_right = 45.5
+margin_bottom = 25.0
 
-[node name="Start" type="Button" parent="HFlowContainer"]
-margin_right = 80.0
+[node name="Local" type="Button" parent="HFlowContainer"]
+margin_right = 91.0
 margin_bottom = 14.0
-text = "Start"
+text = "Local"
+
+[node name="Multiplayer" type="Button" parent="HFlowContainer"]
+margin_top = 18.0
+margin_right = 91.0
+margin_bottom = 32.0
+text = "Multiplayer"
 
 [node name="Config" type="Button" parent="HFlowContainer"]
-margin_top = 18.0
-margin_right = 80.0
-margin_bottom = 32.0
+margin_top = 36.0
+margin_right = 91.0
+margin_bottom = 50.0
 text = "Config"
 
 [node name="fps_label" parent="." instance=ExtResource( 3 )]
@@ -51,5 +57,5 @@ text = "Config"
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
 
-[connection signal="pressed" from="HFlowContainer/Start" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="HFlowContainer/Local" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="HFlowContainer/Config" to="." method="_on_Config_pressed"]

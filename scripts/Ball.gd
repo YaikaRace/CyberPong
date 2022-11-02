@@ -29,6 +29,8 @@ func limit_velocity():
 func _on_Ball_body_entered(body):
 	if body.is_in_group("Player"):
 		$Impact.play()
+		$Circle2D.color = body.rectangle.self_modulate
+		$Particles2D.self_modulate = body.rectangle.self_modulate
 	$"%Camera".shake(0.2, abs(linear_velocity.x + 1) / 4, 2)
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_LINEAR)
