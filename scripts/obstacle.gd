@@ -3,6 +3,8 @@ extends StaticBody2D
 onready var color_obs = get_tree().get_nodes_in_group("color_obs")
 
 func _ready():
+	for node in color_obs:
+		node.self_modulate = Color(0, 0.439216, 1)
 	pass 
 
 func impact():

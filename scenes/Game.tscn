@@ -408,7 +408,10 @@ unique_name_in_owner = true
 modulate = Color( 1.1, 1.1, 1.1, 1 )
 position = Vector2( 26, 88 )
 
-[node name="Circle2D" parent="Ball" index="1"]
+[node name="Circle2D2" parent="Ball" index="1"]
+modulate = Color( 1.1, 1.1, 1.1, 1 )
+
+[node name="Circle2D" parent="Ball" index="2"]
 modulate = Color( 1.1, 1.1, 1.1, 1 )
 
 [node name="Area2D" type="Area2D" parent="."]

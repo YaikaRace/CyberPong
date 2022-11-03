@@ -25,4 +25,11 @@ var scored_player
 
 
 func _ready():
-	pass
+	var file = File.new()
+	if file.file_exists("user://game_options"):
+		file.open("user://game_options", File.READ)
+		var data = {}
+		var text = file.get_as_text()
+		data = parse_json(text)
+		game_opt = str2var(data)
+		file.close()

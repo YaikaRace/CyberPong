@@ -45,6 +45,11 @@ lifetime = 0.2
 local_coords = false
 process_material = SubResource( 5 )
 
+[node name="Circle2D2" type="Node2D" parent="."]
+script = ExtResource( 1 )
+radius = 7.0
+filled = true
+
 [node name="Circle2D" type="Node2D" parent="."]
 script = ExtResource( 1 )
 radius = 5.0

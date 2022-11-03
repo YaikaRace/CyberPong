@@ -67,6 +67,10 @@ func init_game():
 		ball.max_velocity = 350
 		for player in $Players.get_children():
 			player.ball_impulse = 450
+	if "slow_ball" in modifiers:
+		ball.max_velocity = 150
+		for player in $Players.get_children():
+			player.ball_impulse = 175
 
 func randomize_player():
 	match Global.scored_player:
