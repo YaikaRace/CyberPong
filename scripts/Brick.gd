@@ -11,6 +11,7 @@ const colors = {
 	RED = Color(1, 0, 0.351563)
 }
 var modulate_color = Color(1.3, 1.3, 1.3, 1)
+var new_hit_allowed = true
 
 func _ready():
 	pass
@@ -36,9 +37,16 @@ func _physics_process(delta):
 				queue_free()
 
 func hit():
-	hits += 1
-	var tween = create_tween()
-	tween.set_trans(Tween.TRANS_LINEAR)
-	tween.tween_property(self, "modulate", modulate_color, 0)
-	tween.tween_property(self, "modulate", Color(1, 1, 1, .5), 2)
+	if new_hit_allowed:
+		hits += 1
+		var tween = create_tween()
+		tween.set_trans(Tween.TRANS_LINEAR)
+		tween.tween_property(self, "modulate", modulate_color, 0)
+		tween.tween_property(self, "modulate", Color(1, 1, 1, .5), 2)
+		$Timer.start(1.5)
+		new_hit_allowed = false
 	
+
+
+func _on_Timer_timeout():
+	new_hit_allowed = true

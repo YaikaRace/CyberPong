@@ -19,11 +19,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/primitives2d/circle2d.gd"
 }, {
-"base": "EditorVCSInterface",
-"class": "GitAPI",
-"language": "NativeScript",
-"path": "res://addons/godot-git-plugin/git_api.gdns"
-}, {
 "base": "Node2D",
 "class": "Rectangle2D",
 "language": "GDScript",
@@ -32,7 +27,6 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Arc2D": "",
 "Circle2D": "",
-"GitAPI": "",
 "Rectangle2D": ""
 }
 
@@ -67,7 +61,7 @@ enabled=PoolStringArray( "res://addons/primitives2d/plugin.cfg" )
 
 [gdnative]
 
-singletons=[ "res://addons/godot-git-plugin/git_api.gdnlib" ]
+singletons=[  ]
 
 [gui]
 

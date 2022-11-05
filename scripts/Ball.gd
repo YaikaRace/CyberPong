@@ -51,11 +51,10 @@ func _on_Ball_body_entered(body):
 	if body.is_in_group("Player"):
 		$Impact.play()
 		$Circle2D2.color = body.rectangle.self_modulate
+		$fire_particles.get_process_material().color = body.rectangle.self_modulate
 		$Particles2D.self_modulate = body.rectangle.self_modulate
 		last_player = body
-	if body.is_in_group("powerup"):
-		var texture = body.get_child(0).texture
-		last_player.power_up_picked(texture)
+		body.restart_glove()
 	camera.shake(0.2, abs(linear_velocity.x + 1) / 4, 2)
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(5,5), 0).connect("finished", self, "_on_player_tween_finished")
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(-5, -5), 0)
@@ -82,12 +81,29 @@ func _on_player_tween_finished():
 
 func check_powers():
 	if "Fast_ball" in powers:
-		$Circle2D2.color = Color(1, 0.447059, 0)
-		$Particles2D.self_modulate = Color(1, 0.447059, 0)
+		$Circle2D2.color = Color(0.6, 0.901961, 0.372549)
+		$Particles2D.self_modulate = Color(0.6, 0.901961, 0.372549)
+		$fire_particles.get_process_material().color = Color(0.6, 0.901961, 0.372549)
+		$fast_particles.emitting = true
 	else:
 		if last_player != null:
-			$Circle2D2.color = last_player.rectangle.self_modulate
-			$Particles2D.self_modulate = last_player.rectangle.self_modulate
+			$fast_particles.emitting = false
+			if not "Slow_ball" in powers:
+				$Circle2D2.color = last_player.rectangle.self_modulate
+				$Particles2D.self_modulate = last_player.rectangle.self_modulate
+				$fire_particles.get_process_material().color = last_player.rectangle.self_modulate
+	if "Slow_ball" in powers:
+		$Circle2D2.color = Color(0.960784, 0.333333, 0.364706)
+		$Particles2D.self_modulate = Color(0.960784, 0.333333, 0.364706)
+		$fire_particles.get_process_material().color = Color(0.960784, 0.333333, 0.364706)
+		$slow_particles.emitting = true
+	else:
+		if last_player != null:
+			$slow_particles.emitting = false
+			if not "Fast_ball" in powers:
+				$Circle2D2.color = last_player.rectangle.self_modulate
+				$Particles2D.self_modulate = last_player.rectangle.self_modulate
+				$fire_particles.get_process_material().color = last_player.rectangle.self_modulate
 	if "Bubble" in powers:
 		$"%bubble_s".visible = true
 		$"%bubbles".emitting = true
@@ -115,3 +131,6 @@ func check_powers():
 
 func _on_Timer_timeout():
 	powers.erase("Wings")
+
+func active_player_pup(texture, pup_name):
+	last_player.power_up_picked(texture, pup_name)

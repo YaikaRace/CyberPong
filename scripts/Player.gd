@@ -14,6 +14,7 @@ var can_move = false
 var rng = RandomNumberGenerator.new()
 var ball_impulse = 450
 var power_up = ""
+var glove_ball_chase = false
 
 onready var pup_picked_area = $up_power_up
 onready var up_col = $up_col
@@ -21,6 +22,7 @@ onready var middle_col = $middle_col
 onready var down_col = $down_col
 onready var rectangle = $Rectangle2D
 onready var ball = get_parent().get_node("%Ball")
+onready var ray = $RayCast2D
 
 
 func _ready():
@@ -39,6 +41,10 @@ func _physics_process(delta):
 		move_and_collide(motion)
 		if Input.is_action_just_pressed(pup_key):
 			use_power_up(power_up)
+		$boxing_glove/glove_pup.look_at(ball.position)
+		if glove_ball_chase:
+			var direction = ball.position - $boxing_glove/glove_pup.position
+			$boxing_glove/glove_pup.move_and_collide(direction * 350)
 
 func hit():
 	var tween = create_tween()
@@ -66,22 +72,34 @@ func _on_down_area_body_entered(body):
 	impulse_ball(46, 300, body)
 
 func impulse_ball(from: int, to: int, body):
-	rng.randomize()
-	var velocity_y = 0
-	velocity_y = rng.randi_range(from, to)
-	body.linear_velocity = Vector2(ball_impulse, velocity_y)
-	if self.name == "Player2":
-		body.linear_velocity = Vector2(-ball_impulse, velocity_y)
+	if body.is_in_group("ball"):
+		rng.randomize()
+		var velocity_y = 0
+		velocity_y = rng.randi_range(from, to)
+		body.linear_velocity = Vector2(ball_impulse, velocity_y)
+		if self.name == "Player2":
+			body.linear_velocity = Vector2(-ball_impulse, velocity_y)
 
-func power_up_picked(sprite):
-	var pup_area_sprite = pup_picked_area.get_child(0).get_child(0)
+func power_up_picked(sprite, pup_name):
+	if power_up == "":
+		var frames = SpriteFrames.new()
+		if pup_name != "Cloud":
+			frames.add_frame("default", sprite)
+		else:
+			frames = sprite
+		var pup_area_sprite = pup_picked_area.get_child(0).get_child(0)
+		var tween = create_tween()
+		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		tween.connect("finished", self, "_on_tween_finished", [pup_area_sprite])
+		pup_area_sprite.frames = frames
+		tween.tween_property(pup_area_sprite, "scale", Vector2(1, 1), 0.5)
+	
+
+func _on_tween_finished(sprite):
+	yield(get_tree().create_timer(1), "timeout")
 	var tween = create_tween()
-	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	pup_area_sprite.texture = sprite
-	tween.tween_property(pup_area_sprite, "scale", Vector2(1, 1), 0.5)
-	yield(tween, "finished")
-	yield(get_tree().create_timer(0.5),"timeout")
-	tween.tween_property(pup_area_sprite, "scale", Vector2(0, 0), 0.5)
+	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(sprite, "scale", Vector2(0, 0), 0.5)
 
 func add_powerup(path: String, pup_name: String):
 	if power_up == "":
@@ -117,7 +135,7 @@ func use_power_up(pup_name):
 			var previous_modulate = ball.modulate
 			tween.tween_property(ball, "modulate", Color(0.666667, 0.87451, 0.878431), 0.3)
 			yield(get_tree().create_timer(1),"timeout")
-			tween.tween_property(ball, "modulate", previous_modulate, 0.3)
+			tween.tween_property(ball, "modulate", Color(1, 1, 1, 1), 0.3)
 			ball.powers.erase("Freeze")
 			if ball.linear_velocity == Vector2.ZERO:
 				ball.linear_velocity = previous_velocity
@@ -131,16 +149,32 @@ func use_power_up(pup_name):
 					other_player = player_node
 			thunder.width = 2
 			thunder.add_point(position)
-			thunder.add_point(other_player.position)
+			if player == 1:
+				thunder.add_point(position + ray.cast_to)
+			elif player == 2:
+				thunder.add_point(position - ray.cast_to)
 			thunder.default_color = Color.gold
 			pups_render.add_child(thunder)
+			ray.enabled = true
 			yield(get_tree().create_timer(0.1), "timeout")
-			other_player.can_move = false
+			if ray.is_colliding():
+				if ray.get_collider() == other_player:
+					other_player.can_move = false
 			pups_render.remove_child(thunder)
+			ray.enabled = false
 			yield(get_tree().create_timer(0.9), "timeout")
 			other_player.can_move = true
+		"Boxing_glove":
+			$boxing_glove.visible = true
+			$boxing_glove/glove_pup/CollisionShape2D.disabled = false
+			glove_ball_chase = true
 			
 
+func restart_glove():
+	$boxing_glove.visible = false
+	$boxing_glove/glove_pup/CollisionShape2D.disabled = true
+	$boxing_glove/glove_pup.position = position
+	glove_ball_chase = false
 
 func _on_down_pup_body_entered(body):
 	if body.is_in_group("barrier"):

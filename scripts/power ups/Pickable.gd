@@ -12,6 +12,10 @@ func _ready():
 func _on_Freeze_body_entered(body):
 	if pickable:
 		if body.is_in_group("ball"):
+			if pup_name != "Cloud":
+				body.active_player_pup(get_child(0).texture, pup_name)
+			else:
+				body.active_player_pup(get_child(0).frames, pup_name)
 			body.last_player.add_powerup(path, pup_name)
 			queue_free()
 		

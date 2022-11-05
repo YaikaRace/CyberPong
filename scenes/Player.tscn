@@ -1,8 +1,8 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://addons/primitives2d/rectangle2d.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
-[ext_resource path="res://textures/power ups/fast ball.png" type="Texture" id=3]
+[ext_resource path="res://textures/power ups/glove.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 2, 11 )
@@ -16,7 +16,12 @@ extents = Vector2( 5, 24 )
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 8, 8 )
 
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 6.5, 7.5 )
+
 [node name="Player" type="KinematicBody2D" groups=["Player"]]
+collision_layer = 9
+collision_mask = 9
 script = ExtResource( 2 )
 
 [node name="Rectangle2D" type="Node2D" parent="."]
@@ -58,10 +63,10 @@ shape = SubResource( 3 )
 [node name="up_pup" type="Area2D" parent="up_power_up"]
 unique_name_in_owner = true
 
-[node name="Sprite" type="Sprite" parent="up_power_up/up_pup"]
+[node name="Sprite" type="AnimatedSprite" parent="up_power_up/up_pup"]
 position = Vector2( 0, -40 )
 scale = Vector2( 1e-05, 1e-05 )
-texture = ExtResource( 3 )
+playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="up_power_up/up_pup"]
 position = Vector2( 0, -40 )
@@ -72,14 +77,34 @@ shape = SubResource( 4 )
 [node name="down_pup" type="Area2D" parent="down_power_up"]
 unique_name_in_owner = true
 
-[node name="Sprite" type="Sprite" parent="down_power_up/down_pup"]
+[node name="Sprite" type="AnimatedSprite" parent="down_power_up/down_pup"]
 position = Vector2( 0, 40 )
 scale = Vector2( 1e-05, 1e-05 )
-texture = ExtResource( 3 )
+playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="down_power_up/down_pup"]
 position = Vector2( 0, 40 )
 shape = SubResource( 4 )
+
+[node name="boxing_glove" type="Node2D" parent="."]
+visible = false
+
+[node name="glove_pup" type="KinematicBody2D" parent="boxing_glove"]
+collision_layer = 16
+collision_mask = 16
+
+[node name="Glove" type="Sprite" parent="boxing_glove/glove_pup"]
+rotation = 1.5708
+texture = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="boxing_glove/glove_pup"]
+position = Vector2( -0.5, -23.5 )
+shape = SubResource( 5 )
+disabled = true
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+cast_to = Vector2( 600, 0 )
+collision_mask = 8
 
 [connection signal="body_entered" from="up_area" to="." method="_on_up_area_body_entered"]
 [connection signal="body_entered" from="middle_area" to="." method="_on_middle_area_body_entered"]

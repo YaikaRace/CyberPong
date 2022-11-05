@@ -141,7 +141,7 @@ pup_name = "Cloud"
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 32 )
-frame = 4
+frame = 26
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
