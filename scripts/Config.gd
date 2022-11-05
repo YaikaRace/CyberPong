@@ -14,6 +14,7 @@ func _process(delta):
 
 
 func _on_Back_pressed():
+	Global.save_config()
 	if get_tree().current_scene.name == "Config":
 		get_tree().change_scene("res://scenes/Menu.tscn")
 	else:

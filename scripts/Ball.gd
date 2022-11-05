@@ -1,11 +1,16 @@
 extends RigidBody2D
 
-onready var aberration = $"%aberration"
+onready var aberration = get_parent().get_node("%aberration")
+onready var camera = get_parent().get_node("%Camera")
 
-var max_velocity = 250
+var max_velocity = 350
 var previous_velocity = Vector2.ZERO
+var previous_modulate = modulate
 var rng = RandomNumberGenerator.new()
 var started = false
+var last_player
+var powers = []
+var new_time = 0.1
 
 func _ready():
 	aberration.get_material().set("shader_param/r_displacement", Vector2.ZERO)
@@ -14,9 +19,12 @@ func _ready():
 func _physics_process(delta):
 	if linear_velocity.x == 0:
 		$Circle2D2.visible = false
+		$fire_particles.emitting = false
 	else:
 		$Circle2D2.visible = true
+		$fire_particles.emitting = true
 	limit_velocity()
+	check_powers()
 
 func limit_velocity():
 	if linear_velocity.x > max_velocity:
@@ -24,20 +32,32 @@ func limit_velocity():
 	if linear_velocity.y > max_velocity:
 		linear_velocity.y -= 1
 	if started:
-		if linear_velocity.x >= 0 and linear_velocity.x < max_velocity:
-			linear_velocity.x = max_velocity
-		if linear_velocity.x <= 0 and linear_velocity.x > -max_velocity:
-			linear_velocity.x = -max_velocity
+		if not "Freeze" in powers:
+			if linear_velocity.x >= 0 and linear_velocity.x < max_velocity:
+				linear_velocity.x = max_velocity
+			if linear_velocity.x <= 0 and linear_velocity.x > -max_velocity:
+				linear_velocity.x = -max_velocity
 
 func _on_Ball_body_entered(body):
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_LINEAR)
+	powers.erase("Wings")
+	$wings.visible = false
+	if "Freeze" in powers:
+		linear_velocity = previous_velocity
+		tween.tween_property(self, "modulate", previous_modulate, 0.3)
+		powers.erase("Freeze")
+		powers.erase("Bubble")
 	if body.is_in_group("Player"):
 		$Impact.play()
 		$Circle2D2.color = body.rectangle.self_modulate
 		$Particles2D.self_modulate = body.rectangle.self_modulate
-	$"%Camera".shake(0.2, abs(linear_velocity.x + 1) / 4, 2)
-	var tween = create_tween()
-	tween.set_trans(Tween.TRANS_LINEAR)
-	tween.tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(5,5), 0).connect("finished", self, "_on_player_tween_finished")
+		last_player = body
+	if body.is_in_group("powerup"):
+		var texture = body.get_child(0).texture
+		last_player.power_up_picked(texture)
+	camera.shake(0.2, abs(linear_velocity.x + 1) / 4, 2)
+	tween.parallel().tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(5,5), 0).connect("finished", self, "_on_player_tween_finished")
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(-5, -5), 0)
 	if body.is_in_group("barrier"):
 		tween.parallel().tween_property(body.get_child(1), "modulate", Color(1.2, 1.2, 1.2, 1), 0).connect("finished", self, "_on_barrier_tween_finished", [body])
@@ -59,3 +79,39 @@ func _on_player_tween_finished():
 	tween.set_trans(Tween.TRANS_LINEAR)
 	tween.tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(0,0), 0.3)
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(0, 0), 0.3)
+
+func check_powers():
+	if "Fast_ball" in powers:
+		$Circle2D2.color = Color(1, 0.447059, 0)
+		$Particles2D.self_modulate = Color(1, 0.447059, 0)
+	else:
+		if last_player != null:
+			$Circle2D2.color = last_player.rectangle.self_modulate
+			$Particles2D.self_modulate = last_player.rectangle.self_modulate
+	if "Bubble" in powers:
+		$"%bubble_s".visible = true
+		$"%bubbles".emitting = true
+	else: 
+		$"%bubble_s".visible = false
+		$"%bubbles".emitting = false
+	if "Wings" in powers:
+		if $Timer.is_stopped():
+			$Timer.start(3)
+		previous_velocity.x = linear_velocity.x
+		rng.randomize()
+		var new_vel_y = rng.randi_range(-200, 200)
+		rng.randomize()
+		var new_vel_x = rng.randi_range(-450, 450)
+		$wings.visible = true
+		yield(get_tree().create_timer(new_time),"timeout")
+		if "Wings" in powers:
+			rng.randomize()
+			new_time = rng.randf_range(0.5, 0.8)
+			linear_velocity = Vector2(new_vel_x, new_vel_y)
+	elif not "Wings" in powers:
+		new_time = 0.1
+		
+
+
+func _on_Timer_timeout():
+	powers.erase("Wings")

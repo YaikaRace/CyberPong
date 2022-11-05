@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://scenes/Ball.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://sounds/explosion.wav" type="AudioStream" id=6]
 [ext_resource path="res://scenes/Brick.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/Pause_menu.tscn" type="PackedScene" id=8]
+[ext_resource path="res://fonts/dynamic/pixel-lg.tres" type="DynamicFont" id=9]
+[ext_resource path="res://addons/primitives2d/rectangle2d.gd" type="Script" id=10]
 
 [sub_resource type="Curve" id=8]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
@@ -28,7 +30,7 @@ scale = 10.0
 scale_curve = SubResource( 9 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 160, 10 )
+extents = Vector2( 160, 10.75 )
 
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 16, 90 )
@@ -54,7 +56,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"points": PoolRealArray( -80, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0 )
 }
 tracks/2/type = "bezier"
@@ -64,7 +66,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"points": PoolRealArray( -45, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0 )
 }
 tracks/3/type = "value"
@@ -89,7 +91,43 @@ tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
+"values": [ true ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Round:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
 "values": [ false ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Round:rect_position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 120, 85 ) ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("ColorRect2:rect_size")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 480, 270 ) ]
 }
 
 [sub_resource type="Animation" id=12]
@@ -102,7 +140,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"points": PoolRealArray( -320, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"points": PoolRealArray( -560, -0.25, 0, 0.25, 0, -80, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0, 0.5 )
 }
 tracks/1/type = "bezier"
@@ -112,7 +150,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"points": PoolRealArray( -45, -0.25, 0, 0.25, 0, -45, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0, 0.5 )
 }
 tracks/2/type = "value"
@@ -204,7 +242,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 320, -0.25, 0, 0.25, 0 ),
+"points": PoolRealArray( -80, -0.25, 0, 0.25, 0, 320, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0, 0.5 )
 }
 tracks/1/type = "bezier"
@@ -214,7 +252,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
+"points": PoolRealArray( -45, -0.25, 0, 0.25, 0, -45, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0, 0.5 )
 }
 tracks/2/type = "value"
@@ -228,6 +266,126 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ true, false ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "new_round"
+length = 1.7
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("ColorRect2:rect_position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( -80, -0.25, 0, 0.25, 0, 400, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 1, 1.5 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("ColorRect2:rect_position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( -45, -0.25, 0, 0.25, 0, -45, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 1, 1.5 )
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ColorRect2:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 1, 1.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Round:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 1.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Round:rect_position")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 1, 1.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 80, 85 ), Vector2( 146, 85 ), Vector2( 404, 85 ) ]
+}
+
+[sub_resource type="Animation" id=15]
+resource_name = "new_round_end"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("ColorRect2:rect_position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( -560, -0.25, 0, 0.25, 0, -80, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("ColorRect2:rect_position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( -45, -0.25, 0, 0.25, 0, -45, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.5 )
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ColorRect2:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Round:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Round:rect_position")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -200, 85 ), Vector2( 120, 85 ) ]
 }
 
 [sub_resource type="Shader" id=3]
@@ -270,14 +428,15 @@ glow_high_quality = true
 script = ExtResource( 3 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
-margin_left = -8.0
-margin_right = 328.0
-margin_bottom = 180.0
+margin_left = -80.0
+margin_top = -45.0
+margin_right = 400.0
+margin_bottom = 225.0
 color = Color( 0, 0, 0, 1 )
 
 [node name="Particles2D" type="Particles2D" parent="."]
 modulate = Color( 1.35, 1.35, 1.35, 1 )
-position = Vector2( 320, 88 )
+position = Vector2( 400, 88 )
 emitting = false
 amount = 50
 lifetime = 1.5
@@ -287,7 +446,7 @@ process_material = SubResource( 5 )
 
 [node name="Particles2D2" type="Particles2D" parent="."]
 modulate = Color( 1.35, 1.35, 1.35, 1 )
-position = Vector2( 0, 88 )
+position = Vector2( -80, 88 )
 emitting = false
 amount = 50
 lifetime = 1.5
@@ -297,46 +456,54 @@ process_material = SubResource( 5 )
 
 [node name="Label" type="Label" parent="."]
 unique_name_in_owner = true
-margin_left = 2.0
-margin_top = 3.0
-margin_right = 90.0
-margin_bottom = 17.0
+margin_left = -69.0
+margin_top = 188.0
+margin_right = 19.0
+margin_bottom = 202.0
 custom_fonts/font = ExtResource( 5 )
 text = "aaaaaaaaaaa"
 
 [node name="bricks2" type="Node2D" parent="."]
+position = Vector2( 80, 0 )
 
 [node name="Brick" parent="bricks2" instance=ExtResource( 7 )]
-position = Vector2( 330, 18 )
+position = Vector2( 330, -5 )
 
 [node name="Brick2" parent="bricks2" instance=ExtResource( 7 )]
-position = Vector2( 330, 54 )
+position = Vector2( 330, 33 )
 
 [node name="Brick3" parent="bricks2" instance=ExtResource( 7 )]
-position = Vector2( 330, 90 )
+position = Vector2( 330, 71 )
 
 [node name="Brick4" parent="bricks2" instance=ExtResource( 7 )]
-position = Vector2( 330, 126 )
+position = Vector2( 330, 109 )
 
 [node name="Brick5" parent="bricks2" instance=ExtResource( 7 )]
-position = Vector2( 330, 162 )
+position = Vector2( 330, 147 )
+
+[node name="Brick6" parent="bricks2" instance=ExtResource( 7 )]
+position = Vector2( 330, 185 )
 
 [node name="bricks1" type="Node2D" parent="."]
+position = Vector2( 80, 0 )
 
 [node name="Brick" parent="bricks1" instance=ExtResource( 7 )]
-position = Vector2( -10, 18 )
+position = Vector2( -170, -5 )
 
 [node name="Brick2" parent="bricks1" instance=ExtResource( 7 )]
-position = Vector2( -10, 54 )
+position = Vector2( -170, 33 )
 
 [node name="Brick3" parent="bricks1" instance=ExtResource( 7 )]
-position = Vector2( -10, 90 )
+position = Vector2( -170, 71 )
 
 [node name="Brick4" parent="bricks1" instance=ExtResource( 7 )]
-position = Vector2( -10, 126 )
+position = Vector2( -170, 109 )
 
 [node name="Brick5" parent="bricks1" instance=ExtResource( 7 )]
-position = Vector2( -10, 162 )
+position = Vector2( -170, 147 )
+
+[node name="Brick6" parent="bricks1" instance=ExtResource( 7 )]
+position = Vector2( -170, 185 )
 
 [node name="Players" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -344,11 +511,12 @@ unique_name_in_owner = true
 [node name="Player1" parent="Players" instance=ExtResource( 2 )]
 unique_name_in_owner = true
 modulate = Color( 1.1, 1, 1.05, 1 )
-position = Vector2( 16, 88 )
+position = Vector2( -64, 88 )
 up = "w"
 down = "s"
 left = "a"
 right = "d"
+pup_key = "space"
 
 [node name="Rectangle2D" parent="Players/Player1" index="0"]
 modulate = Color( 1.2, 1.2, 1.2, 1 )
@@ -357,41 +525,47 @@ self_modulate = Color( 1, 0, 0.584314, 1 )
 [node name="Player2" parent="Players" instance=ExtResource( 2 )]
 unique_name_in_owner = true
 modulate = Color( 1, 1.08, 1.1, 1 )
-position = Vector2( 304, 88 )
+position = Vector2( 384, 88 )
+scale = Vector2( -1, 1 )
 player = 2
+pup_key = "0"
 
 [node name="Rectangle2D" parent="Players/Player2" index="0"]
 modulate = Color( 1.2, 1.2, 1.2, 1 )
 self_modulate = Color( 0, 0.929412, 1, 1 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." groups=["barrier"]]
-position = Vector2( 160, -7 )
+position = Vector2( 160, -35 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 0, 0.5 )
+scale = Vector2( 1.5, 1 )
 shape = SubResource( 1 )
 
 [node name="up_barrier" type="ColorRect" parent="StaticBody2D"]
 unique_name_in_owner = true
 modulate = Color( 1, 1.2, 1.1, 1 )
 self_modulate = Color( 0, 1, 0.486275, 1 )
-margin_left = -160.0
+margin_left = -240.0
 margin_top = -10.0
-margin_right = 160.0
-margin_bottom = 10.0
+margin_right = 240.0
+margin_bottom = 11.0
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="." groups=["barrier"]]
-position = Vector2( 160, 187 )
+position = Vector2( 160, 215 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2( 1.52588e-05, -0.25 )
+scale = Vector2( 1.5, 1 )
 shape = SubResource( 1 )
 
 [node name="down_barrier" type="ColorRect" parent="StaticBody2D2"]
 unique_name_in_owner = true
 modulate = Color( 1, 1.3, 1.2, 1 )
 self_modulate = Color( 0, 1, 0.486275, 1 )
-margin_left = -160.0
-margin_top = -10.0
-margin_right = 160.0
+margin_left = -240.0
+margin_top = -11.0
+margin_right = 240.0
 margin_bottom = 10.0
 
 [node name="obstacle" type="Node2D" parent="."]
@@ -399,70 +573,170 @@ margin_bottom = 10.0
 [node name="obstacle_pos" type="Position2D" parent="obstacle"]
 position = Vector2( 160, 90 )
 
-[node name="Camera" parent="." instance=ExtResource( 4 )]
-unique_name_in_owner = true
-position = Vector2( 160, 90 )
-
 [node name="Ball" parent="." instance=ExtResource( 1 )]
 unique_name_in_owner = true
 modulate = Color( 1.1, 1.1, 1.1, 1 )
-position = Vector2( 26, 88 )
+position = Vector2( -54, 88 )
 
-[node name="Circle2D2" parent="Ball" index="1"]
+[node name="Circle2D2" parent="Ball" index="2"]
 modulate = Color( 1.1, 1.1, 1.1, 1 )
 
-[node name="Circle2D" parent="Ball" index="2"]
+[node name="Circle2D" parent="Ball" index="3"]
 modulate = Color( 1.1, 1.1, 1.1, 1 )
 
 [node name="Area2D" type="Area2D" parent="."]
-position = Vector2( 337, 88 )
+position = Vector2( 417, 88 )
+collision_layer = 2
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 0, 2 )
+scale = Vector2( 1, 1.5 )
 shape = SubResource( 6 )
 
 [node name="Area2D2" type="Area2D" parent="."]
-position = Vector2( -17, 88 )
+position = Vector2( -97, 88 )
+collision_layer = 2
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2"]
 position = Vector2( 0, 2 )
+scale = Vector2( 1, 1.5 )
 shape = SubResource( 6 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "init"
 anims/RESET = SubResource( 10 )
 anims/end = SubResource( 12 )
 anims/explosion1 = SubResource( 7 )
 anims/explosion2 = SubResource( 13 )
 anims/init = SubResource( 11 )
+anims/new_round = SubResource( 14 )
+anims/new_round_end = SubResource( 15 )
+
+[node name="powerup_pos" type="Node2D" parent="."]
+
+[node name="Position2D" type="Position2D" parent="powerup_pos"]
+position = Vector2( 16, -8 )
+
+[node name="Position2D2" type="Position2D" parent="powerup_pos"]
+position = Vector2( 50, 108 )
+
+[node name="Position2D3" type="Position2D" parent="powerup_pos"]
+position = Vector2( 206, -10 )
+
+[node name="Position2D4" type="Position2D" parent="powerup_pos"]
+position = Vector2( 161, 197 )
+
+[node name="Position2D5" type="Position2D" parent="powerup_pos"]
+position = Vector2( 277, 91 )
+
+[node name="Position2D6" type="Position2D" parent="powerup_pos"]
+position = Vector2( 329, 197 )
+
+[node name="Position2D7" type="Position2D" parent="powerup_pos"]
+position = Vector2( 332, 21 )
+
+[node name="Position2D8" type="Position2D" parent="powerup_pos"]
+position = Vector2( 101, 38 )
+
+[node name="Position2D9" type="Position2D" parent="powerup_pos"]
+position = Vector2( 85, 182 )
+
+[node name="Position2D10" type="Position2D" parent="powerup_pos"]
+position = Vector2( -6, 53 )
+
+[node name="Position2D11" type="Position2D" parent="powerup_pos"]
+position = Vector2( -22, 149 )
+
+[node name="Position2D12" type="Position2D" parent="powerup_pos"]
+position = Vector2( 232, 138 )
+
+[node name="Position2D13" type="Position2D" parent="powerup_pos"]
+position = Vector2( 229, 40 )
+
+[node name="Position2D14" type="Position2D" parent="powerup_pos"]
+position = Vector2( 128, 142 )
+
+[node name="Position2D15" type="Position2D" parent="powerup_pos"]
+position = Vector2( 166, 23 )
+
+[node name="powerups" type="Node2D" parent="."]
+unique_name_in_owner = true
 
 [node name="Label2" type="Label" parent="."]
 margin_left = 140.0
-margin_top = 5.0
+margin_top = -15.0
 margin_right = 180.0
-margin_bottom = 13.0
+margin_bottom = -7.0
 custom_fonts/font = ExtResource( 5 )
 text = "0 - 0"
 
+[node name="rounds1" type="Label" parent="."]
+margin_left = 37.0
+margin_top = -18.0
+margin_right = 77.0
+margin_bottom = -4.0
+custom_fonts/font = ExtResource( 5 )
+text = "0"
+valign = 1
+
+[node name="rounds2" type="Label" parent="."]
+margin_left = 276.0
+margin_top = -18.0
+margin_right = 316.0
+margin_bottom = -4.0
+custom_fonts/font = ExtResource( 5 )
+text = "0"
+valign = 1
+
+[node name="Rectangle2D" type="Node2D" parent="."]
+position = Vector2( 343, -17 )
+script = ExtResource( 10 )
+width = 18.0
+height = 18.0
+line_width = 2.0
+
+[node name="Rectangle2D2" type="Node2D" parent="."]
+position = Vector2( -41, -17 )
+script = ExtResource( 10 )
+width = 18.0
+height = 18.0
+line_width = 2.0
+
+[node name="pups_players" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="pup_p1_pos" type="Position2D" parent="pups_players"]
+unique_name_in_owner = true
+position = Vector2( -32, -8 )
+
+[node name="pup_p2_pos" type="Position2D" parent="pups_players"]
+unique_name_in_owner = true
+position = Vector2( 352, -8 )
+
+[node name="pups_render" type="Node2D" parent="."]
+unique_name_in_owner = true
+
 [node name="ColorRect2" type="ColorRect" parent="."]
-visible = false
 anchor_right = 0.802
-margin_right = 320.0
-margin_bottom = 180.0
+margin_left = -80.0
+margin_top = -45.0
+margin_right = 400.0
+margin_bottom = 225.0
 color = Color( 0, 0, 0, 1 )
 
 [node name="aberration" type="ColorRect" parent="."]
 unique_name_in_owner = true
 visible = false
 material = SubResource( 4 )
-margin_left = -8.0
-margin_right = 328.0
-margin_bottom = 180.0
+margin_left = -80.0
+margin_top = -45.0
+margin_right = 400.0
+margin_bottom = 225.0
 color = Color( 1, 1, 1, 0 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
-volume_db = -12.0
 pitch_scale = 0.9
 bus = "Explosion"
 
@@ -473,8 +747,33 @@ visible = false
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 2 )
 
+[node name="Round" type="RichTextLabel" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 120.0
+margin_top = 85.0
+margin_right = 280.0
+margin_bottom = 108.0
+custom_fonts/normal_font = ExtResource( 9 )
+bbcode_enabled = true
+bbcode_text = "[center][shake]Round 2"
+text = "Round 2"
+scroll_active = false
+
+[node name="Camera" parent="." instance=ExtResource( 4 )]
+unique_name_in_owner = true
+position = Vector2( 160, 90 )
+zoom = Vector2( 1.5, 1.5 )
+
+[node name="powerup_timer" type="Timer" parent="."]
+unique_name_in_owner = true
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_entered" from="Area2D2" to="." method="_on_Area2D2_body_entered"]
+[connection signal="timeout" from="powerup_timer" to="." method="_on_powerup_timer_timeout"]
 
 [editable path="Players/Player1"]
 [editable path="Players/Player2"]

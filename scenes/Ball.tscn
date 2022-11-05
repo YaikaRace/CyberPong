@@ -1,9 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://addons/primitives2d/circle2d.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Ball.gd" type="Script" id=2]
 [ext_resource path="res://sounds/impact2.wav" type="AudioStream" id=3]
 [ext_resource path="res://sounds/plop.wav" type="AudioStream" id=4]
+[ext_resource path="res://textures/power ups/bubble2.png" type="Texture" id=5]
+[ext_resource path="res://textures/power ups/wings.png" type="Texture" id=6]
 
 [sub_resource type="PhysicsMaterial" id=2]
 friction = 0.0
@@ -26,6 +28,51 @@ scale_curve = SubResource( 7 )
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.0
 
+[sub_resource type="ParticlesMaterial" id=8]
+trail_divisor = 2
+emission_shape = 1
+emission_sphere_radius = 8.0
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color = Color( 1, 0.447059, 0, 1 )
+hue_variation = 0.12
+hue_variation_random = 1.0
+
+[sub_resource type="Curve" id=9]
+_data = [ Vector2( 0, 0.496933 ), 0.0, 0.0, 0, 0, Vector2( 0.872857, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.998571, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=10]
+curve = SubResource( 9 )
+
+[sub_resource type="ParticlesMaterial" id=11]
+emission_shape = 1
+emission_sphere_radius = 11.0
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 0.75
+scale_curve = SubResource( 10 )
+color = Color( 1, 1, 1, 0.658824 )
+
+[sub_resource type="Curve" id=13]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.00613499 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=14]
+curve = SubResource( 13 )
+
+[sub_resource type="ParticlesMaterial" id=12]
+emission_shape = 1
+emission_sphere_radius = 5.0
+flag_disable_z = true
+gravity = Vector3( 0, -4, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 2.0
+scale_curve = SubResource( 14 )
+
 [node name="Ball" type="RigidBody2D" groups=["ball"]]
 collision_layer = 3
 collision_mask = 3
@@ -45,6 +92,12 @@ lifetime = 0.2
 local_coords = false
 process_material = SubResource( 5 )
 
+[node name="wings" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0, -2 )
+scale = Vector2( 1.2, 1.2 )
+texture = ExtResource( 6 )
+
 [node name="Circle2D2" type="Node2D" parent="."]
 script = ExtResource( 1 )
 radius = 7.0
@@ -60,14 +113,45 @@ shape = SubResource( 1 )
 
 [node name="Impact" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
-volume_db = -5.0
 pitch_scale = 1.5
 bus = "Impact"
 
 [node name="barrier_impact" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
-volume_db = -5.0
 pitch_scale = 2.0
 bus = "Plop"
 
+[node name="fire_particles" type="Particles2D" parent="."]
+emitting = false
+amount = 50
+lifetime = 0.3
+local_coords = false
+process_material = SubResource( 8 )
+
+[node name="bubble" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="bubble_s" type="Sprite" parent="bubble"]
+unique_name_in_owner = true
+visible = false
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 5 )
+
+[node name="bubbles" type="Particles2D" parent="bubble"]
+unique_name_in_owner = true
+emitting = false
+amount = 30
+local_coords = false
+process_material = SubResource( 11 )
+texture = ExtResource( 5 )
+
+[node name="freeze_particles" type="Particles2D" parent="."]
+emitting = false
+amount = 25
+speed_scale = 0.5
+process_material = SubResource( 12 )
+
+[node name="Timer" type="Timer" parent="."]
+
 [connection signal="body_entered" from="." to="." method="_on_Ball_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

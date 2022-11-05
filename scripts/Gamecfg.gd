@@ -2,6 +2,9 @@ extends Control
 
 onready var world_environment = $WorldEnvironment
 
+var previous_point_value = 3
+var previous_round_value = 3
+
 func _ready():
 	var file = File.new()
 	if file.file_exists("user://game_options"):
@@ -11,33 +14,53 @@ func _ready():
 		data = parse_json(text)
 		Global.game_opt = str2var(data)
 		file.close()
-	$ScrollContainer/VBoxContainer/HBoxContainer/OptionButton.select(Global.game_opt.mode)
-	for modifier in $ScrollContainer/VBoxContainer/GridContainer.get_children():
-		if modifier.name in Global.game_opt.modifiers:
-			modifier.pressed = true
-		elif modifier.name == "obs_sel":
-			modifier.selected = Global.game_opt.obstacle
+	$"%point_mode".select(Global.game_opt.mode)
+	$"%round_sel".value = Global.game_opt.total_rounds
 	Global.player1_points = 0
 	Global.player2_points = 0
 	world_environment.environment.glow_enabled = Global.config.glow
-	pass
-
-func _process(delta):
-	if $"%obstacle".pressed == true:
-		$"%obs_sel".visible = true
-		$"%obs_sel".selected = Global.game_opt.obstacle
-	else:
-		$"%obs_sel".visible = false
-	if not $"%Pointsedit".text.is_valid_integer():
-		$"%Pointsedit".text
-
-func _on_OptionButton_item_selected(index):
-	Global.game_opt.mode = index
-	match index:
+	$"%Pointsedit".value = Global.game_opt.rounds
+	$"%round_mode".select(Global.game_opt.round_mode)
+	match Global.game_opt.mode:
 		2:
 			$"%Pointsedit".visible = false
 		_:
 			$"%Pointsedit".visible = true
+	match Global.game_opt.round_mode:
+		2:
+			$"%round_sel".visible = false
+		_:
+			$"%round_sel".visible = true
+	pass
+
+func _process(delta):
+	if int($"%round_sel".get_line_edit().text) < 1:
+		$"%round_sel".get_line_edit().text = "1"
+	if int($"%Pointsedit".get_line_edit().text) < 2:
+		$"%Pointsedit".get_line_edit().text = "2"
+
+func _on_OptionButton_item_selected(index):
+	Global.game_opt.mode = index
+	if index == Global.modes.UNLIMITED:
+		$"%round_mode".select(index)
+	match index:
+		0:
+			$"%round_sel".visible = true
+			$"%Pointsedit".visible = true
+			$"%Pointsedit".value = 3
+			$"%Pointsedit".min_value = 3
+			$"%Pointsedit".step = 1
+			Global.game_opt.rounds = $"%Pointsedit".value
+		1:
+			$"%round_sel".visible = true
+			$"%Pointsedit".visible = true
+			$"%Pointsedit".min_value = 1
+			$"%Pointsedit".value = 1
+			$"%Pointsedit".step = 1
+			Global.game_opt.rounds = $"%Pointsedit".value
+		2:
+			$"%round_sel".visible = false
+			$"%Pointsedit".visible = false
 
 
 func _on_Button_pressed():
@@ -58,11 +81,6 @@ func reload_preview():
 	get_tree().reload_current_scene()
 
 
-func _on_obs_sel_item_selected(index):
-	Global.game_opt.obstacle = index
-	reload_preview()
-
-
 func _on_Back_pressed():
 	var file = File.new()
 	file.open("user://game_options", File.WRITE)
@@ -70,3 +88,76 @@ func _on_Back_pressed():
 	file.close()
 	get_tree().change_scene("res://scenes/Menu.tscn")
 
+
+
+func _on_Pointsedit_value_changed(value):
+	if Global.game_opt.mode == Global.modes.BESTOF:
+		if previous_point_value > value:
+			if int(value) % 2 == 0:
+				if value < 3:
+					$"%Pointsedit".value = 3
+					Global.game_opt.rounds = 3
+					return
+				var new_value = value - 1
+				$"%Pointsedit".value = new_value
+				Global.game_opt.rounds = new_value
+				previous_point_value = new_value
+		else:
+			if int(value) % 2 == 0:
+				var new_value = value + 1
+				$"%Pointsedit".value = new_value
+				Global.game_opt.rounds = new_value
+				previous_point_value = new_value
+	else:
+		Global.game_opt.rounds = value
+
+
+func _on_change_pressed():
+	$Popup.popup()
+
+
+func _on_SpinBox_value_changed(value):
+	if Global.game_opt.round_mode == Global.modes.BESTOF:
+		if previous_round_value > value:
+			if int(value) % 2 == 0:
+				if value < 3:
+					$"%round_sel".value = 3
+					Global.game_opt.total_rounds = 3
+					return
+				var new_value = value - 1
+				$"%round_sel".value = new_value
+				Global.game_opt.total_rounds = new_value
+				previous_round_value = new_value
+		else:
+			if int(value) % 2 == 0:
+				var new_value = value + 1
+				$"%round_sel".value = new_value
+				Global.game_opt.total_rounds = new_value
+				previous_round_value = new_value
+	else:
+		Global.game_opt.total_rounds = value
+
+
+func _on_round_mode_item_selected(index):
+	Global.game_opt.round_mode = index
+	if index == Global.modes.UNLIMITED:
+		$"%point_mode".select(index)
+	match index:
+		0:
+			$"%round_sel".visible = true
+			$"%Pointsedit".visible = true
+			$"%round_sel".value = 3
+			$"%round_sel".min_value = 3
+			$"%round_sel".step = 1
+			Global.game_opt.total_rounds = $"%round_sel".value
+		1:
+			$"%round_sel".visible = true
+			$"%Pointsedit".visible = true
+			$"%round_sel".value = 1
+			$"%round_sel".min_value = 1
+			$"%round_sel".step = 1
+			Global.game_opt.total_rounds = $"%round_sel".value
+		2:
+			$"%round_sel".visible = false
+			$"%Pointsedit".visible = false
+		

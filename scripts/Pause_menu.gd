@@ -22,11 +22,9 @@ func _on_Config_pressed():
 func _on_Menu_pressed():
 	Global.player1_points = 0
 	Global.player2_points = 0
-	Global.game_opt = {
-	rounds = 0,
-	mode = 4,
-	modifiers = [],
-	obstacle = 0
-	}
+	Global.rounds = 0
+	Global.player1_rounds = 0
+	Global.player2_rounds = 0
+	Global.new_round = true
 	get_tree().paused = false
 	get_tree().change_scene("res://scenes/Menu.tscn")

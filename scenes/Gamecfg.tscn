@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/Gamecfg.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Game.tscn" type="PackedScene" id=2]
 [ext_resource path="res://theme/UI.tres" type="Theme" id=3]
-[ext_resource path="res://scenes/Modifier.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/Modifiers.tscn" type="PackedScene" id=4]
+[ext_resource path="res://textures/arrows.png" type="Texture" id=5]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("ViewportContainer/Viewport")
@@ -40,92 +41,83 @@ margin_bottom = -27.0
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
-margin_right = 176.0
-margin_bottom = 94.0
+margin_right = 85.0
+margin_bottom = 100.0
 
 [node name="Button" type="Button" parent="ScrollContainer/VBoxContainer"]
-margin_right = 176.0
+margin_right = 85.0
 margin_bottom = 14.0
 text = "Start"
 
 [node name="Points" type="Label" parent="ScrollContainer/VBoxContainer"]
 margin_top = 18.0
-margin_right = 176.0
+margin_right = 85.0
 margin_bottom = 26.0
 text = "Points"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
 margin_top = 30.0
-margin_right = 176.0
+margin_right = 85.0
 margin_bottom = 42.0
 
-[node name="OptionButton" type="OptionButton" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
-margin_right = 176.0
+[node name="point_mode" type="OptionButton" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+margin_right = 85.0
 margin_bottom = 12.0
 size_flags_horizontal = 3
 text = "Unlimited"
 items = [ "Best of", null, false, 0, null, "First of", null, false, 1, null, "Unlimited", null, false, 4, null ]
-selected = 4
+selected = 2
 
-[node name="Pointsedit" type="LineEdit" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Pointsedit" type="SpinBox" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 visible = false
 margin_left = 89.0
-margin_right = 190.102
+margin_right = 197.0
 margin_bottom = 12.0
-text = "3"
+custom_icons/updown = ExtResource( 5 )
+align = 1
+
+[node name="Rounds" type="Label" parent="ScrollContainer/VBoxContainer"]
+margin_top = 46.0
+margin_right = 85.0
+margin_bottom = 54.0
+text = "Rounds"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+margin_top = 58.0
+margin_right = 85.0
+margin_bottom = 70.0
+
+[node name="round_mode" type="OptionButton" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+margin_right = 85.0
+margin_bottom = 12.0
+size_flags_horizontal = 3
+text = "Unlimited"
+items = [ "Best of", null, false, 0, null, "First of", null, false, 1, null, "Unlimited", null, false, 2, null ]
+selected = 2
+
+[node name="round_sel" type="SpinBox" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+visible = false
+margin_left = 89.0
+margin_right = 197.0
+margin_bottom = 12.0
+custom_icons/updown = ExtResource( 5 )
 align = 1
 
 [node name="Modifiers" type="Label" parent="ScrollContainer/VBoxContainer"]
-margin_top = 46.0
-margin_right = 176.0
-margin_bottom = 54.0
+margin_top = 74.0
+margin_right = 85.0
+margin_bottom = 82.0
 text = "Modifiers"
 
-[node name="GridContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
-margin_top = 58.0
-margin_right = 176.0
-margin_bottom = 94.0
-columns = 2
-
-[node name="obstacle" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 7 )]
-unique_name_in_owner = true
-margin_right = 86.0
-margin_bottom = 16.0
-text = "Obstacle"
-
-[node name="obs_sel" type="OptionButton" parent="ScrollContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-visible = false
-margin_left = 90.0
-margin_right = 176.0
-margin_bottom = 16.0
-text = "Rectangle"
-items = [ "Rectangle", null, false, 0, null, "U shape", null, false, 1, null, "Triangle", null, false, 2, null, "Cross", null, false, 3, null ]
-selected = 0
-
-[node name="brick" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 7 )]
-margin_left = 90.0
-margin_right = 176.0
-margin_bottom = 16.0
-text = "Brick"
-
-[node name="fast_ball" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 7 )]
-margin_top = 20.0
-margin_right = 86.0
-margin_bottom = 36.0
-text = "Fast Ball"
-no_compatible = [ "slow_ball" ]
-can_reload = false
-
-[node name="slow_ball" parent="ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 7 )]
-margin_left = 90.0
-margin_top = 20.0
-margin_right = 176.0
-margin_bottom = 36.0
-text = "Slow Ball"
-no_compatible = [ "fast_ball" ]
-can_reload = false
+[node name="change" type="Button" parent="ScrollContainer/VBoxContainer"]
+margin_top = 86.0
+margin_right = 85.0
+margin_bottom = 100.0
+text = "Change"
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 pause_mode = 1
@@ -232,7 +224,16 @@ text = "Back"
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 13 )
 
+[node name="Popup" type="Popup" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Modifiers" parent="Popup" instance=ExtResource( 4 )]
+
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Button" to="." method="_on_Button_pressed"]
-[connection signal="item_selected" from="ScrollContainer/VBoxContainer/HBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
-[connection signal="item_selected" from="ScrollContainer/VBoxContainer/GridContainer/obs_sel" to="." method="_on_obs_sel_item_selected"]
+[connection signal="item_selected" from="ScrollContainer/VBoxContainer/HBoxContainer/point_mode" to="." method="_on_OptionButton_item_selected"]
+[connection signal="value_changed" from="ScrollContainer/VBoxContainer/HBoxContainer/Pointsedit" to="." method="_on_Pointsedit_value_changed"]
+[connection signal="item_selected" from="ScrollContainer/VBoxContainer/HBoxContainer2/round_mode" to="." method="_on_round_mode_item_selected"]
+[connection signal="value_changed" from="ScrollContainer/VBoxContainer/HBoxContainer2/round_sel" to="." method="_on_SpinBox_value_changed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/change" to="." method="_on_change_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]

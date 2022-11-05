@@ -8,5 +8,4 @@ margin_bottom = 24.0
 text = "modifier"
 script = ExtResource( 1 )
 
-[connection signal="gui_input" from="." to="." method="_on_Modifier_gui_input"]
 [connection signal="toggled" from="." to="." method="_on_Modifier_toggled"]

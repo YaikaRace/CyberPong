@@ -1,0 +1,98 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scenes/Modifier.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/Modifiers.gd" type="Script" id=2]
+[ext_resource path="res://theme/UI.tres" type="Theme" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 6.0
+content_margin_right = 6.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0, 0, 0, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="Modifiers" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+script = ExtResource( 2 )
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+margin_left = 66.0
+margin_top = 50.0
+margin_right = 254.0
+margin_bottom = 130.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 182.0
+margin_bottom = 74.0
+
+[node name="Modifiers" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_right = 176.0
+margin_bottom = 8.0
+text = "Modifiers"
+align = 1
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_top = 12.0
+margin_right = 176.0
+margin_bottom = 68.0
+columns = 2
+
+[node name="obstacle" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 1 )]
+unique_name_in_owner = true
+margin_right = 86.0
+margin_bottom = 16.0
+text = "Obstacle"
+
+[node name="obs_sel" type="OptionButton" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+visible = false
+margin_left = 90.0
+margin_right = 176.0
+margin_bottom = 16.0
+text = "Rectangle"
+items = [ "Rectangle", null, false, 0, null, "U shape", null, false, 1, null, "Triangle", null, false, 2, null, "Cross", null, false, 3, null ]
+selected = 0
+
+[node name="brick" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 1 )]
+margin_left = 90.0
+margin_right = 176.0
+margin_bottom = 16.0
+text = "Brick"
+
+[node name="fast_ball" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 1 )]
+margin_top = 20.0
+margin_right = 86.0
+margin_bottom = 36.0
+text = "Fast Ball"
+no_compatible = [ "slow_ball" ]
+
+[node name="slow_ball" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 1 )]
+margin_left = 90.0
+margin_top = 20.0
+margin_right = 176.0
+margin_bottom = 36.0
+text = "Slow Ball"
+no_compatible = [ "fast_ball" ]
+
+[node name="power_ups" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 1 )]
+margin_top = 40.0
+margin_right = 86.0
+margin_bottom = 56.0
+text = "Power Ups"
+
+[connection signal="gui_input" from="." to="." method="_on_Modifiers_gui_input"]
+[connection signal="gui_input" from="CenterContainer" to="." method="_on_Modifiers_gui_input"]
+[connection signal="item_selected" from="CenterContainer/PanelContainer/VBoxContainer/GridContainer/obs_sel" to="." method="_on_obs_sel_item_selected"]

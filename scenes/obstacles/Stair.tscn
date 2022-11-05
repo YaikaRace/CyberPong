@@ -11,4 +11,4 @@ polygon = PoolVector2Array( 0, -16, 72, -88, -72, -88 )
 [node name="Polygon2D2" type="Polygon2D" parent="." groups=["color_obs"]]
 modulate = Color( 1, 1, 1, 0.501961 )
 self_modulate = Color( 0, 1, 0.486275, 1 )
-polygon = PoolVector2Array( 0, -16, 72, -88, -72, -88 )
+polygon = PoolVector2Array( 0, -16, 88, -104, -88, -104 )
