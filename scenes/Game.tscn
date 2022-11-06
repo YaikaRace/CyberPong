@@ -505,12 +505,23 @@ position = Vector2( -170, 147 )
 [node name="Brick6" parent="bricks1" instance=ExtResource( 7 )]
 position = Vector2( -170, 185 )
 
+[node name="Players_pos" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="p1_pos" type="Position2D" parent="Players_pos"]
+unique_name_in_owner = true
+position = Vector2( -64, 88 )
+
+[node name="p2_pos" type="Position2D" parent="Players_pos"]
+unique_name_in_owner = true
+position = Vector2( 384, 88 )
+
 [node name="Players" type="Node2D" parent="."]
 unique_name_in_owner = true
 
 [node name="Player1" parent="Players" instance=ExtResource( 2 )]
 unique_name_in_owner = true
-modulate = Color( 1.1, 1, 1.05, 1 )
+modulate = Color( 1.1, 1.1, 1.1, 1 )
 position = Vector2( -64, 88 )
 up = "w"
 down = "s"
@@ -524,7 +535,7 @@ self_modulate = Color( 1, 0, 0.584314, 1 )
 
 [node name="Player2" parent="Players" instance=ExtResource( 2 )]
 unique_name_in_owner = true
-modulate = Color( 1, 1.08, 1.1, 1 )
+modulate = Color( 1.1, 1.1, 1.1, 1 )
 position = Vector2( 384, 88 )
 scale = Vector2( -1, 1 )
 player = 2
@@ -585,7 +596,8 @@ modulate = Color( 1.1, 1.1, 1.1, 1 )
 modulate = Color( 1.1, 1.1, 1.1, 1 )
 
 [node name="Area2D" type="Area2D" parent="."]
-position = Vector2( 417, 88 )
+position = Vector2( 448, 88 )
+scale = Vector2( 1, 1.5 )
 collision_layer = 2
 collision_mask = 2
 
@@ -595,7 +607,8 @@ scale = Vector2( 1, 1.5 )
 shape = SubResource( 6 )
 
 [node name="Area2D2" type="Area2D" parent="."]
-position = Vector2( -97, 88 )
+position = Vector2( -128, 88 )
+scale = Vector2( 1, 1.5 )
 collision_layer = 2
 collision_mask = 2
 

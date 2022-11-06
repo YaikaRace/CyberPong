@@ -20,16 +20,18 @@ var obstacles = [
 	preload("res://scenes/obstacles/Stairs.tscn"),
 	preload("res://scenes/obstacles/Cross.tscn")
 	]
-var powerups2 = [
+var powerups = [
 	preload("res://scenes/Power ups/Bubble.tscn"),
 	preload("res://scenes/Power ups/Confusion.tscn"),
 	preload("res://scenes/Power ups/Fast_ball.tscn"),
 	preload("res://scenes/Power ups/Freeze.tscn"),
-	preload("res://scenes/Power ups/Slow_ball.tscn"),
+	#preload("res://scenes/Power ups/Slow_ball.tscn"),
 	preload("res://scenes/Power ups/Cloud.tscn"),
-	preload("res://scenes/Power ups/Wings.tscn")
+	preload("res://scenes/Power ups/Wings.tscn"),
+	preload("res://scenes/Power ups/Boxing_glove.tscn"),
+	preload("res://scenes/Power ups/Boomerang.tscn")
 	]
-var powerups = [preload("res://scenes/Power ups/Boxing_glove.tscn")]
+var powerups2 = [preload("res://scenes/Power ups/Fast_ball.tscn"), preload("res://scenes/Power ups/Slow_ball.tscn")]
 enum obstacles_idx {RECTANGLE, U, TRIANGLE, CROSS}
 var can_move = false
 var timer_range = [5, 15]
@@ -69,7 +71,15 @@ func _physics_process(delta):
 	$rounds2.text = String(player2_rounds)
 	var powerups_nodes = get_tree().get_nodes_in_group("powerup")
 	if powerups_nodes.size() > 3:
-		powerups_nodes[0].queue_free()
+		var tween = create_tween().set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+		if is_instance_valid(powerups_nodes[0]):
+			if "pickable" in powerups_nodes[0]:
+				powerups_nodes[0].pickable = false
+			powerups_nodes[0].monitoring = false
+			tween.tween_property(powerups_nodes[0], "scale", Vector2(0, 0), 0.5)
+			yield(tween, "finished")
+			if is_instance_valid(powerups_nodes[0]):
+				powerups_nodes[0].queue_free()
 	if can_move:
 		check_start()
 		check_mode()
@@ -271,14 +281,24 @@ func add_obstacle():
 func _on_powerup_timer_timeout():
 	if is_instance_valid(self):
 		var tween = create_tween()
-		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+		tween.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN)
 		rng.randomize()
 		var power = rng.randi_range(0, powerups.size()-1)
 		var powerup = powerups[power]
-		rng.randomize()
-		var pos = powerup_pos.get_child(rng.randi_range(0, powerup_pos.get_child_count()-1)).position
+		var unique_pos = false
 		var powerup_instance = powerup.instance()
-		powerup_instance.position = pos
+		while not unique_pos:
+			rng.randomize()
+			var pos = powerup_pos.get_child(rng.randi_range(0, powerup_pos.get_child_count()-1)).position
+			powerup_instance.position = pos
+			var power_pos = Vector2.ZERO
+			for pup_pos in $"%powerups".get_children():
+				if pup_pos.position == pos:
+					power_pos = pup_pos.position
+			if power_pos == Vector2.ZERO:
+				unique_pos = true
+			else:
+				return
 		powerup_instance.scale = Vector2.ZERO
 		$"%powerups".add_child(powerup_instance)
 		tween.tween_property(powerup_instance, "scale", Vector2(1, 1), 0.5)

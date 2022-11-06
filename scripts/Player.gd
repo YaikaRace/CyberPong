@@ -7,14 +7,14 @@ export var right = "ui_right"
 export var player = 1
 export var pup_key: String
 
-var speed = 5.5
+var speed = 6.5
 var motion = Vector2(0, 0)
 var section = 160
 var can_move = false
 var rng = RandomNumberGenerator.new()
 var ball_impulse = 450
 var power_up = ""
-var glove_ball_chase = false
+var inertia = true
 
 onready var pup_picked_area = $up_power_up
 onready var up_col = $up_col
@@ -38,13 +38,20 @@ func _physics_process(delta):
 			motion.y = speed
 		else:
 			motion.y = 0
-		move_and_collide(motion)
+		move_and_collide(motion, inertia)
 		if Input.is_action_just_pressed(pup_key):
 			use_power_up(power_up)
-		$boxing_glove/glove_pup.look_at(ball.position)
-		if glove_ball_chase:
-			var direction = ball.position - $boxing_glove/glove_pup.position
-			$boxing_glove/glove_pup.move_and_collide(direction * 350)
+		if player == 1:
+			var pos = get_parent().get_node("%p1_pos")
+			position.x = pos.position.x
+		if player == 2:
+			var pos = get_parent().get_node("%p2_pos")
+			position.x = pos.position.x
+		if $up.is_colliding() or $down.is_colliding():
+			if not "Freeze" in ball.powers:
+				inertia = false
+		else:
+			inertia = true
 
 func hit():
 	var tween = create_tween()
@@ -107,6 +114,7 @@ func add_powerup(path: String, pup_name: String):
 		var power = load(path)
 		var pup_instance = power.instance()
 		pup_instance.pickable = false
+		pup_instance.remove_from_group("powerup")
 		var pups_container = get_parent().get_node("%pups_players")
 		var pups_pos
 		if player == 1:
@@ -133,12 +141,8 @@ func use_power_up(pup_name):
 			ball.powers.append(pup_name)
 			ball.linear_velocity = Vector2.ZERO
 			var previous_modulate = ball.modulate
-			tween.tween_property(ball, "modulate", Color(0.666667, 0.87451, 0.878431), 0.3)
-			yield(get_tree().create_timer(1),"timeout")
-			tween.tween_property(ball, "modulate", Color(1, 1, 1, 1), 0.3)
-			ball.powers.erase("Freeze")
-			if ball.linear_velocity == Vector2.ZERO:
-				ball.linear_velocity = previous_velocity
+			tween.tween_property(ball.get_node("%Circle2D"), "color", Color(0.666667, 0.87451, 0.878431), 0.3).connect("finished", self, "_on_freeze_finished", [previous_velocity])
+			ball.get_node("%freeze_particles").emitting = true
 		"Cloud":
 			var thunder = Line2D.new()
 			var players = get_parent().get_node("%Players")
@@ -165,16 +169,22 @@ func use_power_up(pup_name):
 			yield(get_tree().create_timer(0.9), "timeout")
 			other_player.can_move = true
 		"Boxing_glove":
-			$boxing_glove.visible = true
-			$boxing_glove/glove_pup/CollisionShape2D.disabled = false
-			glove_ball_chase = true
-			
+			var pups_render = get_parent().get_node("%pups_render")
+			var glove = load("res://scenes/Power ups/glove_pup.tscn")
+			var glove_ins = glove.instance()
+			glove_ins.position = position
+			glove_ins.last_player = self
+			pups_render.add_child(glove_ins)
 
-func restart_glove():
-	$boxing_glove.visible = false
-	$boxing_glove/glove_pup/CollisionShape2D.disabled = true
-	$boxing_glove/glove_pup.position = position
-	glove_ball_chase = false
+func _on_freeze_finished(previous_velocity):
+	yield(get_tree().create_timer(1), "timeout")
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property(ball.get_node("%Circle2D"), "color", Color(1, 1, 1, 1), 0.3)
+	ball.powers.erase("Freeze")
+	ball.get_node("%freeze_particles").emitting = false
+	if ball.linear_velocity == Vector2.ZERO:
+		ball.linear_velocity = previous_velocity
 
 func _on_down_pup_body_entered(body):
 	if body.is_in_group("barrier"):

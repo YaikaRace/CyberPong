@@ -19,12 +19,14 @@ func _ready():
 func _physics_process(delta):
 	if linear_velocity.x == 0:
 		$Circle2D2.visible = false
-		$fire_particles.emitting = false
+		$"%fire_particles".emitting = false
 	else:
 		$Circle2D2.visible = true
-		$fire_particles.emitting = true
+		$"%fire_particles".emitting = true
 	limit_velocity()
 	check_powers()
+	if not "Fast_ball" in powers and not "Slow_ball" in powers:
+		get_player_color()
 
 func limit_velocity():
 	if linear_velocity.x > max_velocity:
@@ -45,16 +47,19 @@ func _on_Ball_body_entered(body):
 	$wings.visible = false
 	if "Freeze" in powers:
 		linear_velocity = previous_velocity
-		tween.tween_property(self, "modulate", previous_modulate, 0.3)
+		$"%Circle2D".color = previous_modulate
+		$"%freeze_particles".emitting = false
+		$"%freeze_break".emitting = true
 		powers.erase("Freeze")
 		powers.erase("Bubble")
+	if "Boomerang" in powers:
+		powers.erase("Boomerang")
 	if body.is_in_group("Player"):
 		$Impact.play()
 		$Circle2D2.color = body.rectangle.self_modulate
-		$fire_particles.get_process_material().color = body.rectangle.self_modulate
+		$"%fire_particles".get_process_material().color = body.rectangle.self_modulate
 		$Particles2D.self_modulate = body.rectangle.self_modulate
 		last_player = body
-		body.restart_glove()
 	camera.shake(0.2, abs(linear_velocity.x + 1) / 4, 2)
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(5,5), 0).connect("finished", self, "_on_player_tween_finished")
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(-5, -5), 0)
@@ -83,27 +88,15 @@ func check_powers():
 	if "Fast_ball" in powers:
 		$Circle2D2.color = Color(0.6, 0.901961, 0.372549)
 		$Particles2D.self_modulate = Color(0.6, 0.901961, 0.372549)
-		$fire_particles.get_process_material().color = Color(0.6, 0.901961, 0.372549)
-		$fast_particles.emitting = true
-	else:
-		if last_player != null:
-			$fast_particles.emitting = false
-			if not "Slow_ball" in powers:
-				$Circle2D2.color = last_player.rectangle.self_modulate
-				$Particles2D.self_modulate = last_player.rectangle.self_modulate
-				$fire_particles.get_process_material().color = last_player.rectangle.self_modulate
+		$"%fire_particles".get_process_material().color = Color(0.6, 0.901961, 0.372549)
+		$"%fast_particles".emitting = true
+		$"%slow_particles".emitting = false
 	if "Slow_ball" in powers:
 		$Circle2D2.color = Color(0.960784, 0.333333, 0.364706)
 		$Particles2D.self_modulate = Color(0.960784, 0.333333, 0.364706)
-		$fire_particles.get_process_material().color = Color(0.960784, 0.333333, 0.364706)
-		$slow_particles.emitting = true
-	else:
-		if last_player != null:
-			$slow_particles.emitting = false
-			if not "Fast_ball" in powers:
-				$Circle2D2.color = last_player.rectangle.self_modulate
-				$Particles2D.self_modulate = last_player.rectangle.self_modulate
-				$fire_particles.get_process_material().color = last_player.rectangle.self_modulate
+		$"%fire_particles".get_process_material().color = Color(0.960784, 0.333333, 0.364706)
+		$"%slow_particles".emitting = true
+		$"%fast_particles".emitting = false
 	if "Bubble" in powers:
 		$"%bubble_s".visible = true
 		$"%bubbles".emitting = true
@@ -126,11 +119,51 @@ func check_powers():
 			linear_velocity = Vector2(new_vel_x, new_vel_y)
 	elif not "Wings" in powers:
 		new_time = 0.1
-		
 
+func set_color(body):
+	last_player = body
+
+func get_player_color():
+	if last_player != null:
+			$"%fast_particles".emitting = false
+			$"%slow_particles".emitting = false
+			$Circle2D2.color = last_player.rectangle.self_modulate
+			$Particles2D.self_modulate = last_player.rectangle.self_modulate
+			$"%fire_particles".get_process_material().color = last_player.rectangle.self_modulate
+
+func use_boomerang():
+	var tween = create_tween().set_trans(Tween.TRANS_LINEAR)
+	var new_vel = linear_velocity
+	tween.tween_property(self, "linear_velocity", new_vel.rotated(deg2rad(-90)), 0.7)
+	yield(self,"body_entered")
+	tween.stop()
+
+func reset_ball_speed(pup):
+	var body = self
+	var players = get_tree().get_nodes_in_group("Player")
+	yield(get_tree().create_timer(8), "timeout")
+	if is_instance_valid(body):
+		if "fast_ball" in Global.game_opt.modifiers:
+			body.max_velocity = 450
+			for player in players:
+				player.ball_impulse = 550
+		elif "slow_ball" in Global.game_opt.modifiers:
+			body.max_velocity = 250
+			for player in players:
+				player.ball_impulse = 275
+		else:
+			body.max_velocity = 350
+			for player in players:
+				player.ball_impulse = 450
+		body.powers.erase(pup)
 
 func _on_Timer_timeout():
 	powers.erase("Wings")
 
 func active_player_pup(texture, pup_name):
 	last_player.power_up_picked(texture, pup_name)
+
+
+func _on_VisibilityNotifier2D_screen_exited():
+	yield(get_tree().create_timer(1.5),"timeout")
+	position = Vector2(160, 90)

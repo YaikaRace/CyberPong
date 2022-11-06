@@ -15,6 +15,11 @@ func _process(delta):
 
 func _on_Back_pressed():
 	Global.save_config()
+	if Global.config.pixel:
+		ProjectSettings.set_setting("display/window/stretch/mode", "viewport")
+	else:
+		ProjectSettings.set_setting("display/window/stretch/mode", "2d")
+	ProjectSettings.save_custom("override.cfg")
 	if get_tree().current_scene.name == "Config":
 		get_tree().change_scene("res://scenes/Menu.tscn")
 	else:
@@ -34,3 +39,9 @@ func _on_p2_color_pressed():
 
 func _on_Color_picker_close():
 	$Popup.visible = false
+
+
+func _on_pixel_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == 1:
+			$"%pixel_warn".visible = true

@@ -5,6 +5,8 @@ var config = {
 	glow = true,
 	fps = false,
 	shaders = true,
+	fullscreen = false,
+	pixel = false,
 	Player1 = {
 		color = Color(1, 0, 0.58)
 	},
@@ -32,6 +34,10 @@ var new_round = true
 
 
 func _ready():
+	if Global.config.pixel:
+		ProjectSettings.set_setting("display/window/stretch/mode", "viewport")
+	else:
+		ProjectSettings.set_setting("display/window/stretch/mode", "2d")
 	load_config()
 	var file = File.new()
 	if file.file_exists("user://game_options"):
@@ -47,6 +53,7 @@ func save_config():
 	file.open("user://config", File.WRITE)
 	file.store_line(var2str(config))
 	file.close()
+	OS.window_fullscreen = config.fullscreen
 
 func load_config():
 	var file = File.new()
@@ -57,3 +64,4 @@ func load_config():
 		data = str2var(text)
 		config = data
 		file.close()
+	OS.window_fullscreen = config.fullscreen

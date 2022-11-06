@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 6.5, 7.5 )
 
-[node name="Boxing_glove" type="Area2D"]
+[node name="Boxing_glove" type="Area2D" groups=["powerup"]]
 script = ExtResource( 2 )
 path = "res://scenes/Power ups/Boxing_glove.tscn"
 pup_name = "Boxing_glove"

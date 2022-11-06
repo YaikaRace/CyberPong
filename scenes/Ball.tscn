@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://addons/primitives2d/circle2d.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Ball.gd" type="Script" id=2]
@@ -67,6 +67,44 @@ orbit_velocity_random = 0.0
 scale = 3.0
 scale_curve = SubResource( 19 )
 
+[sub_resource type="Curve" id=13]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.00613499 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=14]
+curve = SubResource( 13 )
+
+[sub_resource type="ParticlesMaterial" id=12]
+emission_shape = 5
+emission_ring_radius = 7.0
+emission_ring_inner_radius = 6.0
+emission_ring_height = 1.0
+emission_ring_axis = Vector3( 0, 0, 1 )
+flag_disable_z = true
+gravity = Vector3( 0, -4, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 4.0
+scale_curve = SubResource( 14 )
+color = Color( 0.968627, 1, 0.996078, 1 )
+hue_variation = -0.01
+hue_variation_random = 1.0
+
+[sub_resource type="Curve" id=21]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=22]
+curve = SubResource( 21 )
+
+[sub_resource type="ParticlesMaterial" id=20]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 98, 0 )
+initial_velocity = 20.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 4.0
+scale_curve = SubResource( 22 )
+
 [sub_resource type="Curve" id=9]
 _data = [ Vector2( 0, 0.496933 ), 0.0, 0.0, 0, 0, Vector2( 0.872857, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.998571, 0 ), 0.0, 0.0, 0, 0 ]
 
@@ -84,25 +122,9 @@ scale = 0.75
 scale_curve = SubResource( 10 )
 color = Color( 1, 1, 1, 0.658824 )
 
-[sub_resource type="Curve" id=13]
-_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.00613499 ), 0.0, 0.0, 0, 0 ]
-
-[sub_resource type="CurveTexture" id=14]
-curve = SubResource( 13 )
-
-[sub_resource type="ParticlesMaterial" id=12]
-emission_shape = 1
-emission_sphere_radius = 5.0
-flag_disable_z = true
-gravity = Vector3( 0, -4, 0 )
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-scale = 2.0
-scale_curve = SubResource( 14 )
-
 [node name="Ball" type="RigidBody2D" groups=["ball"]]
-collision_layer = 19
-collision_mask = 19
+collision_layer = 51
+collision_mask = 51
 mode = 2
 physics_material_override = SubResource( 2 )
 gravity_scale = 0.0
@@ -131,6 +153,7 @@ radius = 7.0
 filled = true
 
 [node name="Circle2D" type="Node2D" parent="."]
+unique_name_in_owner = true
 script = ExtResource( 1 )
 radius = 5.0
 filled = true
@@ -148,14 +171,18 @@ stream = ExtResource( 4 )
 pitch_scale = 2.0
 bus = "Plop"
 
-[node name="fire_particles" type="Particles2D" parent="."]
+[node name="particles" type="Node2D" parent="."]
+
+[node name="fire_particles" type="Particles2D" parent="particles"]
+unique_name_in_owner = true
 emitting = false
 amount = 50
 lifetime = 0.3
 local_coords = false
 process_material = SubResource( 8 )
 
-[node name="fast_particles" type="Particles2D" parent="."]
+[node name="fast_particles" type="Particles2D" parent="particles"]
+unique_name_in_owner = true
 emitting = false
 amount = 12
 lifetime = 0.8
@@ -163,13 +190,32 @@ local_coords = false
 process_material = SubResource( 17 )
 texture = ExtResource( 7 )
 
-[node name="slow_particles" type="Particles2D" parent="."]
+[node name="slow_particles" type="Particles2D" parent="particles"]
+unique_name_in_owner = true
 emitting = false
 amount = 12
 lifetime = 0.8
 local_coords = false
 process_material = SubResource( 17 )
 texture = ExtResource( 8 )
+
+[node name="freeze_particles" type="Particles2D" parent="particles"]
+unique_name_in_owner = true
+emitting = false
+amount = 25
+speed_scale = 0.5
+process_material = SubResource( 12 )
+
+[node name="freeze_break" type="Particles2D" parent="particles"]
+unique_name_in_owner = true
+emitting = false
+amount = 25
+lifetime = 2.0
+one_shot = true
+speed_scale = 1.5
+explosiveness = 0.8
+local_coords = false
+process_material = SubResource( 20 )
 
 [node name="bubble" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -188,13 +234,12 @@ local_coords = false
 process_material = SubResource( 11 )
 texture = ExtResource( 5 )
 
-[node name="freeze_particles" type="Particles2D" parent="."]
-emitting = false
-amount = 25
-speed_scale = 0.5
-process_material = SubResource( 12 )
-
 [node name="Timer" type="Timer" parent="."]
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+position = Vector2( -1.19209e-07, -1.19209e-07 )
+scale = Vector2( 0.7, 0.7 )
 
 [connection signal="body_entered" from="." to="." method="_on_Ball_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
