@@ -1,0 +1,72 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://addons/primitives2d/rectangle2d.gd" type="Script" id=1]
+[ext_resource path="res://scripts/Obstacles/Portal.gd" type="Script" id=2]
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.573034, 0.363636 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=2]
+emission_shape = 2
+emission_box_extents = Vector3( 14, 1, 1 )
+flag_disable_z = true
+initial_velocity_random = 1.0
+angular_velocity = 180.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 10.0
+scale_curve = SubResource( 4 )
+hue_variation = 0.1
+hue_variation_random = 1.0
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0.011236, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.522472, 0.169318 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+emission_shape = 2
+emission_box_extents = Vector3( 14, 1, 1 )
+flag_disable_z = true
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale_curve = SubResource( 6 )
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 16, 5 )
+
+[node name="Portal" type="Area2D" groups=["portal"]]
+script = ExtResource( 2 )
+color = Color( 1, 0.560784, 0, 1 )
+
+[node name="Particles2D" type="Particles2D" parent="."]
+position = Vector2( 0, -2 )
+amount = 50
+process_material = SubResource( 2 )
+
+[node name="Particles2D2" type="Particles2D" parent="."]
+position = Vector2( 0, -2 )
+amount = 50
+process_material = SubResource( 7 )
+
+[node name="Rectangle2D" type="Node2D" parent="."]
+script = ExtResource( 1 )
+color = Color( 1, 0.560784, 0, 1 )
+width = 32.0
+height = 4.0
+filled = true
+centered = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -3 )
+shape = SubResource( 1 )
+
+[node name="exit_pos" type="Position2D" parent="."]
+unique_name_in_owner = true
+position = Vector2( 0, -8 )
+
+[connection signal="body_entered" from="." to="." method="_on_Portal_body_entered"]

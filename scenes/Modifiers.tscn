@@ -63,7 +63,7 @@ margin_left = 90.0
 margin_right = 176.0
 margin_bottom = 16.0
 text = "Rectangle"
-items = [ "Rectangle", null, false, 0, null, "U shape", null, false, 1, null, "Triangle", null, false, 2, null, "Cross", null, false, 3, null ]
+items = [ "Rectangle", null, false, 0, null, "U shape", null, false, 1, null, "Triangle", null, false, 2, null, "Cross", null, false, 3, null, "Portal", null, false, 4, null ]
 selected = 0
 
 [node name="brick" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 1 )]

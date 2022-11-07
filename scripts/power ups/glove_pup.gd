@@ -15,6 +15,8 @@ func _physics_process(delta):
 func stop_glove():
 	$CollisionShape2D.disabled = true
 	$Area2D/CollisionShape2D.disabled = true
+	$Area2D.monitoring = false
+	$Area2D.monitorable = false
 	var tween = create_tween().set_trans(Tween.TRANS_LINEAR)
 	speed = Vector2(0, 0)
 	tween.tween_property(self, "modulate", Color(1, 1, 1, 0), 1).connect("finished", self, "tween_finish")

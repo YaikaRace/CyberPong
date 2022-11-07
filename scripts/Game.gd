@@ -18,21 +18,22 @@ var obstacles = [
 	preload("res://scenes/obstacles/barrier_middle.tscn"),
 	preload("res://scenes/obstacles/midle_u.tscn"),
 	preload("res://scenes/obstacles/Stairs.tscn"),
-	preload("res://scenes/obstacles/Cross.tscn")
+	preload("res://scenes/obstacles/Cross.tscn"),
+	preload("res://scenes/obstacles/portal_obstacle.tscn")
 	]
 var powerups = [
 	preload("res://scenes/Power ups/Bubble.tscn"),
 	preload("res://scenes/Power ups/Confusion.tscn"),
 	preload("res://scenes/Power ups/Fast_ball.tscn"),
 	preload("res://scenes/Power ups/Freeze.tscn"),
-	#preload("res://scenes/Power ups/Slow_ball.tscn"),
+	preload("res://scenes/Power ups/Slow_ball.tscn"),
 	preload("res://scenes/Power ups/Cloud.tscn"),
 	preload("res://scenes/Power ups/Wings.tscn"),
 	preload("res://scenes/Power ups/Boxing_glove.tscn"),
 	preload("res://scenes/Power ups/Boomerang.tscn")
 	]
-var powerups2 = [preload("res://scenes/Power ups/Fast_ball.tscn"), preload("res://scenes/Power ups/Slow_ball.tscn")]
-enum obstacles_idx {RECTANGLE, U, TRIANGLE, CROSS}
+var powerups2 = [preload("res://scenes/Power ups/Bubble.tscn")]
+enum obstacles_idx {RECTANGLE, U, TRIANGLE, CROSS, PORTAL}
 var can_move = false
 var timer_range = [5, 15]
 

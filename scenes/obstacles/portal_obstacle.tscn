@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/obstacles/Portal.tscn" type="PackedScene" id=2]
+
+[node name="portal_obstacle" type="Node2D"]
+
+[node name="Camera" parent="." instance=ExtResource( 1 )]
+zoom = Vector2( 1.5, 1.5 )
+
+[node name="portals" type="Node2D" parent="."]
+
+[node name="Portal" parent="portals" instance=ExtResource( 2 )]
+position = Vector2( 0, 112 )
+
+[node name="Portal2" parent="portals" instance=ExtResource( 2 )]
+position = Vector2( 0, -112 )
+rotation = 3.14159
+color = Color( 0, 0.764706, 1, 1 )
+
+[node name="points" type="Node2D" parent="."]

@@ -20,13 +20,5 @@ func _on_Confusion_body_entered(body):
 		visible = false
 		$CollisionShape2D.disabled = true
 		remove_from_group("powerup")
-		yield(get_tree().create_timer(8),"timeout")
-		for player in players:
-			if player != other_player:
-				if player.player == 2:
-					player.up = "ui_up"
-					player.down = "ui_down"
-				elif player.player == 1:
-					player.up = "w"
-					player.down = "s"
+		body.finish_confusion(other_player)
 		queue_free()

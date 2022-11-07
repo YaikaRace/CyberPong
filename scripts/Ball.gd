@@ -11,6 +11,7 @@ var started = false
 var last_player
 var powers = []
 var new_time = 0.1
+var ball_state
 
 func _ready():
 	aberration.get_material().set("shader_param/r_displacement", Vector2.ZERO)
@@ -28,13 +29,16 @@ func _physics_process(delta):
 	if not "Fast_ball" in powers and not "Slow_ball" in powers:
 		get_player_color()
 
+func _integrate_forces(state):
+	ball_state = state
+
 func limit_velocity():
 	if linear_velocity.x > max_velocity:
 		linear_velocity.x -= 1
 	if linear_velocity.y > max_velocity:
 		linear_velocity.y -= 1
 	if started:
-		if not "Freeze" in powers:
+		if not "Freeze" in powers and not "Bubble" in powers:
 			if linear_velocity.x >= 0 and linear_velocity.x < max_velocity:
 				linear_velocity.x = max_velocity
 			if linear_velocity.x <= 0 and linear_velocity.x > -max_velocity:
@@ -51,9 +55,11 @@ func _on_Ball_body_entered(body):
 		$"%freeze_particles".emitting = false
 		$"%freeze_break".emitting = true
 		powers.erase("Freeze")
-		powers.erase("Bubble")
 	if "Boomerang" in powers:
 		powers.erase("Boomerang")
+	if "Bubble" in powers:
+		powers.erase("Bubble")
+		linear_velocity = previous_velocity
 	if body.is_in_group("Player"):
 		$Impact.play()
 		$Circle2D2.color = body.rectangle.self_modulate
@@ -61,8 +67,8 @@ func _on_Ball_body_entered(body):
 		$Particles2D.self_modulate = body.rectangle.self_modulate
 		last_player = body
 	camera.shake(0.2, abs(linear_velocity.x + 1) / 4, 2)
-	tween.parallel().tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(5,5), 0).connect("finished", self, "_on_player_tween_finished")
-	tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(-5, -5), 0)
+	tween.parallel().tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(2,2), 0).connect("finished", self, "_on_player_tween_finished")
+	tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(-2, -2), 0)
 	if body.is_in_group("barrier"):
 		tween.parallel().tween_property(body.get_child(1), "modulate", Color(1.2, 1.2, 1.2, 1), 0).connect("finished", self, "_on_barrier_tween_finished", [body])
 		$barrier_impact.play()
@@ -137,6 +143,18 @@ func use_boomerang():
 	tween.tween_property(self, "linear_velocity", new_vel.rotated(deg2rad(-90)), 0.7)
 	yield(self,"body_entered")
 	tween.stop()
+
+func finish_confusion(other_player):
+	var players = get_parent().get_node("%Players")
+	yield(get_tree().create_timer(8),"timeout")
+	for player in players:
+		if player != other_player:
+			if player.player == 2:
+				player.up = "ui_up"
+				player.down = "ui_down"
+			elif player.player == 1:
+				player.up = "w"
+				player.down = "s"
 
 func reset_ball_speed(pup):
 	var body = self

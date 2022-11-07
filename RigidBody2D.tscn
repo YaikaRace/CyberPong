@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://addons/primitives2d/rectangle2d.gd" type="Script" id=1]
+[ext_resource path="res://RigidBody2D.gd" type="Script" id=2]
 
 [sub_resource type="PhysicsMaterial" id=2]
 friction = 0.0
@@ -9,14 +10,14 @@ bounce = 1.0
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 5, 5 )
 
-[node name="RigidBody2D" type="RigidBody2D"]
+[node name="RigidBody2D" type="RigidBody2D" groups=["ball"]]
 physics_material_override = SubResource( 2 )
 gravity_scale = 0.0
 linear_damp = 0.0
 angular_damp = 0.0
+script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 5, 5 )
 shape = SubResource( 1 )
 
 [node name="Rectangle2D" type="Node2D" parent="."]
@@ -24,3 +25,4 @@ script = ExtResource( 1 )
 width = 10
 height = 10
 filled = true
+centered = true
