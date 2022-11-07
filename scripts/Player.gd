@@ -67,24 +67,16 @@ func _input(event):
 			if event.position.x > section:
 				move_and_collide(Vector2(0, event.position.y) - Vector2(0, global_position.y))
 
-func _on_up_area_body_entered(body):
-	impulse_ball(-300, -44, body)
-
-
-func _on_middle_area_body_entered(body):
-	impulse_ball(-45, 45, body)
-
-
-func _on_down_area_body_entered(body):
-	impulse_ball(46, 300, body)
-
 func impulse_ball(from: int, to: int, body):
 	if body.is_in_group("ball"):
 		rng.randomize()
 		var velocity_y = 0
-		velocity_y = rng.randi_range(from, to)
+		if body.linear_velocity.y > 0:
+			velocity_y = rng.randi_range(from, to)
+		elif body.linear_velocity.y < 0:
+			velocity_y = rng.randi_range(-to, -from)
 		body.linear_velocity = Vector2(ball_impulse, velocity_y)
-		if self.name == "Player2":
+		if player == 2:
 			body.linear_velocity = Vector2(-ball_impulse, velocity_y)
 
 func power_up_picked(sprite, pup_name):
@@ -194,3 +186,7 @@ func _on_down_pup_body_entered(body):
 func _on_up_pup_body_entered(body):
 	if body.is_in_group("barrier"):
 		pup_picked_area = $down_power_up
+
+
+func _on_Area2D_body_entered(body):
+	impulse_ball(45, 250, body)

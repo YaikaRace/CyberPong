@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/obstacles/Portal.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/Obstacles/portal_obstacle.gd" type="Script" id=3]
 
 [node name="portal_obstacle" type="Node2D"]
+script = ExtResource( 3 )
 
 [node name="Camera" parent="." instance=ExtResource( 1 )]
 zoom = Vector2( 1.5, 1.5 )
@@ -11,11 +13,140 @@ zoom = Vector2( 1.5, 1.5 )
 [node name="portals" type="Node2D" parent="."]
 
 [node name="Portal" parent="portals" instance=ExtResource( 2 )]
+unique_name_in_owner = true
 position = Vector2( 0, 112 )
 
 [node name="Portal2" parent="portals" instance=ExtResource( 2 )]
+unique_name_in_owner = true
 position = Vector2( 0, -112 )
-rotation = 3.14159
-color = Color( 0, 0.764706, 1, 1 )
+scale = Vector2( 1, -1 )
+color = Color( 0, 0.741176, 1, 1 )
 
 [node name="points" type="Node2D" parent="."]
+
+[node name="Position2D" type="Position2D" parent="points"]
+position = Vector2( -157, 112 )
+
+[node name="Position2D2" type="Position2D" parent="points"]
+position = Vector2( -93, 112 )
+
+[node name="Position2D3" type="Position2D" parent="points"]
+position = Vector2( 50, 112 )
+
+[node name="Position2D4" type="Position2D" parent="points"]
+position = Vector2( 87, 112 )
+
+[node name="Position2D5" type="Position2D" parent="points"]
+position = Vector2( -53, 112 )
+
+[node name="Position2D6" type="Position2D" parent="points"]
+position = Vector2( 154, 112 )
+
+[node name="Position2D7" type="Position2D" parent="points"]
+position = Vector2( 105, 21 )
+
+[node name="Position2D8" type="Position2D" parent="points"]
+position = Vector2( -104, 32 )
+
+[node name="Position2D9" type="Position2D" parent="points"]
+position = Vector2( -66, -29 )
+
+[node name="Position2D10" type="Position2D" parent="points"]
+position = Vector2( 45, 62 )
+
+[node name="Position2D11" type="Position2D" parent="points"]
+position = Vector2( 70, -112 )
+
+[node name="Position2D12" type="Position2D" parent="points"]
+position = Vector2( 112, -112 )
+
+[node name="Position2D13" type="Position2D" parent="points"]
+position = Vector2( 154, -112 )
+
+[node name="Position2D14" type="Position2D" parent="points"]
+position = Vector2( -63, -112 )
+
+[node name="Position2D15" type="Position2D" parent="points"]
+position = Vector2( -121, -112 )
+
+[node name="Position2D16" type="Position2D" parent="points"]
+position = Vector2( 84, -39 )
+
+[node name="Position2D17" type="Position2D" parent="points"]
+position = Vector2( 35, -24 )
+
+[node name="Position2D18" type="Position2D" parent="points"]
+position = Vector2( -27, 50 )
+
+[node name="Position2D19" type="Position2D" parent="points"]
+position = Vector2( -21, -60 )
+
+[node name="Position2D20" type="Position2D" parent="points"]
+position = Vector2( -116, -40 )
+
+[node name="Position2D21" type="Position2D" parent="points"]
+position = Vector2( -160, -18 )
+
+[node name="Position2D22" type="Position2D" parent="points"]
+position = Vector2( -150, 33 )
+
+[node name="Position2D23" type="Position2D" parent="points"]
+position = Vector2( -73, 62 )
+
+[node name="Position2D24" type="Position2D" parent="points"]
+position = Vector2( 66, 22 )
+
+[node name="Position2D25" type="Position2D" parent="points"]
+position = Vector2( -18, 8 )
+
+[node name="Position2D26" type="Position2D" parent="points"]
+position = Vector2( 10, -35 )
+
+[node name="Position2D27" type="Position2D" parent="points"]
+position = Vector2( 18, 54 )
+
+[node name="Position2D28" type="Position2D" parent="points"]
+position = Vector2( 48, -70 )
+
+[node name="Position2D29" type="Position2D" parent="points"]
+position = Vector2( 132, -61 )
+
+[node name="Position2D30" type="Position2D" parent="points"]
+position = Vector2( 102, 68 )
+
+[node name="Position2D31" type="Position2D" parent="points"]
+position = Vector2( 141, 54 )
+
+[node name="Position2D32" type="Position2D" parent="points"]
+position = Vector2( 137, -13 )
+
+[node name="Position2D33" type="Position2D" parent="points"]
+position = Vector2( -156, -62 )
+
+[node name="Position2D34" type="Position2D" parent="points"]
+position = Vector2( -126, 83 )
+
+[node name="Position2D35" type="Position2D" parent="points"]
+position = Vector2( -87, -71 )
+
+[node name="Position2D36" type="Position2D" parent="points"]
+position = Vector2( -59, 28 )
+
+[node name="Position2D37" type="Position2D" parent="points"]
+position = Vector2( 28, 17 )
+
+[node name="Position2D38" type="Position2D" parent="points"]
+position = Vector2( 0, 73 )
+
+[node name="Position2D39" type="Position2D" parent="points"]
+position = Vector2( 127, 96 )
+
+[node name="Position2D40" type="Position2D" parent="points"]
+position = Vector2( -88, -2 )
+
+[node name="Position2D41" type="Position2D" parent="points"]
+position = Vector2( -20, -20 )
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

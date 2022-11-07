@@ -22,7 +22,7 @@ scale_curve = SubResource( 3 )
 color = Color( 1, 0, 0.35, 1 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 18, 19 )
+extents = Vector2( 18, 19.5 )
 
 [node name="Brick" type="StaticBody2D" groups=["brick"]]
 modulate = Color( 1, 1, 1, 0.5 )
@@ -48,6 +48,7 @@ local_coords = false
 process_material = SubResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 0.5 )
 shape = SubResource( 1 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

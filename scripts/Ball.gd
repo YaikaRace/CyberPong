@@ -10,7 +10,6 @@ var rng = RandomNumberGenerator.new()
 var started = false
 var last_player
 var powers = []
-var new_time = 0.1
 var ball_state
 
 func _ready():
@@ -38,7 +37,7 @@ func limit_velocity():
 	if linear_velocity.y > max_velocity:
 		linear_velocity.y -= 1
 	if started:
-		if not "Freeze" in powers and not "Bubble" in powers:
+		if not "Freeze" in powers and not "Bubble" in powers and not "Wings" in powers:
 			if linear_velocity.x >= 0 and linear_velocity.x < max_velocity:
 				linear_velocity.x = max_velocity
 			if linear_velocity.x <= 0 and linear_velocity.x > -max_velocity:
@@ -110,21 +109,15 @@ func check_powers():
 		$"%bubble_s".visible = false
 		$"%bubbles".emitting = false
 	if "Wings" in powers:
-		if $Timer.is_stopped():
-			$Timer.start(3)
-		previous_velocity.x = linear_velocity.x
-		rng.randomize()
-		var new_vel_y = rng.randi_range(-200, 200)
-		rng.randomize()
-		var new_vel_x = rng.randi_range(-450, 450)
-		$wings.visible = true
-		yield(get_tree().create_timer(new_time),"timeout")
-		if "Wings" in powers:
-			rng.randomize()
-			new_time = rng.randf_range(0.5, 0.8)
-			linear_velocity = Vector2(new_vel_x, new_vel_y)
-	elif not "Wings" in powers:
-		new_time = 0.1
+		linear_velocity.x = 150
+		while "Wings" in powers:
+			var tween = create_tween().set_trans(Tween.TRANS_CUBIC)
+			tween.tween_property(self, "position", position + Vector2(0, 250), 0.5)
+			yield(tween,"finished")
+			var tween2 = create_tween().set_trans(Tween.TRANS_CUBIC)
+			tween2.tween_property(self, "position", position + Vector2(0, 250), 0.5)
+			yield(tween2, "finished")
+			yield(get_tree(), "idle_frame")
 
 func set_color(body):
 	last_player = body
@@ -147,7 +140,7 @@ func use_boomerang():
 func finish_confusion(other_player):
 	var players = get_parent().get_node("%Players")
 	yield(get_tree().create_timer(8),"timeout")
-	for player in players:
+	for player in players.get_children():
 		if player != other_player:
 			if player.player == 2:
 				player.up = "ui_up"
@@ -174,9 +167,6 @@ func reset_ball_speed(pup):
 			for player in players:
 				player.ball_impulse = 450
 		body.powers.erase(pup)
-
-func _on_Timer_timeout():
-	powers.erase("Wings")
 
 func active_player_pup(texture, pup_name):
 	last_player.power_up_picked(texture, pup_name)

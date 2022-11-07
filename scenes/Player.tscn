@@ -1,13 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/primitives2d/rectangle2d.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 2, 11 )
-
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 2, 2 )
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 2, 24 )
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 5, 24 )
@@ -27,28 +24,10 @@ height = 48.0
 filled = true
 centered = true
 
-[node name="up_area" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 2
+[node name="Area2D" type="Area2D" parent="."]
 
-[node name="up_col" type="CollisionShape2D" parent="up_area"]
-position = Vector2( 0, -13 )
-shape = SubResource( 1 )
-
-[node name="middle_area" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 2
-
-[node name="middle_col" type="CollisionShape2D" parent="middle_area"]
-shape = SubResource( 2 )
-
-[node name="down_area" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 2
-
-[node name="down_col" type="CollisionShape2D" parent="down_area"]
-position = Vector2( 0, 13 )
-shape = SubResource( 1 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -3, 0 )
@@ -95,8 +74,6 @@ collision_mask = 32
 enabled = true
 collision_mask = 32
 
-[connection signal="body_entered" from="up_area" to="." method="_on_up_area_body_entered"]
-[connection signal="body_entered" from="middle_area" to="." method="_on_middle_area_body_entered"]
-[connection signal="body_entered" from="down_area" to="." method="_on_down_area_body_entered"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_entered" from="up_power_up/up_pup" to="." method="_on_up_pup_body_entered"]
 [connection signal="body_entered" from="down_power_up/down_pup" to="." method="_on_down_pup_body_entered"]
