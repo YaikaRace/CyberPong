@@ -21,7 +21,7 @@ var obstacles = [
 	preload("res://scenes/obstacles/Cross.tscn"),
 	preload("res://scenes/obstacles/portal_obstacle.tscn")
 	]
-var powerups = [
+var powerups2 = [
 	preload("res://scenes/Power ups/Bubble.tscn"),
 	preload("res://scenes/Power ups/Confusion.tscn"),
 	preload("res://scenes/Power ups/Fast_ball.tscn"),
@@ -30,9 +30,11 @@ var powerups = [
 	preload("res://scenes/Power ups/Cloud.tscn"),
 	preload("res://scenes/Power ups/Wings.tscn"),
 	preload("res://scenes/Power ups/Boxing_glove.tscn"),
-	preload("res://scenes/Power ups/Boomerang.tscn")
+	preload("res://scenes/Power ups/Boomerang.tscn"),
+	preload("res://scenes/Power ups/Portal_gun.tscn"),
+	preload("res://scenes/Power ups/Blaster.tscn")
 	]
-var powerups2 = [preload("res://scenes/Power ups/Wings.tscn")]
+var powerups = [preload("res://scenes/Power ups/Portal_gun.tscn"), preload("res://scenes/Power ups/Blaster.tscn")]
 enum obstacles_idx {RECTANGLE, U, TRIANGLE, CROSS, PORTAL}
 var can_move = false
 var timer_range = [5, 15]
@@ -105,8 +107,6 @@ func play_init_animation():
 func init_game():
 	if get_tree().current_scene.name == "Game":
 		can_move = true
-	up_barrier.modulate = Color(1, 1, 1, 0.5)
-	down_barrier.modulate = Color(1, 1, 1, 0.5)
 	world_environment.environment.glow_enabled = Global.config.glow
 	$"%Label".visible = Global.config.fps
 	$"%aberration".visible = Global.config.shaders
@@ -235,8 +235,10 @@ func mode_first_of():
 		match Global.winner:
 			"Player 1":
 				Global.player1_rounds += 1
-			"Player2":
+				player1_rounds += 1
+			"Player 2":
 				Global.player2_rounds += 1
+				player2_rounds += 1
 		Global.rounds += 1
 		played_rounds += 1
 		Global.player1_points = 0

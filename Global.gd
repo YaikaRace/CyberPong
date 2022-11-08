@@ -8,10 +8,10 @@ var config = {
 	fullscreen = false,
 	pixel = false,
 	Player1 = {
-		color = Color(1, 0, 0.58)
+		color = Color(1, 0, 0.25098)
 	},
 	Player2 = {
-		color = Color(0, 0.93, 1)
+		color = Color(0.047059, 0.945098, 1)
 	}
 }
 var game_opt = {

@@ -6,6 +6,7 @@ export var left = "ui_left"
 export var right = "ui_right"
 export var player = 1
 export var pup_key: String
+export var front_direction = Vector2(1, 1)
 
 var speed = 6.5
 var motion = Vector2(0, 0)
@@ -52,6 +53,14 @@ func _physics_process(delta):
 				inertia = false
 		else:
 			inertia = true
+		if power_up == "Portal_gun":
+			$portal_gun.visible = true
+		else:
+			$portal_gun.visible = false
+		if power_up == "Blaster":
+			$blaster.visible = true
+		else:
+			$blaster.visible = false
 
 func hit():
 	var tween = create_tween()
@@ -167,6 +176,45 @@ func use_power_up(pup_name):
 			glove_ins.position = position
 			glove_ins.last_player = self
 			pups_render.add_child(glove_ins)
+		"Portal_gun":
+			var portal_pup = load("res://scenes/Power ups/portals_pup.tscn")
+			$bullet.visible = true
+			tween.tween_property($bullet, "scale", Vector2(0.2, 0.2), 0.05)
+			yield(tween,"finished")
+			$bullet.visible = false
+			$portal_particles.emitting = true
+			var tween2 = create_tween().set_trans(Tween.TRANS_LINEAR)
+			var new_pos
+			if player == 1:
+				if ball.global_position.x < 160:
+					new_pos = ball.global_position.x - 40
+					if new_pos < global_position.x + 40:
+						new_pos = global_position.x + 40
+				else:
+					new_pos = 160
+			if player == 2:
+				if ball.global_position.x > 160:
+					new_pos = ball.global_position.x + 40
+					if new_pos > global_position.x - 40:
+						new_pos = global_position.x - 40
+				else:
+					new_pos = 160
+			#new_pos = Vector2(30, 0) * front_direction
+			tween2.tween_property($portal_particles, "global_position", Vector2(new_pos, $portal_particles.global_position.y), 0.05)
+			yield(tween2, "finished")
+			var portal_pup_ins = portal_pup.instance()
+			portal_pup_ins.global_position = $portal_particles.global_position
+			portal_pup_ins.scale = self.scale
+			$portal_particles.emitting = false
+			get_parent().add_child(portal_pup_ins)
+			yield(get_tree().create_timer(2), "timeout")
+			get_parent().remove_child(portal_pup_ins)
+		"Blaster":
+			var bullet = load("res://scenes/Power ups/blaster_bullet.tscn")
+			var bullet_ins = bullet.instance()
+			bullet_ins.global_position = global_position + (Vector2(12, 1) * front_direction)
+			bullet_ins.linear_velocity *= front_direction
+			get_parent().add_child(bullet_ins)
 
 func _on_freeze_finished(previous_velocity):
 	yield(get_tree().create_timer(1), "timeout")

@@ -69,10 +69,12 @@ func _on_Ball_body_entered(body):
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(2,2), 0).connect("finished", self, "_on_player_tween_finished")
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(-2, -2), 0)
 	if body.is_in_group("barrier"):
-		tween.parallel().tween_property(body.get_child(1), "modulate", Color(1.2, 1.2, 1.2, 1), 0).connect("finished", self, "_on_barrier_tween_finished", [body])
+		var tween2 = create_tween().set_trans(Tween.TRANS_BOUNCE)
+		if tween2.is_running():
+			tween2.tween_property(body.get_child(1), "modulate", Color(1.9, 1.9, 1.9, 1), 0).connect("finished", self, "_on_barrier_tween_finished", [body])
 		$barrier_impact.play()
 	if body.is_in_group("brick"):
-		body.hit()
+		body.hit(1)
 		$barrier_impact.play()
 	if body.is_in_group("obstacle"):
 		body.impact()
@@ -81,7 +83,7 @@ func _on_Ball_body_entered(body):
 func _on_barrier_tween_finished(body):
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_LINEAR)
-	tween.tween_property(body.get_child(1), "modulate", Color(1, 1, 1, 0.5), 2)
+	tween.tween_property(body.get_child(1), "modulate", Color(1, 1, 1, 1), 2)
 
 func _on_player_tween_finished():
 	var tween = create_tween()

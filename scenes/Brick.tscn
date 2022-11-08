@@ -19,13 +19,12 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 10.0
 scale_curve = SubResource( 3 )
-color = Color( 1, 0, 0.35, 1 )
+color = Color( 0.917647, 0.196078, 0.235294, 1 )
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 18, 19.5 )
 
 [node name="Brick" type="StaticBody2D" groups=["brick"]]
-modulate = Color( 1, 1, 1, 0.5 )
 collision_layer = 2
 collision_mask = 2
 script = ExtResource( 1 )
@@ -36,7 +35,7 @@ margin_top = -19.0
 margin_right = 18.0
 margin_bottom = 19.0
 rect_pivot_offset = Vector2( 18, 18 )
-color = Color( 0, 1, 0.18, 1 )
+color = Color( 0.2, 0.596078, 0.294118, 1 )
 
 [node name="Particles2D" type="Particles2D" parent="."]
 modulate = Color( 1.2, 1.2, 1.2, 1 )

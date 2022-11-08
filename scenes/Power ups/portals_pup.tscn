@@ -1,0 +1,69 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/obstacles/Portal.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/power ups/portals_pup.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 21, 3.5 )
+
+[node name="portals_pup" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Portal" parent="." groups=["portal_pup"] instance=ExtResource( 1 )]
+rotation = 3.14159
+portal_rotation = -90.0
+portal_size = Vector2( 38, 4 )
+group = "portal_pup"
+
+[node name="Particles2D" parent="Portal" index="0"]
+position = Vector2( 2.38419e-07, 0 )
+rotation = -1.5708
+
+[node name="Particles2D2" parent="Portal" index="1"]
+position = Vector2( 2.38419e-07, 0 )
+rotation = -1.5708
+
+[node name="Rectangle2D" parent="Portal" index="2"]
+rotation = -1.5708
+width = 38.0
+
+[node name="CollisionShape2D" parent="Portal" index="3"]
+position = Vector2( 0, 0 )
+rotation = -1.5708
+shape = SubResource( 1 )
+
+[node name="Node2D" parent="Portal" index="4"]
+rotation = -1.5708
+
+[node name="Portal2" parent="." groups=["portal_pup"] instance=ExtResource( 1 )]
+position = Vector2( 0, 43 )
+rotation = 3.14159
+color = Color( 0, 0.596078, 0.862745, 1 )
+portal_rotation = -90.0
+portal_size = Vector2( 38, 4 )
+group = "portal_pup"
+
+[node name="Particles2D" parent="Portal2" index="0"]
+modulate = Color( 0, 0.596078, 0.862745, 1 )
+position = Vector2( 0, 0 )
+rotation = -1.5708
+
+[node name="Particles2D2" parent="Portal2" index="1"]
+position = Vector2( 0, 0 )
+rotation = -1.5708
+
+[node name="Rectangle2D" parent="Portal2" index="2"]
+rotation = -1.5708
+color = Color( 0, 0.596078, 0.862745, 1 )
+width = 38.0
+
+[node name="CollisionShape2D" parent="Portal2" index="3"]
+position = Vector2( 0, 0 )
+rotation = -1.5708
+shape = SubResource( 1 )
+
+[node name="Node2D" parent="Portal2" index="4"]
+rotation = -1.5708
+
+[editable path="Portal"]
+[editable path="Portal2"]

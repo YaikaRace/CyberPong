@@ -11,7 +11,7 @@ curve = SubResource( 3 )
 
 [sub_resource type="ParticlesMaterial" id=2]
 emission_shape = 2
-emission_box_extents = Vector3( 32, 1, 1 )
+emission_box_extents = Vector3( 19, 0, 0 )
 flag_disable_z = true
 initial_velocity_random = 1.0
 angular_velocity = 180.0
@@ -31,21 +31,22 @@ curve = SubResource( 5 )
 [sub_resource type="ParticlesMaterial" id=7]
 lifetime_randomness = 0.3
 emission_shape = 2
-emission_box_extents = Vector3( 32, 1, 1 )
+emission_box_extents = Vector3( 19, 0, 0 )
 flag_disable_z = true
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale_curve = SubResource( 6 )
 
 [sub_resource type="RectangleShape2D" id=1]
+resource_local_to_scene = true
 extents = Vector2( 34, 3.5 )
 
 [node name="Portal" type="Area2D" groups=["portal"]]
 script = ExtResource( 2 )
-color = Color( 1, 0.560784, 0, 1 )
+color = Color( 1, 0.635294, 0.0784314, 1 )
 
 [node name="Particles2D" type="Particles2D" parent="."]
-modulate = Color( 1, 0.560784, 0, 1 )
+modulate = Color( 1, 0.635294, 0.0784314, 1 )
 position = Vector2( 0, -2 )
 amount = 50
 lifetime = 2.0
@@ -59,17 +60,19 @@ process_material = SubResource( 7 )
 
 [node name="Rectangle2D" type="Node2D" parent="."]
 script = ExtResource( 1 )
-color = Color( 1, 0.560784, 0, 1 )
+color = Color( 1, 0.635294, 0.0784314, 1 )
 width = 64.0
 height = 4.0
 filled = true
 centered = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -1.5 )
+position = Vector2( 0, -1 )
 shape = SubResource( 1 )
 
-[node name="exit_pos" type="Position2D" parent="."]
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="exit_pos" type="Position2D" parent="Node2D"]
 unique_name_in_owner = true
 position = Vector2( 0, -8 )
 

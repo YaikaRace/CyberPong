@@ -6,9 +6,9 @@ var hits = 0
 var broke = false
 
 const colors = {
-	GREEN = Color(0, 1, 0.179688),
-	YELLOW = Color(0.87451, 1, 0),
-	RED = Color(1, 0, 0.351563)
+	GREEN = Color(0.2, 0.596078, 0.294118),
+	YELLOW = Color(1, 0.784314, 0.145098),
+	RED = Color(0.768627, 0.141176, 0.188235)
 }
 var modulate_color = Color(1.3, 1.3, 1.3, 1)
 var new_hit_allowed = true
@@ -36,13 +36,13 @@ func _physics_process(delta):
 				yield(get_tree().create_timer(2),"timeout")
 				queue_free()
 
-func hit():
+func hit(hit_number):
 	if new_hit_allowed:
-		hits += 1
+		hits += hit_number
 		var tween = create_tween()
 		tween.set_trans(Tween.TRANS_LINEAR)
 		tween.tween_property(self, "modulate", modulate_color, 0)
-		tween.tween_property(self, "modulate", Color(1, 1, 1, .5), 2)
+		tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 2)
 		$Timer.start(1.5)
 		new_hit_allowed = false
 	
