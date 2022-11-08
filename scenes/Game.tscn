@@ -434,6 +434,13 @@ margin_right = 400.0
 margin_bottom = 225.0
 color = Color( 0, 0, 0, 1 )
 
+[node name="center" type="Position2D" parent="."]
+unique_name_in_owner = true
+position = Vector2( 160, 90 )
+__meta__ = {
+"_gizmo_extents_": 40.0
+}
+
 [node name="Particles2D" type="Particles2D" parent="."]
 modulate = Color( 1.35, 1.35, 1.35, 1 )
 position = Vector2( 400, 88 )
@@ -464,6 +471,7 @@ custom_fonts/font = ExtResource( 5 )
 text = "aaaaaaaaaaa"
 
 [node name="bricks2" type="Node2D" parent="."]
+unique_name_in_owner = true
 position = Vector2( 80, 0 )
 
 [node name="Brick" parent="bricks2" instance=ExtResource( 7 )]
@@ -485,6 +493,7 @@ position = Vector2( 330, 147 )
 position = Vector2( 330, 185 )
 
 [node name="bricks1" type="Node2D" parent="."]
+unique_name_in_owner = true
 position = Vector2( 80, 0 )
 
 [node name="Brick" parent="bricks1" instance=ExtResource( 7 )]
@@ -528,6 +537,7 @@ down = "s"
 left = "a"
 right = "d"
 pup_key = "space"
+player_bullets_node_name = "%p1_bullets"
 
 [node name="Rectangle2D" parent="Players/Player1" index="0"]
 modulate = Color( 1.2, 1.2, 1.2, 1 )
@@ -541,6 +551,7 @@ scale = Vector2( -1, 1 )
 player = 2
 pup_key = "0"
 front_direction = Vector2( -1, 1 )
+player_bullets_node_name = "%p2_bullets"
 
 [node name="Rectangle2D" parent="Players/Player2" index="0"]
 modulate = Color( 1.2, 1.2, 1.2, 1 )
@@ -728,6 +739,54 @@ position = Vector2( 352, -8 )
 
 [node name="pups_render" type="Node2D" parent="."]
 unique_name_in_owner = true
+
+[node name="p1_bullets" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Line2D" type="Line2D" parent="p1_bullets"]
+modulate = Color( 1.26, 0.63, 0.85, 1 )
+position = Vector2( 2, 0 )
+points = PoolVector2Array( -40, 4, -40, 9 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D2" type="Line2D" parent="p1_bullets"]
+modulate = Color( 1.26, 0.63, 0.85, 1 )
+position = Vector2( 2, 0 )
+points = PoolVector2Array( -34, 4, -34, 9 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D3" type="Line2D" parent="p1_bullets"]
+modulate = Color( 1.26, 0.63, 0.85, 1 )
+position = Vector2( 2, 0 )
+points = PoolVector2Array( -28, 4, -28, 9 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="p2_bullets" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Line2D" type="Line2D" parent="p2_bullets"]
+modulate = Color( 1.26, 0.63, 0.85, 1 )
+position = Vector2( 386, 0 )
+points = PoolVector2Array( -40, 4, -40, 9 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D2" type="Line2D" parent="p2_bullets"]
+modulate = Color( 1.26, 0.63, 0.85, 1 )
+position = Vector2( 386, 0 )
+points = PoolVector2Array( -34, 4, -34, 9 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D3" type="Line2D" parent="p2_bullets"]
+modulate = Color( 1.26, 0.63, 0.85, 1 )
+position = Vector2( 386, 0 )
+points = PoolVector2Array( -28, 4, -28, 9 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
 
 [node name="ColorRect2" type="ColorRect" parent="."]
 anchor_right = 0.802

@@ -32,9 +32,10 @@ var powerups2 = [
 	preload("res://scenes/Power ups/Boxing_glove.tscn"),
 	preload("res://scenes/Power ups/Boomerang.tscn"),
 	preload("res://scenes/Power ups/Portal_gun.tscn"),
-	preload("res://scenes/Power ups/Blaster.tscn")
+	preload("res://scenes/Power ups/Blaster.tscn"),
+	preload("res://scenes/Power ups/Fenix.tscn")
 	]
-var powerups = [preload("res://scenes/Power ups/Portal_gun.tscn"), preload("res://scenes/Power ups/Blaster.tscn")]
+var powerups = [preload("res://scenes/Power ups/Fenix.tscn")]
 enum obstacles_idx {RECTANGLE, U, TRIANGLE, CROSS, PORTAL}
 var can_move = false
 var timer_range = [5, 15]

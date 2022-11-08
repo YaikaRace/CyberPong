@@ -7,6 +7,7 @@ export var right = "ui_right"
 export var player = 1
 export var pup_key: String
 export var front_direction = Vector2(1, 1)
+export var player_bullets_node_name: String
 
 var speed = 6.5
 var motion = Vector2(0, 0)
@@ -16,6 +17,8 @@ var rng = RandomNumberGenerator.new()
 var ball_impulse = 450
 var power_up = ""
 var inertia = true
+var bullets_node
+var count = 2
 
 onready var pup_picked_area = $up_power_up
 onready var up_col = $up_col
@@ -25,10 +28,14 @@ onready var rectangle = $Rectangle2D
 onready var ball = get_parent().get_node("%Ball")
 onready var ray = $RayCast2D
 
+signal power_up_finished
+signal power_up_actived
+
 
 func _ready():
 	if get_tree().current_scene.name == "Game":
 		can_move = true
+	bullets_node = get_parent().get_node(player_bullets_node_name)
 	pass
 
 func _physics_process(delta):
@@ -59,8 +66,10 @@ func _physics_process(delta):
 			$portal_gun.visible = false
 		if power_up == "Blaster":
 			$blaster.visible = true
+			bullets_node.visible = true
 		else:
 			$blaster.visible = false
+			bullets_node.visible = false
 
 func hit():
 	var tween = create_tween()
@@ -129,6 +138,7 @@ func add_powerup(path: String, pup_name: String):
 
 func use_power_up(pup_name):
 	power_up = ""
+	emit_signal("power_up_active")
 	var pup_str = "pup_p" + String(player)
 	var pups_children = get_parent().get_node("%pups_players").get_children()
 	for pup in pups_children:
@@ -200,21 +210,37 @@ func use_power_up(pup_name):
 				else:
 					new_pos = 160
 			#new_pos = Vector2(30, 0) * front_direction
-			tween2.tween_property($portal_particles, "global_position", Vector2(new_pos, $portal_particles.global_position.y), 0.05)
+			tween2.tween_property($portal_particles, "global_position", Vector2(new_pos, $portal_particles.global_position.y), 0.5)
 			yield(tween2, "finished")
 			var portal_pup_ins = portal_pup.instance()
 			portal_pup_ins.global_position = $portal_particles.global_position
 			portal_pup_ins.scale = self.scale
 			$portal_particles.emitting = false
 			get_parent().add_child(portal_pup_ins)
-			yield(get_tree().create_timer(2), "timeout")
-			get_parent().remove_child(portal_pup_ins)
 		"Blaster":
 			var bullet = load("res://scenes/Power ups/blaster_bullet.tscn")
 			var bullet_ins = bullet.instance()
 			bullet_ins.global_position = global_position + (Vector2(12, 1) * front_direction)
 			bullet_ins.linear_velocity *= front_direction
 			get_parent().add_child(bullet_ins)
+			bullets_node.get_child(count).visible = false
+			if count > 0:
+				add_powerup("res://scenes/Power ups/Blaster.tscn", "Blaster")
+				count -= 1
+			else:
+				bullets_node.visible = false
+				for node in bullets_node.get_children():
+					node.visible = true
+				count = 2
+				var pups_pos
+				if player == 1:
+					pups_pos = get_parent().get_node("%pup_p1_pos")
+				elif player == 2:
+					pups_pos = get_parent().get_node("%pup_p2_pos")
+				for pup in pups_children:
+					if not pup is Position2D:
+						if pup.global_position == pups_pos.global_position:
+							pup.queue_free()
 
 func _on_freeze_finished(previous_velocity):
 	yield(get_tree().create_timer(1), "timeout")

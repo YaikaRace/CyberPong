@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://addons/primitives2d/circle2d.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Ball.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://textures/power ups/wings.png" type="Texture" id=6]
 [ext_resource path="res://textures/power ups/plus.png" type="Texture" id=7]
 [ext_resource path="res://textures/power ups/minus.png" type="Texture" id=8]
+[ext_resource path="res://textures/power ups/fenix.png" type="Texture" id=9]
 
 [sub_resource type="PhysicsMaterial" id=2]
 friction = 0.0
@@ -104,6 +105,16 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 4.0
 scale_curve = SubResource( 22 )
+
+[sub_resource type="ParticlesMaterial" id=23]
+trail_divisor = 2
+emission_shape = 1
+emission_sphere_radius = 20.0
+flag_disable_z = true
+gravity = Vector3( 0, 98, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color = Color( 1, 0.635294, 0.0784314, 1 )
 
 [sub_resource type="Curve" id=9]
 _data = [ Vector2( 0, 0.496933 ), 0.0, 0.0, 0, 0, Vector2( 0.872857, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.998571, 0 ), 0.0, 0.0, 0, 0 ]
@@ -217,6 +228,13 @@ explosiveness = 0.8
 local_coords = false
 process_material = SubResource( 20 )
 
+[node name="fenix_particles" type="Particles2D" parent="particles"]
+unique_name_in_owner = true
+emitting = false
+amount = 100
+local_coords = false
+process_material = SubResource( 23 )
+
 [node name="bubble" type="Node2D" parent="."]
 unique_name_in_owner = true
 
@@ -237,6 +255,11 @@ texture = ExtResource( 5 )
 [node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 position = Vector2( -1.19209e-07, -1.19209e-07 )
 scale = Vector2( 0.7, 0.7 )
+
+[node name="Fenix" type="Sprite" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 9 )
 
 [connection signal="body_entered" from="." to="." method="_on_Ball_body_entered"]
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

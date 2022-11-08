@@ -26,6 +26,7 @@ func _on_Portal_body_entered(body):
 		portal.monitoring = false
 		monitoring = false
 		yield(get_tree().create_timer(2),"timeout")
+		get_parent().queue_free()
 		portal.monitoring = true
 		monitoring = true
 

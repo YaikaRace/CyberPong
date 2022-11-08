@@ -98,7 +98,7 @@ texture = ExtResource( 5 )
 [node name="portal_particles" type="Particles2D" parent="."]
 position = Vector2( 21, 0 )
 emitting = false
-amount = 15
+amount = 100
 local_coords = false
 process_material = SubResource( 6 )
 

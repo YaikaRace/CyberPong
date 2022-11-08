@@ -24,7 +24,7 @@ func _physics_process(delta):
 			color_rect.color = colors.YELLOW
 		2:
 			color_rect.color = colors.RED
-		3:
+		_:
 			if not broke:
 				color_rect.visible = false
 				modulate = Color(1, 1, 1, 1)

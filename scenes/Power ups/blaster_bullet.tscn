@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/power ups/blaster_bullet.gd" type="Script" id=1]
 
@@ -7,6 +7,14 @@ friction = 0.0
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 8, 3 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 9.8, 0 )
+initial_velocity = 10.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
 
 [node name="blaster_bullet" type="RigidBody2D"]
 collision_layer = 3
@@ -30,4 +38,19 @@ default_color = Color( 1, 1, 1, 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 2 )
 
+[node name="Particles2D" type="Particles2D" parent="."]
+modulate = Color( 1.26, 0.63, 0.85, 1 )
+emitting = false
+amount = 15
+lifetime = 5.0
+one_shot = true
+speed_scale = 5.0
+explosiveness = 0.9
+process_material = SubResource( 3 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+position = Vector2( 4.17233e-07, 0.5 )
+scale = Vector2( 0.8, 0.35 )
+
 [connection signal="body_entered" from="." to="." method="_on_blaster_bullet_body_entered"]
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
