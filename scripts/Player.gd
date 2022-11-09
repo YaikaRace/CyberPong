@@ -23,9 +23,6 @@ var id = 0
 var is_master
 
 onready var pup_picked_area = $up_power_up
-onready var up_col = $up_col
-onready var middle_col = $middle_col
-onready var down_col = $down_col
 onready var rectangle = $Rectangle2D
 onready var ball = get_parent().get_node("%Ball")
 onready var ray = $RayCast2D
@@ -44,7 +41,8 @@ func _ready():
 
 func _process(delta):
 	if is_master:
-		rpc_unreliable("set_pos", position)
+		if get_tree().network_peer != null:
+			rpc_unreliable("set_pos", position)
 
 func _physics_process(delta):
 	if is_master:
@@ -64,21 +62,21 @@ func _physics_process(delta):
 			if player == 2:
 				var pos = get_parent().get_node("%p2_pos")
 				position.x = pos.position.x
-			if $up.is_colliding() or $down.is_colliding():
-				if not "Freeze" in ball.powers:
-					inertia = false
-			else:
-				inertia = true
-			if power_up == "Portal_gun":
-				$portal_gun.visible = true
-			else:
-				$portal_gun.visible = false
-			if power_up == "Blaster":
-				$blaster.visible = true
-				bullets_node.visible = true
-			else:
-				$blaster.visible = false
-				bullets_node.visible = false
+		if $up.is_colliding() or $down.is_colliding():
+			if not "Freeze" in ball.powers:
+				inertia = false
+		else:
+			inertia = true
+		if power_up == "Portal_gun":
+			$portal_gun.visible = true
+		else:
+			$portal_gun.visible = false
+		if power_up == "Blaster":
+			$blaster.visible = true
+			bullets_node.visible = true
+		else:
+			$blaster.visible = false
+			bullets_node.visible = false
 
 func hit():
 	var tween = create_tween()

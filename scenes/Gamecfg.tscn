@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/Gamecfg.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Game.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://scenes/Modifiers.tscn" type="PackedScene" id=4]
 [ext_resource path="res://textures/arrows.png" type="Texture" id=5]
 [ext_resource path="res://scenes/Waiting.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/Power_up_selector.tscn" type="PackedScene" id=7]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("ViewportContainer/Viewport")
@@ -120,6 +121,23 @@ margin_right = 85.0
 margin_bottom = 100.0
 text = "Change"
 
+[node name="power_up_container" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+visible = false
+margin_top = 104.0
+margin_right = 85.0
+margin_bottom = 130.0
+
+[node name="power ups" type="Label" parent="ScrollContainer/VBoxContainer/power_up_container"]
+margin_right = 85.0
+margin_bottom = 8.0
+text = "Power Ups"
+
+[node name="change_pups" type="Button" parent="ScrollContainer/VBoxContainer/power_up_container"]
+margin_top = 12.0
+margin_right = 85.0
+margin_bottom = 26.0
+text = "Change"
+
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 pause_mode = 1
 margin_left = 321.0
@@ -231,6 +249,12 @@ anchor_bottom = 1.0
 
 [node name="Modifiers" parent="Popup" instance=ExtResource( 4 )]
 
+[node name="Popup2" type="Popup" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Power_up_selector" parent="Popup2" instance=ExtResource( 7 )]
+
 [node name="Waiting" parent="." instance=ExtResource( 6 )]
 visible = false
 
@@ -240,4 +264,5 @@ visible = false
 [connection signal="item_selected" from="ScrollContainer/VBoxContainer/HBoxContainer2/round_mode" to="." method="_on_round_mode_item_selected"]
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/HBoxContainer2/round_sel" to="." method="_on_SpinBox_value_changed"]
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/change" to="." method="_on_change_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/power_up_container/change_pups" to="." method="_on_change_pups_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]

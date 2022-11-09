@@ -13,3 +13,9 @@ func _on_Modifier_toggled(button_pressed):
 				Global.game_opt.modifiers.erase(item)
 	else:
 		Global.game_opt.modifiers.erase(self.name)
+
+func _process(delta):
+	if self.name in Global.game_opt.modifiers:
+		pressed = true
+	else:
+		pressed = false

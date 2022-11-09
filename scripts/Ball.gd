@@ -42,7 +42,8 @@ func _physics_process(delta):
 			elif $R.is_colliding():
 				linear_velocity.x = -max_velocity
 				powers.erase("Wings")
-		rpc_unreliable("set_ball_pos", position)
+		if get_tree().network_peer != null:
+			rpc_unreliable("set_ball_pos", position)
 
 func set_polygon_points(new_radius):
 	circle_radius = new_radius
@@ -233,16 +234,43 @@ func use_wings():
 func use_power_up(pup_name):
 	match pup_name:
 		"Crystal":
-			$crystall_ball.visible = true
-			$Circle2D.visible = false
-			var line = Line2D.new()
-			$Timer.start(2)
-			get_parent().add_child_below_node(self, line)
-			while not $Timer.is_stopped():
-				line.add_point(global_position)
-				yield(get_tree(), "idle_frame")
-			$crystall_ball.visible = false
-			$Circle2D.visible = true
+			if $Timer.is_stopped():
+				$crystall_ball.visible = true
+				$Circle2D.visible = false
+				var body = StaticBody2D.new()
+				var line = Line2D.new()
+				var col = CollisionShape2D.new()
+				var shape = ConvexPolygonShape2D.new()
+				var points = []
+				$Timer.connect("timeout", self, "_on_crystal_timeout")
+				$Timer.start(0.75)
+				line.width = 3
+				line.default_color = Color(0.858824, 0.247059, 0.992157)
+				line.modulate = Color(1.2, 1.2, 1.2, 1)
+				col.shape = shape
+				body.add_child(col)
+				body.add_child(line)
+				get_parent().add_child_below_node(self, body)
+				while not $Timer.is_stopped():
+					$crystall_ball.look_at(position * linear_velocity)
+					$crystall_ball.rotation_degrees += 90
+					points.append(global_position)
+					var vector_points = PoolVector2Array(points)
+					line.set_points(vector_points)
+					yield(get_tree(), "idle_frame")
+				points.append(points[0])
+				var vector_points = PoolVector2Array(points)
+				line.set_points(vector_points)
+				shape.points = vector_points
+				body.collision_layer = 2
+				body.collision_mask = 2
+				$crystall_ball.visible = false
+				$Circle2D.visible = true
+				$Timer.start(10)
+				while not $Timer.is_stopped():
+					yield(get_tree(), "idle_frame")
+					continue
+				get_parent().remove_child(body)
 
 func finish_confusion(other_player):
 	var players = get_parent().get_node("%Players")

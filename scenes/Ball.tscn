@@ -275,9 +275,11 @@ enabled = true
 cast_to = Vector2( 20, 0 )
 
 [node name="Timer" type="Timer" parent="."]
+one_shot = true
 
 [node name="crystall_ball" type="Sprite" parent="."]
 visible = false
+scale = Vector2( 2, 2 )
 texture = ExtResource( 10 )
 
 [connection signal="body_entered" from="." to="." method="_on_Ball_body_entered"]

@@ -1,0 +1,172 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://theme/UI.tres" type="Theme" id=1]
+[ext_resource path="res://scripts/Power_up_selector.gd" type="Script" id=2]
+[ext_resource path="res://scenes/power_up_button.tscn" type="PackedScene" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 6.0
+content_margin_right = 6.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="Power_up_selector" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+margin_left = 17.0
+margin_top = 24.0
+margin_right = 303.0
+margin_bottom = 155.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 280.0
+margin_bottom = 125.0
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_right = 274.0
+margin_bottom = 96.0
+columns = 3
+
+[node name="Blaster" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_right = 70.0
+margin_bottom = 16.0
+text = "Blaster"
+button_name = "Blaster"
+
+[node name="Boomerang" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_left = 74.0
+margin_right = 160.0
+margin_bottom = 16.0
+text = "Boomerang"
+button_name = "Boomerang"
+
+[node name="Boxing Glove" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_left = 164.0
+margin_right = 274.0
+margin_bottom = 16.0
+text = "Boxing Glove"
+button_name = "Boxing Glove"
+
+[node name="Bubble" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_top = 20.0
+margin_right = 70.0
+margin_bottom = 36.0
+text = "Bubble"
+button_name = "Bubble"
+
+[node name="Thunder" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_left = 74.0
+margin_top = 20.0
+margin_right = 160.0
+margin_bottom = 36.0
+text = "Thunder"
+button_name = "Thunder"
+
+[node name="Confusion" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_left = 164.0
+margin_top = 20.0
+margin_right = 274.0
+margin_bottom = 36.0
+text = "Confusion"
+button_name = "Confusion"
+
+[node name="Crystal" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_top = 40.0
+margin_right = 70.0
+margin_bottom = 56.0
+text = "Crystal"
+button_name = "Crystal"
+
+[node name="Speed Up" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_left = 74.0
+margin_top = 40.0
+margin_right = 160.0
+margin_bottom = 56.0
+text = "Speed Up"
+button_name = "Speed Up"
+
+[node name="Speed Down" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_left = 164.0
+margin_top = 40.0
+margin_right = 274.0
+margin_bottom = 56.0
+text = "Speed Down"
+button_name = "Speed Down"
+
+[node name="Phoenix" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_top = 60.0
+margin_right = 70.0
+margin_bottom = 76.0
+text = "Phoenix"
+button_name = "Phoenix"
+
+[node name="Freeze" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_left = 74.0
+margin_top = 60.0
+margin_right = 160.0
+margin_bottom = 76.0
+text = "Freeze"
+button_name = "Freeze"
+
+[node name="Portal Gun" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_left = 164.0
+margin_top = 60.0
+margin_right = 274.0
+margin_bottom = 76.0
+text = "Portal Gun"
+button_name = "Portal Gun"
+
+[node name="Wings" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 3 )]
+margin_top = 80.0
+margin_right = 70.0
+margin_bottom = 96.0
+text = "Wings"
+button_name = "Wings"
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_top = 100.0
+margin_right = 274.0
+margin_bottom = 119.0
+custom_constants/margin_top = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer"]
+margin_top = 5.0
+margin_right = 274.0
+margin_bottom = 19.0
+
+[node name="select" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_right = 135.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+text = "Select All"
+
+[node name="unselect" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_left = 139.0
+margin_right = 274.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+text = "Unselect All"
+
+[connection signal="gui_input" from="CenterContainer" to="." method="_on_CenterContainer_gui_input"]
+[connection signal="pressed" from="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer/select" to="." method="_on_select_pressed"]
+[connection signal="pressed" from="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer/unselect" to="." method="_on_unselect_pressed"]

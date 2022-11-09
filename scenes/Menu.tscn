@@ -25,38 +25,45 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
 
-[node name="HFlowContainer" type="VBoxContainer" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -45.5
-margin_top = -25.0
-margin_right = 45.5
-margin_bottom = 25.0
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 
-[node name="Local" type="Button" parent="HFlowContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+margin_left = 114.0
+margin_top = 56.0
+margin_right = 205.0
+margin_bottom = 124.0
+
+[node name="Local" type="Button" parent="CenterContainer/VBoxContainer"]
 margin_right = 91.0
 margin_bottom = 14.0
 text = "Local"
 
-[node name="Multiplayer" type="Button" parent="HFlowContainer"]
+[node name="Multiplayer" type="Button" parent="CenterContainer/VBoxContainer"]
 margin_top = 18.0
 margin_right = 91.0
 margin_bottom = 32.0
 text = "Multiplayer"
 
-[node name="Config" type="Button" parent="HFlowContainer"]
+[node name="Config" type="Button" parent="CenterContainer/VBoxContainer"]
 margin_top = 36.0
 margin_right = 91.0
 margin_bottom = 50.0
 text = "Config"
+
+[node name="Exit" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 54.0
+margin_right = 91.0
+margin_bottom = 68.0
+text = "Exit"
 
 [node name="fps_label" parent="." instance=ExtResource( 3 )]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
 
-[connection signal="pressed" from="HFlowContainer/Local" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="HFlowContainer/Multiplayer" to="." method="_on_Multiplayer_pressed"]
-[connection signal="pressed" from="HFlowContainer/Config" to="." method="_on_Config_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Local" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Multiplayer" to="." method="_on_Multiplayer_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Config" to="." method="_on_Config_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Exit" to="." method="_on_Exit_pressed"]

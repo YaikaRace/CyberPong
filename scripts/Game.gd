@@ -1,4 +1,5 @@
 extends Node2D
+
 onready var ball = $"%Ball"
 onready var up_barrier = $"%up_barrier"
 onready var down_barrier = $"%down_barrier"
@@ -21,22 +22,21 @@ var obstacles = [
 	preload("res://scenes/obstacles/Cross.tscn"),
 	preload("res://scenes/obstacles/portal_obstacle.tscn")
 	]
-var powerups = [
-	preload("res://scenes/Power ups/Bubble.tscn"),
-	preload("res://scenes/Power ups/Confusion.tscn"),
-	preload("res://scenes/Power ups/Fast_ball.tscn"),
-	preload("res://scenes/Power ups/Freeze.tscn"),
-	preload("res://scenes/Power ups/Slow_ball.tscn"),
-	preload("res://scenes/Power ups/Cloud.tscn"),
-	preload("res://scenes/Power ups/Wings.tscn"),
-	preload("res://scenes/Power ups/Boxing_glove.tscn"),
-	preload("res://scenes/Power ups/Boomerang.tscn"),
-	preload("res://scenes/Power ups/Portal_gun.tscn"),
-	preload("res://scenes/Power ups/Blaster.tscn"),
-	preload("res://scenes/Power ups/Fenix.tscn"),
-	preload("res://scenes/Power ups/Crystal.tscn")
-	]
-var powerups2 = [preload("res://scenes/Power ups/Crystal.tscn")]
+var powerups = {
+	"Blaster": preload("res://scenes/Power ups/Blaster.tscn"),
+	"Boomerang": preload("res://scenes/Power ups/Boomerang.tscn"),
+	"Boxing Glove": preload("res://scenes/Power ups/Boxing_glove.tscn"),
+	"Bubble": preload("res://scenes/Power ups/Bubble.tscn"),
+	"Thunder": preload("res://scenes/Power ups/Cloud.tscn"),
+	"Confusion": preload("res://scenes/Power ups/Cloud.tscn"),
+	"Crystal": preload("res://scenes/Power ups/Crystal.tscn"),
+	"Speed Up": preload("res://scenes/Power ups/Fast_ball.tscn"),
+	"Speed Down": preload("res://scenes/Power ups/Slow_ball.tscn"),
+	"Phoenix": preload("res://scenes/Power ups/Fenix.tscn"),
+	"Freeze": preload("res://scenes/Power ups/Freeze.tscn"),
+	"Portal Gun": preload("res://scenes/Power ups/Portal_gun.tscn"),
+	"Wings": preload("res://scenes/Power ups/Wings.tscn")
+	}
 enum obstacles_idx {RECTANGLE, U, TRIANGLE, CROSS, PORTAL}
 var can_move = false
 var timer_range = [5, 15]
@@ -57,6 +57,8 @@ onready var player2_rounds = Global.player2_rounds
 signal explosion_finished
 
 func _ready():
+	for excluded in Global.game_opt.exclude_power_ups:
+		powerups.erase(excluded)
 	if get_tree().network_peer == null:
 		$"%Player1".up = "w"
 		$"%Player1".down = "s"
@@ -301,8 +303,8 @@ func _on_powerup_timer_timeout():
 		var tween = create_tween()
 		tween.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN)
 		rng.randomize()
-		var power = rng.randi_range(0, powerups.size()-1)
-		var powerup = powerups[power]
+		var power = rng.randi_range(0, powerups.values().size()-1)
+		var powerup = powerups.values()[power]
 		var unique_pos = false
 		var powerup_instance = powerup.instance()
 		while not unique_pos:
@@ -318,6 +320,8 @@ func _on_powerup_timer_timeout():
 			else:
 				return
 		powerup_instance.scale = Vector2.ZERO
+		if not powerup_instance.is_in_group("powerup"):
+			powerup_instance.add_to_group("powerup")
 		$"%powerups".add_child(powerup_instance)
 		tween.tween_property(powerup_instance, "scale", Vector2(1, 1), 0.5)
 		rng.randomize()

@@ -15,3 +15,7 @@ func _on_Config_pressed():
 
 func _on_Multiplayer_pressed():
 	get_tree().change_scene("res://scenes/Multiplayer.tscn")
+
+
+func _on_Exit_pressed():
+	get_tree().quit()

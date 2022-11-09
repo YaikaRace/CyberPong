@@ -37,10 +37,10 @@ func _ready():
 	pass
 
 func _process(delta):
-	if int($"%round_sel".get_line_edit().text) < 1:
-		$"%round_sel".get_line_edit().text = "1"
-	if int($"%Pointsedit".get_line_edit().text) < 2:
-		$"%Pointsedit".get_line_edit().text = "2"
+	if "power_ups" in Global.game_opt.modifiers:
+		$ScrollContainer/VBoxContainer/power_up_container.visible = true
+	else:
+		$ScrollContainer/VBoxContainer/power_up_container.visible = false
 
 func _on_OptionButton_item_selected(index):
 	Global.game_opt.mode = index
@@ -73,8 +73,9 @@ func _on_Button_pressed():
 	file.open("user://game_options", File.WRITE)
 	file.store_line(to_json(var2str(Global.game_opt)))
 	file.close()
-	Global.client_sync_opt()
-	Global.rpc("change_scene", "res://scenes/Game.tscn")
+	if get_tree().network_peer != null:
+		Global.client_sync_opt()
+		Global.rpc("change_scene", "res://scenes/Game.tscn")
 	get_tree().change_scene("res://scenes/Game.tscn")
 
 func reload_preview():
@@ -90,7 +91,8 @@ func _on_Back_pressed():
 	file.open("user://game_options", File.WRITE)
 	file.store_line(to_json(var2str(Global.game_opt)))
 	file.close()
-	rpc("stop_client")
+	if get_tree().network_peer == null:
+		rpc("stop_client")
 	get_tree().network_peer = null
 	get_tree().change_scene("res://scenes/Menu.tscn")
 
@@ -170,3 +172,7 @@ func _on_round_mode_item_selected(index):
 			$"%round_sel".visible = false
 			$"%Pointsedit".visible = false
 		
+
+
+func _on_change_pups_pressed():
+	$Popup2.popup()

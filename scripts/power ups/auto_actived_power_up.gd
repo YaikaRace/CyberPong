@@ -9,3 +9,4 @@ func _ready():
 func _on_Crystal_body_entered(body):
 	if body.is_in_group("ball"):
 		body.use_power_up(pup_name)
+		queue_free()

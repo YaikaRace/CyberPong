@@ -21,6 +21,8 @@ var game_opt = {
 	obstacle = 0,
 	total_rounds = 1,
 	round_mode = 2,
+	power_ups = [],
+	exclude_power_ups = []
 }
 var player1_points = 0.0
 var player2_points = 0.0
