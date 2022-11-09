@@ -11,3 +11,7 @@ func _on_Button_pressed():
 
 func _on_Config_pressed():
 	get_tree().change_scene("res://scenes/Config.tscn")
+
+
+func _on_Multiplayer_pressed():
+	get_tree().change_scene("res://scenes/Multiplayer.tscn")

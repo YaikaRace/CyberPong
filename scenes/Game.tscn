@@ -532,11 +532,6 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 modulate = Color( 1.1, 1.1, 1.1, 1 )
 position = Vector2( -64, 88 )
-up = "w"
-down = "s"
-left = "a"
-right = "d"
-pup_key = "space"
 player_bullets_node_name = "%p1_bullets"
 
 [node name="Rectangle2D" parent="Players/Player1" index="0"]
@@ -549,7 +544,6 @@ modulate = Color( 1.1, 1.1, 1.1, 1 )
 position = Vector2( 384, 88 )
 scale = Vector2( -1, 1 )
 player = 2
-pup_key = "0"
 front_direction = Vector2( -1, 1 )
 player_bullets_node_name = "%p2_bullets"
 
@@ -598,6 +592,7 @@ position = Vector2( 160, 90 )
 unique_name_in_owner = true
 modulate = Color( 1.1, 1.1, 1.1, 1 )
 position = Vector2( -54, 88 )
+circle_radius = 0.0
 
 [node name="Circle2D2" parent="Ball" index="2"]
 modulate = Color( 1.1, 1.1, 1.1, 1 )

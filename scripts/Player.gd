@@ -5,7 +5,7 @@ export var down = "ui_down"
 export var left = "ui_left"
 export var right = "ui_right"
 export var player = 1
-export var pup_key: String
+export var pup_key: String = "space"
 export var front_direction = Vector2(1, 1)
 export var player_bullets_node_name: String
 
@@ -19,6 +19,8 @@ var power_up = ""
 var inertia = true
 var bullets_node
 var count = 2
+var id = 0
+var is_master
 
 onready var pup_picked_area = $up_power_up
 onready var up_col = $up_col
@@ -36,40 +38,47 @@ func _ready():
 	if get_tree().current_scene.name == "Game":
 		can_move = true
 	bullets_node = get_parent().get_node(player_bullets_node_name)
+	if get_tree().network_peer == null:
+		is_master = true
 	pass
 
+func _process(delta):
+	if is_master:
+		rpc_unreliable("set_pos", position)
+
 func _physics_process(delta):
-	if can_move:
-		if Input.is_action_pressed(up):
-			motion.y = -speed
-		elif Input.is_action_pressed(down):
-			motion.y = speed
-		else:
-			motion.y = 0
-		move_and_collide(motion, inertia)
-		if Input.is_action_just_pressed(pup_key):
-			use_power_up(power_up)
-		if player == 1:
-			var pos = get_parent().get_node("%p1_pos")
-			position.x = pos.position.x
-		if player == 2:
-			var pos = get_parent().get_node("%p2_pos")
-			position.x = pos.position.x
-		if $up.is_colliding() or $down.is_colliding():
-			if not "Freeze" in ball.powers:
-				inertia = false
-		else:
-			inertia = true
-		if power_up == "Portal_gun":
-			$portal_gun.visible = true
-		else:
-			$portal_gun.visible = false
-		if power_up == "Blaster":
-			$blaster.visible = true
-			bullets_node.visible = true
-		else:
-			$blaster.visible = false
-			bullets_node.visible = false
+	if is_master:
+		if can_move:
+			if Input.is_action_pressed(up):
+				motion.y = -speed
+			elif Input.is_action_pressed(down):
+				motion.y = speed
+			else:
+				motion.y = 0
+			move_and_collide(motion, inertia)
+			if Input.is_action_just_pressed(pup_key):
+				use_power_up(power_up)
+			if player == 1:
+				var pos = get_parent().get_node("%p1_pos")
+				position.x = pos.position.x
+			if player == 2:
+				var pos = get_parent().get_node("%p2_pos")
+				position.x = pos.position.x
+			if $up.is_colliding() or $down.is_colliding():
+				if not "Freeze" in ball.powers:
+					inertia = false
+			else:
+				inertia = true
+			if power_up == "Portal_gun":
+				$portal_gun.visible = true
+			else:
+				$portal_gun.visible = false
+			if power_up == "Blaster":
+				$blaster.visible = true
+				bullets_node.visible = true
+			else:
+				$blaster.visible = false
+				bullets_node.visible = false
 
 func hit():
 	var tween = create_tween()
@@ -117,6 +126,13 @@ func _on_tween_finished(sprite):
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	tween.tween_property(sprite, "scale", Vector2(0, 0), 0.5)
+
+func set_id(id):
+	if get_tree().network_peer != null:
+		is_master = id == get_tree().get_network_unique_id()
+
+remote func set_pos(pos):
+	position = pos
 
 func add_powerup(path: String, pup_name: String):
 	if power_up == "":
@@ -210,7 +226,7 @@ func use_power_up(pup_name):
 				else:
 					new_pos = 160
 			#new_pos = Vector2(30, 0) * front_direction
-			tween2.tween_property($portal_particles, "global_position", Vector2(new_pos, $portal_particles.global_position.y), 0.5)
+			tween2.tween_property($portal_particles, "global_position", Vector2(new_pos, $portal_particles.global_position.y), 0.05)
 			yield(tween2, "finished")
 			var portal_pup_ins = portal_pup.instance()
 			portal_pup_ins.global_position = $portal_particles.global_position

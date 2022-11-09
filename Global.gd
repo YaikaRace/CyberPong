@@ -31,6 +31,8 @@ var winner = "Undefined"
 var game_winner = "Undefined"
 var scored_player
 var new_round = true
+var player_ids = []
+var net_id
 
 
 func _ready():
@@ -47,6 +49,15 @@ func _ready():
 		data = parse_json(text)
 		game_opt = str2var(data)
 		file.close()
+
+remote func sync_game_opt(opt):
+	game_opt = opt
+
+remote func change_scene(scene):
+	get_tree().change_scene(scene)
+
+func client_sync_opt():
+	rpc("sync_game_opt", game_opt)
 
 func save_config():
 	var file = File.new()

@@ -19,6 +19,26 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/primitives2d/circle2d.gd"
 }, {
+"base": "ColorRect",
+"class": "ColorTile",
+"language": "GDScript",
+"path": "res://addons/color-palette/ColorTile.gd"
+}, {
+"base": "Container",
+"class": "FlexGridContainer",
+"language": "GDScript",
+"path": "res://addons/color-palette/utilities/FlexGridContainer.gd"
+}, {
+"base": "Reference",
+"class": "Palette",
+"language": "GDScript",
+"path": "res://addons/color-palette/Palette.gd"
+}, {
+"base": "Reference",
+"class": "PaletteImporter",
+"language": "GDScript",
+"path": "res://addons/color-palette/PaletteImporter.gd"
+}, {
 "base": "Node2D",
 "class": "Rectangle2D",
 "language": "GDScript",
@@ -27,6 +47,10 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Arc2D": "",
 "Circle2D": "",
+"ColorTile": "",
+"FlexGridContainer": "res://addons/color-palette/utilities/FlexGridContainerIcon.png",
+"Palette": "",
+"PaletteImporter": "",
 "Rectangle2D": ""
 }
 

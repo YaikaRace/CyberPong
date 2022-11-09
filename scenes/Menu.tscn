@@ -58,4 +58,5 @@ text = "Config"
 environment = SubResource( 1 )
 
 [connection signal="pressed" from="HFlowContainer/Local" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="HFlowContainer/Multiplayer" to="." method="_on_Multiplayer_pressed"]
 [connection signal="pressed" from="HFlowContainer/Config" to="." method="_on_Config_pressed"]

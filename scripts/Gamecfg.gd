@@ -6,6 +6,9 @@ var previous_point_value = 3
 var previous_round_value = 3
 
 func _ready():
+	if get_tree().network_peer != null:
+		if not get_tree().is_network_server():
+			$Waiting.visible = true
 	var file = File.new()
 	if file.file_exists("user://game_options"):
 		file.open("user://game_options", File.READ)
@@ -70,8 +73,9 @@ func _on_Button_pressed():
 	file.open("user://game_options", File.WRITE)
 	file.store_line(to_json(var2str(Global.game_opt)))
 	file.close()
+	Global.client_sync_opt()
+	Global.rpc("change_scene", "res://scenes/Game.tscn")
 	get_tree().change_scene("res://scenes/Game.tscn")
-
 
 func reload_preview():
 	var file = File.new()
@@ -86,9 +90,14 @@ func _on_Back_pressed():
 	file.open("user://game_options", File.WRITE)
 	file.store_line(to_json(var2str(Global.game_opt)))
 	file.close()
+	rpc("stop_client")
+	get_tree().network_peer = null
 	get_tree().change_scene("res://scenes/Menu.tscn")
 
-
+remote func stop_client():
+	$Waiting/Control/RichTextLabel.bbcode_text = "The connection was interrupted :("
+	get_tree().network_peer = null
+	$Waiting/Control/Button.visible = true
 
 func _on_Pointsedit_value_changed(value):
 	if Global.game_opt.mode == Global.modes.BESTOF:

@@ -4,6 +4,7 @@ onready var color_rect = $ColorRect
 
 var hits = 0
 var broke = false
+var hidden = false
 
 const colors = {
 	GREEN = Color(0.2, 0.596078, 0.294118),
@@ -17,6 +18,9 @@ func _ready():
 	pass
 
 func _physics_process(delta):
+	if hidden:
+		self.visible = false
+		$CollisionShape2D.disabled = true
 	match hits:
 		0:
 			color_rect.color = colors.GREEN

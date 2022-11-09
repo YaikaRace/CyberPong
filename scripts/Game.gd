@@ -21,7 +21,7 @@ var obstacles = [
 	preload("res://scenes/obstacles/Cross.tscn"),
 	preload("res://scenes/obstacles/portal_obstacle.tscn")
 	]
-var powerups2 = [
+var powerups = [
 	preload("res://scenes/Power ups/Bubble.tscn"),
 	preload("res://scenes/Power ups/Confusion.tscn"),
 	preload("res://scenes/Power ups/Fast_ball.tscn"),
@@ -33,9 +33,10 @@ var powerups2 = [
 	preload("res://scenes/Power ups/Boomerang.tscn"),
 	preload("res://scenes/Power ups/Portal_gun.tscn"),
 	preload("res://scenes/Power ups/Blaster.tscn"),
-	preload("res://scenes/Power ups/Fenix.tscn")
+	preload("res://scenes/Power ups/Fenix.tscn"),
+	preload("res://scenes/Power ups/Crystal.tscn")
 	]
-var powerups = [preload("res://scenes/Power ups/Fenix.tscn")]
+var powerups2 = [preload("res://scenes/Power ups/Crystal.tscn")]
 enum obstacles_idx {RECTANGLE, U, TRIANGLE, CROSS, PORTAL}
 var can_move = false
 var timer_range = [5, 15]
@@ -56,6 +57,17 @@ onready var player2_rounds = Global.player2_rounds
 signal explosion_finished
 
 func _ready():
+	if get_tree().network_peer == null:
+		$"%Player1".up = "w"
+		$"%Player1".down = "s"
+		$"%Player1".left = "a"
+		$"%Player1".right = "d"
+		$"%Player2".pup_key = "0"
+	elif get_tree().network_peer != null:
+		if get_tree().is_network_server():
+			$"%Player1".set_id(get_tree().get_network_unique_id())
+		else:
+			$"%Player2".set_id(get_tree().get_network_unique_id())
 	connect("explosion_finished", self,"_on_explosion_finish")
 	$"%Player1".rectangle.self_modulate = Global.config.Player1.color
 	$"%Player2".rectangle.self_modulate = Global.config.Player2.color
@@ -113,8 +125,10 @@ func init_game():
 	$"%aberration".visible = Global.config.shaders
 	$Label2.text = String(player1) + " - " + String(player2)
 	if not "brick" in modifiers:
-		$bricks1.queue_free()
-		$bricks2.queue_free()
+		for brick in $bricks1.get_children():
+			brick.hidden = true
+		for brick in $bricks2.get_children():
+			brick.hidden = true
 	if "obstacle" in modifiers:
 		add_obstacle()
 	if "fast_ball" in modifiers:

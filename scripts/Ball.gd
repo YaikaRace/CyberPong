@@ -1,7 +1,10 @@
 extends RigidBody2D
 
+export (float, 0, 20) var circle_radius = 5 setget set_polygon_points
+
 onready var aberration = get_parent().get_node("%aberration")
 onready var camera = get_parent().get_node("%Camera")
+onready var is_server = get_tree().is_network_server()
 
 var max_velocity = 350
 var previous_velocity = Vector2.ZERO
@@ -17,18 +20,48 @@ var barrier_hits = 1
 func _ready():
 	aberration.get_material().set("shader_param/r_displacement", Vector2.ZERO)
 	aberration.get_material().set("shader_param/g_displacement", Vector2.ZERO)
+	if get_tree().network_peer == null:
+		is_server = true
 
 func _physics_process(delta):
-	if linear_velocity.x == 0:
-		$Circle2D2.visible = false
-		$"%fire_particles".emitting = false
-	else:
-		$Circle2D2.visible = true
-		$"%fire_particles".emitting = true
-	limit_velocity()
-	check_powers()
-	if not "Fast_ball" in powers and not "Slow_ball" in powers:
-		get_player_color()
+	if is_server:
+		if linear_velocity.x == 0:
+			$Circle2D2.visible = false
+			$"%fire_particles".emitting = false
+		else:
+			$Circle2D2.visible = true
+			$"%fire_particles".emitting = true
+		limit_velocity()
+		check_powers()
+		if not "Fast_ball" in powers and not "Slow_ball" in powers:
+			get_player_color()
+		if "Wings" in powers:
+			if $L.is_colliding():
+				linear_velocity.x = max_velocity
+				powers.erase("Wings")
+			elif $R.is_colliding():
+				linear_velocity.x = -max_velocity
+				powers.erase("Wings")
+		rpc_unreliable("set_ball_pos", position)
+
+func set_polygon_points(new_radius):
+	circle_radius = new_radius
+
+func generate_circle_polygon(radius: float, num_sides: int, position: Vector2) -> PoolVector2Array:
+	var angle_delta: float = (PI * 2) / num_sides
+	var vector: Vector2 = Vector2(radius, 0)
+	var polygon: PoolVector2Array
+
+	for _i in num_sides:
+		polygon.append(vector + position)
+		vector = vector.rotated(angle_delta)
+
+	return polygon
+
+remote func set_bal_pos(pos):
+	var new_trans = ball_state.get_transform()
+	new_trans.origin = pos
+	ball_state.set_transform(new_trans)
 
 func _integrate_forces(state):
 	ball_state = state
@@ -36,8 +69,18 @@ func _integrate_forces(state):
 func limit_velocity():
 	if linear_velocity.x > max_velocity:
 		linear_velocity.x -= 1
+	if linear_velocity.x < -max_velocity:
+		linear_velocity.x += 1
 	if linear_velocity.y > max_velocity:
 		linear_velocity.y -= 1
+	if linear_velocity.y < -max_velocity:
+		linear_velocity.y += 1
+	if linear_velocity.x > 750 or linear_velocity.x < -750:
+		position = get_parent().get_node("%center").position
+		linear_velocity.x = 350 * last_player.front_direction.x
+	if linear_velocity.y > 750 or linear_velocity.y < -750:
+		position = get_parent().get_node("%center").position
+		linear_velocity.y = 200
 	if started:
 		if not "Freeze" in powers and not "Bubble" in powers and not "Wings" in powers and not "Fenix" in powers:
 			if linear_velocity.x >= 0 and linear_velocity.x < max_velocity:
@@ -51,6 +94,7 @@ func _on_Ball_body_entered(body):
 	rotation = 0.0
 	powers.erase("Wings")
 	$wings.visible = false
+	loop = false
 	if "Freeze" in powers:
 		linear_velocity = previous_velocity
 		$"%Circle2D".color = previous_modulate
@@ -67,10 +111,10 @@ func _on_Ball_body_entered(body):
 		sleeping = false
 		loop = false
 		var tween2 = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC)
-		tween2.tween_property($Fenix, "modulate", Color(1, 1, 1, 0), 1)
 		tween2.parallel().tween_property($"%fenix_particles", "modulate", Color(1, 1, 1, 0), 1)
 		powers.erase("Fenix")
 		$"%fenix_particles".emitting = false
+		rotation = 0
 	if body.is_in_group("Player"):
 		barrier_hits = 1
 		$Impact.play()
@@ -124,16 +168,6 @@ func check_powers():
 	else: 
 		$"%bubble_s".visible = false
 		$"%bubbles".emitting = false
-	if "Wings" in powers:
-		linear_velocity.x = 150
-		while "Wings" in powers:
-			var tween = create_tween().set_trans(Tween.TRANS_CUBIC)
-			tween.tween_property(self, "position", position + Vector2(0, 250), 0.5)
-			yield(tween,"finished")
-			var tween2 = create_tween().set_trans(Tween.TRANS_CUBIC)
-			tween2.tween_property(self, "position", position + Vector2(0, 250), 0.5)
-			yield(tween2, "finished")
-			yield(get_tree(), "idle_frame")
 	if "Fenix" in powers:
 		if not loop:
 			loop = true
@@ -148,6 +182,7 @@ func check_powers():
 			tween.parallel().tween_property($Fenix, "modulate", Color(1.1, 1.1, 1.1, 1), 1)
 			tween.parallel().tween_property($"%fenix_particles", "modulate", Color(1, 1, 1, 1), 1)
 			tween.tween_property(camera, "zoom", Vector2(1.5, 1.5), 1)
+			tween.parallel().tween_property($Fenix, "modulate", Color(1, 1, 1, 0), 1)
 			camera.shake(1, 50, 5)
 			yield(get_tree().create_timer(3), "timeout")
 			rng.randomize()
@@ -178,6 +213,36 @@ func use_boomerang():
 	tween.tween_property(self, "linear_velocity", new_vel.rotated(deg2rad(-90)), 0.7)
 	yield(self,"body_entered")
 	tween.stop()
+
+func use_wings():
+	while "Wings" in powers:
+		if not loop:
+			loop = true
+			$wings.visible = true
+			var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+			tween.tween_property(self, "position:y", position.y + 100, 0.3)
+			tween.parallel().tween_property(self, "position:x", position.x + 75 * last_player.front_direction.x, 0.3)
+			yield(tween,"finished")
+			if "Wings" in powers:
+				var tween2 = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+				tween2.tween_property(self, "position:y", position.y - 100, 0.3)
+				tween2.parallel().tween_property(self, "position:x", position.x + 75 * last_player.front_direction.x, 0.3)
+				yield(tween2, "finished")
+			loop = false
+
+func use_power_up(pup_name):
+	match pup_name:
+		"Crystal":
+			$crystall_ball.visible = true
+			$Circle2D.visible = false
+			var line = Line2D.new()
+			$Timer.start(2)
+			get_parent().add_child_below_node(self, line)
+			while not $Timer.is_stopped():
+				line.add_point(global_position)
+				yield(get_tree(), "idle_frame")
+			$crystall_ball.visible = false
+			$Circle2D.visible = true
 
 func finish_confusion(other_player):
 	var players = get_parent().get_node("%Players")

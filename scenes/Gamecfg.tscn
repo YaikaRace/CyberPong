@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/Gamecfg.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Game.tscn" type="PackedScene" id=2]
 [ext_resource path="res://theme/UI.tres" type="Theme" id=3]
 [ext_resource path="res://scenes/Modifiers.tscn" type="PackedScene" id=4]
 [ext_resource path="res://textures/arrows.png" type="Texture" id=5]
+[ext_resource path="res://scenes/Waiting.tscn" type="PackedScene" id=6]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("ViewportContainer/Viewport")
@@ -229,6 +230,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Modifiers" parent="Popup" instance=ExtResource( 4 )]
+
+[node name="Waiting" parent="." instance=ExtResource( 6 )]
+visible = false
 
 [connection signal="pressed" from="ScrollContainer/VBoxContainer/Button" to="." method="_on_Button_pressed"]
 [connection signal="item_selected" from="ScrollContainer/VBoxContainer/HBoxContainer/point_mode" to="." method="_on_OptionButton_item_selected"]
