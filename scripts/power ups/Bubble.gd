@@ -12,6 +12,8 @@ func _on_Bubble_body_entered(body):
 		var previous_velocity = body.linear_velocity
 		body.powers.append("Bubble")
 		body.previous_velocity = previous_velocity
+		body.sleeping = true
+		body.gravity_scale = 0
 		if previous_velocity.x < 0:
 			body.linear_velocity = Vector2(-ball_impulse - 100, 0)
 		else:

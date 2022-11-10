@@ -7,6 +7,13 @@ func _ready():
 			button.set_pressed(true)
 	pass
 
+func _process(delta):
+	if not "brick" in Global.game_opt.modifiers:
+		$"%Blaster".set_pressed(false)
+		$"%Blaster".set_disabled(true)
+		$"%Blaster".set_focus_mode(Control.FOCUS_NONE)
+	else:
+		$"%Blaster".set_disabled(false)
 
 func _on_select_pressed():
 	for button in $CenterContainer/PanelContainer/VBoxContainer/GridContainer.get_children():

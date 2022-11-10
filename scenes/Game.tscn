@@ -14,7 +14,7 @@
 [sub_resource type="Curve" id=8]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=9]
+[sub_resource type="CurveTexture" id=16]
 curve = SubResource( 8 )
 
 [sub_resource type="ParticlesMaterial" id=5]
@@ -27,7 +27,7 @@ orbit_velocity_random = 0.0
 angle = 720.0
 angle_random = 1.0
 scale = 10.0
-scale_curve = SubResource( 9 )
+scale_curve = SubResource( 16 )
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 160, 10.75 )
@@ -755,39 +755,39 @@ unique_name_in_owner = true
 
 [node name="Label2" type="Label" parent="."]
 margin_left = 140.0
-margin_top = -15.0
+margin_top = -39.0
 margin_right = 180.0
-margin_bottom = -7.0
+margin_bottom = -31.0
 custom_fonts/font = ExtResource( 5 )
 text = "0 - 0"
 
 [node name="rounds1" type="Label" parent="."]
 margin_left = 37.0
-margin_top = -18.0
+margin_top = -42.0
 margin_right = 77.0
-margin_bottom = -4.0
+margin_bottom = -28.0
 custom_fonts/font = ExtResource( 5 )
 text = "0"
 valign = 1
 
 [node name="rounds2" type="Label" parent="."]
 margin_left = 276.0
-margin_top = -18.0
+margin_top = -42.0
 margin_right = 316.0
-margin_bottom = -4.0
+margin_bottom = -28.0
 custom_fonts/font = ExtResource( 5 )
 text = "0"
 valign = 1
 
 [node name="Rectangle2D" type="Node2D" parent="."]
-position = Vector2( 343, -17 )
+position = Vector2( 343, -41 )
 script = ExtResource( 10 )
 width = 18.0
 height = 18.0
 line_width = 2.0
 
 [node name="Rectangle2D2" type="Node2D" parent="."]
-position = Vector2( -41, -17 )
+position = Vector2( -41, -41 )
 script = ExtResource( 10 )
 width = 18.0
 height = 18.0
@@ -795,6 +795,7 @@ line_width = 2.0
 
 [node name="pups_players" type="Node2D" parent="."]
 unique_name_in_owner = true
+position = Vector2( 0, -24 )
 
 [node name="pup_p1_pos" type="Position2D" parent="pups_players"]
 unique_name_in_owner = true
@@ -809,6 +810,7 @@ unique_name_in_owner = true
 
 [node name="p1_bullets" type="Node2D" parent="."]
 unique_name_in_owner = true
+position = Vector2( 0, -24 )
 
 [node name="Line2D" type="Line2D" parent="p1_bullets"]
 modulate = Color( 1.26, 0.63, 0.85, 1 )
@@ -833,6 +835,7 @@ default_color = Color( 1, 1, 1, 1 )
 
 [node name="p2_bullets" type="Node2D" parent="."]
 unique_name_in_owner = true
+position = Vector2( 0, -24 )
 
 [node name="Line2D" type="Line2D" parent="p2_bullets"]
 modulate = Color( 1.26, 0.63, 0.85, 1 )

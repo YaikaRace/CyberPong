@@ -1,0 +1,229 @@
+[gd_scene load_steps=29 format=2]
+
+[ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/Basket.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/Basketball.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 20, 135 )
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Basket:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 160, 90 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "move"
+length = 20.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Basket:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 5, 10, 15, 20 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 160, 90 ), Vector2( 160, -10 ), Vector2( 160, 90 ), Vector2( 160, 187 ), Vector2( 160, 90 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "move2"
+length = 15.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Basket:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 5, 10, 15 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 160, 90 ), Vector2( 320, 0 ), Vector2( 0, 0 ), Vector2( 160, 90 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "move3"
+length = 15.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Basket:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 5, 10, 15 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 160, 90 ), Vector2( 0, 180 ), Vector2( 320, 180 ), Vector2( 160, 90 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "move4"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Basket:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 160, 90 ), Vector2( 321, 90 ), Vector2( 160, 90 ) ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "move5"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Basket:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 160, 90 ), Vector2( 0, 90 ), Vector2( 160, 90 ) ]
+}
+
+[sub_resource type="AnimationNodeAnimation" id=23]
+animation = "move"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "move"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "move2"
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+animation = "move3"
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "move4"
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "move5"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=15]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=18]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=19]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=25]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id=4]
+states/move/node = SubResource( 10 )
+states/move/position = Vector2( 556, 122 )
+"states/move 2/node" = SubResource( 23 )
+"states/move 2/position" = Vector2( 525, 35.2559 )
+states/move2/node = SubResource( 11 )
+states/move2/position = Vector2( 394, 38.6879 )
+states/move3/node = SubResource( 12 )
+states/move3/position = Vector2( 695, 35.6879 )
+states/move4/node = SubResource( 13 )
+states/move4/position = Vector2( 378, 199.968 )
+states/move5/node = SubResource( 14 )
+states/move5/position = Vector2( 702, 196.968 )
+transitions = [ "move", "move2", SubResource( 15 ), "move", "move3", SubResource( 16 ), "move", "move5", SubResource( 17 ), "move", "move4", SubResource( 18 ), "move2", "move", SubResource( 19 ), "move4", "move", SubResource( 20 ), "move3", "move", SubResource( 21 ), "move5", "move", SubResource( 22 ), "move", "move 2", SubResource( 24 ), "move 2", "move", SubResource( 25 ) ]
+graph_offset = Vector2( 0, -7.74407 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=5]
+
+[node name="Basketball" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = -80.0
+margin_top = -45.0
+margin_right = 400.0
+margin_bottom = 225.0
+color = Color( 0.78, 0.27, 0.14, 0.7 )
+
+[node name="Basket" parent="." instance=ExtResource( 2 )]
+position = Vector2( 160, 90 )
+
+[node name="barrier1" type="StaticBody2D" parent="." groups=["barrier"]]
+
+[node name="ColorRect" type="ColorRect" parent="barrier1"]
+margin_left = -112.0
+margin_top = -45.0
+margin_right = -72.0
+margin_bottom = 225.0
+color = Color( 0.2, 0.596078, 0.294118, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="barrier1"]
+position = Vector2( -92, 90 )
+shape = SubResource( 1 )
+
+[node name="barrier2" type="StaticBody2D" parent="." groups=["barrier"]]
+
+[node name="ColorRect" type="ColorRect" parent="barrier2"]
+margin_left = 392.0
+margin_top = -45.0
+margin_right = 432.0
+margin_bottom = 225.0
+color = Color( 0.2, 0.596078, 0.294118, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="barrier2"]
+position = Vector2( 412, 90 )
+shape = SubResource( 1 )
+
+[node name="Camera" parent="." instance=ExtResource( 1 )]
+position = Vector2( 160, 90 )
+current = false
+zoom = Vector2( 1.5, 1.5 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "move"
+anims/RESET = SubResource( 2 )
+anims/move = SubResource( 3 )
+anims/move2 = SubResource( 6 )
+anims/move3 = SubResource( 7 )
+anims/move4 = SubResource( 8 )
+anims/move5 = SubResource( 9 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 4 )
+anim_player = NodePath("../AnimationPlayer")
+parameters/playback = SubResource( 5 )
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

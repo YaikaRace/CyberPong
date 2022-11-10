@@ -1,0 +1,248 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/primitives2d/rectangle2d.gd" type="Script" id=2]
+[ext_resource path="res://addons/primitives2d/circle2d.gd" type="Script" id=3]
+[ext_resource path="res://addons/primitives2d/arc2d.gd" type="Script" id=4]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 20, 123 )
+
+[sub_resource type="Animation" id=1]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("p1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("p2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "move"
+length = 20.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("p1:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 5, 10, 15 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -97 ), Vector2( 0, 0 ), Vector2( 0, 101 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("p2:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 5, 10, 15 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 101 ), Vector2( 0, 0 ), Vector2( 0, -97 ) ]
+}
+
+[node name="Soccer" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = -80.0
+margin_top = -45.0
+margin_right = 400.0
+margin_bottom = 225.0
+color = Color( 0.0745098, 0.298039, 0.298039, 1 )
+
+[node name="Camera" parent="." instance=ExtResource( 1 )]
+position = Vector2( 160, 90 )
+current = false
+zoom = Vector2( 1.5, 1.5 )
+
+[node name="p1" type="StaticBody2D" parent="." groups=["barrier"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="ColorRect" type="ColorRect" parent="p1"]
+margin_left = -112.0
+margin_top = -198.0
+margin_right = -72.0
+margin_bottom = 48.0
+color = Color( 0.2, 0.596078, 0.294118, 1 )
+
+[node name="ColorRect2" type="ColorRect" parent="p1"]
+margin_left = -112.0
+margin_top = 128.0
+margin_right = -72.0
+margin_bottom = 374.0
+color = Color( 0.2, 0.596078, 0.294118, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="p1"]
+position = Vector2( -92, -75 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="p1"]
+position = Vector2( -92, 251 )
+shape = SubResource( 3 )
+
+[node name="p2" type="StaticBody2D" parent="." groups=["barrier"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="ColorRect" type="ColorRect" parent="p2"]
+margin_left = 392.0
+margin_top = -198.0
+margin_right = 432.0
+margin_bottom = 48.0
+color = Color( 0.2, 0.596078, 0.294118, 1 )
+
+[node name="ColorRect2" type="ColorRect" parent="p2"]
+margin_left = 392.0
+margin_top = 128.0
+margin_right = 432.0
+margin_bottom = 374.0
+color = Color( 0.2, 0.596078, 0.294118, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="p2"]
+position = Vector2( 412, -75 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="p2"]
+position = Vector2( 412, 251 )
+shape = SubResource( 3 )
+
+[node name="Node2D" type="Node2D" parent="."]
+modulate = Color( 1, 1, 1, 0.498039 )
+
+[node name="Rectangle2D" type="Node2D" parent="Node2D"]
+position = Vector2( 160, 90 )
+script = ExtResource( 2 )
+width = 433.0
+height = 213.0
+line_width = 2.0
+centered = true
+
+[node name="Line2D" type="Line2D" parent="Node2D"]
+points = PoolVector2Array( 160, -22, 160, 201 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Circle2D" type="Node2D" parent="Node2D"]
+position = Vector2( 160, 90 )
+script = ExtResource( 3 )
+radius = 40.0
+line_width = 2.0
+
+[node name="Arc2D" type="Node2D" parent="Node2D"]
+position = Vector2( 376, -16 )
+script = ExtResource( 4 )
+radius = 15.0
+start_degrees = 90.0
+end_degrees = 180.0
+line_width = 2.0
+
+[node name="Arc2D2" type="Node2D" parent="Node2D"]
+position = Vector2( 376, 196 )
+script = ExtResource( 4 )
+radius = 15.0
+start_degrees = 180.0
+end_degrees = 270.0
+line_width = 2.0
+
+[node name="Arc2D3" type="Node2D" parent="Node2D"]
+position = Vector2( -56, 196 )
+script = ExtResource( 4 )
+radius = 15.0
+start_degrees = -90.0
+end_degrees = 0.0
+line_width = 2.0
+
+[node name="Arc2D4" type="Node2D" parent="Node2D"]
+position = Vector2( -56, -16 )
+script = ExtResource( 4 )
+radius = 15.0
+end_degrees = 90.0
+line_width = 2.0
+
+[node name="p1_goal" type="Node2D" parent="Node2D"]
+
+[node name="Rectangle2D" type="Node2D" parent="Node2D/p1_goal"]
+position = Vector2( -36, 90 )
+script = ExtResource( 2 )
+width = 40.0
+height = 120.0
+line_width = 2.0
+centered = true
+
+[node name="Arc2D" type="Node2D" parent="Node2D/p1_goal"]
+position = Vector2( -16, 90 )
+script = ExtResource( 4 )
+radius = 20.0
+start_degrees = -90.0
+end_degrees = 90.0
+line_width = 2.0
+
+[node name="Rectangle2D2" type="Node2D" parent="Node2D/p1_goal"]
+position = Vector2( -46, 90 )
+script = ExtResource( 2 )
+width = 20.0
+height = 60.0
+line_width = 2.0
+centered = true
+
+[node name="p2_goal" type="Node2D" parent="Node2D"]
+scale = Vector2( -1, 1 )
+
+[node name="Rectangle2D" type="Node2D" parent="Node2D/p2_goal"]
+position = Vector2( -356, 90 )
+script = ExtResource( 2 )
+width = 40.0
+height = 120.0
+line_width = 2.0
+centered = true
+
+[node name="Arc2D" type="Node2D" parent="Node2D/p2_goal"]
+position = Vector2( -336, 90 )
+script = ExtResource( 4 )
+radius = 20.0
+start_degrees = -90.0
+end_degrees = 90.0
+line_width = 2.0
+
+[node name="Rectangle2D2" type="Node2D" parent="Node2D/p2_goal"]
+position = Vector2( -366, 90 )
+script = ExtResource( 2 )
+width = 20.0
+height = 60.0
+line_width = 2.0
+centered = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "move"
+anims/RESET = SubResource( 1 )
+anims/move = SubResource( 2 )
+
+[node name="Position2D" type="Position2D" parent="."]
+position = Vector2( 160, 90 )
+__meta__ = {
+"_gizmo_extents_": 320.0
+}

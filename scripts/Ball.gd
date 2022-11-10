@@ -107,6 +107,8 @@ func _on_Ball_body_entered(body):
 	if "Bubble" in powers:
 		powers.erase("Bubble")
 		linear_velocity = previous_velocity
+		sleeping = false
+		gravity_scale = 3
 	if "Fenix" in powers:
 		linear_velocity = previous_velocity
 		sleeping = false
@@ -215,22 +217,6 @@ func use_boomerang():
 	yield(self,"body_entered")
 	tween.stop()
 
-func use_wings():
-	while "Wings" in powers:
-		if not loop:
-			loop = true
-			$wings.visible = true
-			var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-			tween.tween_property(self, "position:y", position.y + 100, 0.3)
-			tween.parallel().tween_property(self, "position:x", position.x + 75 * last_player.front_direction.x, 0.3)
-			yield(tween,"finished")
-			if "Wings" in powers:
-				var tween2 = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-				tween2.tween_property(self, "position:y", position.y - 100, 0.3)
-				tween2.parallel().tween_property(self, "position:x", position.x + 75 * last_player.front_direction.x, 0.3)
-				yield(tween2, "finished")
-			loop = false
-
 func use_power_up(pup_name):
 	match pup_name:
 		"Crystal":
@@ -271,6 +257,13 @@ func use_power_up(pup_name):
 					yield(get_tree(), "idle_frame")
 					continue
 				get_parent().remove_child(body)
+		"Wings":
+			while "Wings" in powers:
+				linear_velocity.y += 50
+				yield(get_tree().create_timer(0.5), "timeout")
+				linear_velocity.y -= 50
+				yield(get_tree().create_timer(0.5), "timeout")
+				yield(get_tree(), "idle_frame")
 
 func finish_confusion(other_player):
 	var players = get_parent().get_node("%Players")
@@ -305,6 +298,15 @@ func reset_ball_speed(pup):
 
 func active_player_pup(texture, pup_name):
 	last_player.power_up_picked(texture, pup_name)
+
+func explode():
+	$explosion.emitting = true
+	set_physics_process(false)
+	set_process(false)
+	gravity_scale = 0
+	linear_velocity = Vector2.ZERO
+	yield(get_tree().create_timer(0.7), "timeout")
+	get_parent().play_end_anim()
 
 
 func _on_VisibilityNotifier2D_screen_exited():

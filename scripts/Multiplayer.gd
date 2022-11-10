@@ -21,3 +21,8 @@ func _on_sucess(id):
 	Global.player_ids.append(id)
 	if Global.player_ids.size() > 1:
 		get_tree().change_scene_to(game_opt)
+
+
+func _on_Button_pressed():
+	get_tree().network_peer = null
+	Global.player_ids.clear()

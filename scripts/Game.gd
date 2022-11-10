@@ -141,6 +141,12 @@ func init_game():
 		ball.max_velocity = 250
 		for player in $Players.get_children():
 			player.ball_impulse = 275
+	if "soccer" in modifiers:
+		var soccer_scene = preload("res://scenes/Soccer.tscn")
+		add_child_below_node($center, soccer_scene.instance())
+	if "basket" in modifiers:
+		var basket = preload("res://scenes/Basketball.tscn")
+		add_child_below_node($center, basket.instance())
 
 func randomize_player():
 	match Global.scored_player:
@@ -184,6 +190,9 @@ func explosion(idx, finished = false):
 	explosions[idx].global_position.y = ball.global_position.y
 	animation_player.play("explosion"+String(idx+1))
 	yield(animation_player, "animation_finished")
+	play_end_anim(finished)
+
+func play_end_anim(finished = false):
 	if Global.new_round:
 		animation_player.play("new_round_end")
 	else:
@@ -210,6 +219,8 @@ func check_start():
 			ball.linear_velocity = Vector2(initial_speed, initial_y)
 			ball.get_child(0).emitting = true
 			ball.last_player = initial_player
+			if "soccer" in modifiers or "basket" in modifiers:
+				ball.gravity_scale = 3
 			rng.randomize()
 			if "power_ups" in modifiers:
 				powerup_timer.start(rng.randi_range(timer_range[0], timer_range[1]))

@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/Menu_camera.gd" type="Script" id=1]
+
+[node name="Menu_camera" type="Camera2D"]
+position = Vector2( 160, 90 )
+current = true
+limit_left = -10
+limit_top = -10
+limit_right = 330
+limit_bottom = 190
+limit_smoothed = true
+smoothing_enabled = true
+smoothing_speed = 1.0
+editor_draw_limits = true
+editor_draw_drag_margin = true
+script = ExtResource( 1 )

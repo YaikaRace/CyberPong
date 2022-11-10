@@ -7,5 +7,10 @@ margin_right = 24.0
 margin_bottom = 24.0
 text = "power_up"
 script = ExtResource( 1 )
+points_w = 4
+freq_w = 4
+length_w = 4
+
+[node name="Line2D" type="Line2D" parent="."]
 
 [connection signal="toggled" from="." to="." method="_on_power_up_button_toggled"]

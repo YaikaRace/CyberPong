@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=19 format=2]
+[gd_resource type="Theme" load_steps=20 format=2]
 
 [ext_resource path="res://fonts/dynamic/pixel.tres" type="DynamicFont" id=1]
 [ext_resource path="res://textures/uncheck.png" type="Texture" id=2]
@@ -7,9 +7,12 @@
 [ext_resource path="res://textures/off.png" type="Texture" id=5]
 [ext_resource path="res://textures/on.png" type="Texture" id=6]
 
+[sub_resource type="StyleBoxFlat" id=20]
+bg_color = Color( 0.364706, 0.364706, 0.364706, 1 )
+
 [sub_resource type="StyleBoxFlat" id=7]
 content_margin_left = 3.0
-bg_color = Color( 1, 0, 0.619608, 1 )
+bg_color = Color( 0.858824, 0.247059, 0.992157, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -19,24 +22,22 @@ corner_radius_bottom_left = 2
 content_margin_left = 3.0
 content_margin_top = 3.0
 content_margin_bottom = 3.0
-bg_color = Color( 0.52549, 0, 0.32549, 1 )
+bg_color = Color( 0.384314, 0.141176, 0.380392, 1 )
 border_color = Color( 1, 1, 1, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxFlat" id=12]
-content_margin_left = 2.0
-bg_color = Color( 1, 0, 0.619608, 1 )
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+[sub_resource type="StyleBoxFlat" id=21]
+bg_color = Color( 0.858824, 0.247059, 0.992157, 1 )
 
-[sub_resource type="StyleBoxFlat" id=6]
-content_margin_left = 2.0
-bg_color = Color( 0.52549, 0, 0.32549, 1 )
+[sub_resource type="StyleBoxFlat" id=22]
+content_margin_left = 1.0
+content_margin_right = 1.0
+content_margin_top = 1.0
+content_margin_bottom = 1.0
+bg_color = Color( 0.384314, 0.141176, 0.380392, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -47,7 +48,7 @@ content_margin_left = 2.0
 content_margin_right = 2.0
 content_margin_top = 2.0
 content_margin_bottom = 2.0
-bg_color = Color( 0, 1, 0.882353, 1 )
+bg_color = Color( 0, 0.803922, 0.976471, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -58,7 +59,7 @@ content_margin_left = 2.0
 content_margin_right = 2.0
 content_margin_top = 2.0
 content_margin_bottom = 2.0
-bg_color = Color( 0, 0.605469, 0.534515, 1 )
+bg_color = Color( 0, 0.411765, 0.666667, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -78,7 +79,7 @@ corner_radius_bottom_left = 2
 content_margin_left = 2.0
 content_margin_right = 2.0
 content_margin_top = 1.0
-bg_color = Color( 0.227451, 0.227451, 0.227451, 1 )
+bg_color = Color( 0.364706, 0.364706, 0.364706, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -88,7 +89,7 @@ corner_radius_bottom_left = 2
 content_margin_left = 3.0
 content_margin_top = 2.0
 content_margin_bottom = 2.0
-bg_color = Color( 0, 1, 0.882353, 1 )
+bg_color = Color( 0, 0.803922, 0.976471, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -98,7 +99,7 @@ corner_radius_bottom_left = 2
 content_margin_left = 3.0
 content_margin_top = 2.0
 content_margin_bottom = 2.0
-bg_color = Color( 0, 0.605469, 0.534515, 1 )
+bg_color = Color( 0, 0.411765, 0.666667, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -107,7 +108,7 @@ corner_radius_bottom_left = 2
 [sub_resource type="StyleBoxFlat" id=17]
 content_margin_left = 2.0
 content_margin_right = 2.0
-bg_color = Color( 1, 0, 0.619608, 1 )
+bg_color = Color( 0.858824, 0.247059, 0.992157, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -121,7 +122,7 @@ expand_margin_bottom = 2.0
 content_margin_left = 2.0
 content_margin_right = 2.0
 content_margin_top = 2.0
-bg_color = Color( 0, 1, 0.882353, 1 )
+bg_color = Color( 0, 0.803922, 0.976471, 1 )
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -133,6 +134,7 @@ default_font = ExtResource( 1 )
 Button/colors/font_color = Color( 0.568627, 0.568627, 0.568627, 1 )
 Button/colors/font_color_hover = Color( 1, 1, 1, 1 )
 Button/fonts/font = ExtResource( 1 )
+Button/styles/disabled = SubResource( 20 )
 Button/styles/focus = SubResource( 7 )
 Button/styles/hover = SubResource( 7 )
 Button/styles/normal = SubResource( 2 )
@@ -140,10 +142,12 @@ Button/styles/pressed = SubResource( 7 )
 CheckBox/constants/check_vadjust = 3
 CheckBox/constants/hseparation = -4
 CheckBox/icons/checked = ExtResource( 4 )
+CheckBox/icons/checked_disabled = ExtResource( 2 )
 CheckBox/icons/unchecked = ExtResource( 2 )
-CheckBox/styles/hover = SubResource( 12 )
-CheckBox/styles/normal = SubResource( 6 )
-CheckBox/styles/pressed = SubResource( 12 )
+CheckBox/icons/unchecked_disabled = ExtResource( 2 )
+CheckBox/styles/hover = SubResource( 21 )
+CheckBox/styles/normal = SubResource( 22 )
+CheckBox/styles/pressed = SubResource( 21 )
 CheckButton/icons/off = ExtResource( 5 )
 CheckButton/icons/on = ExtResource( 6 )
 CheckButton/styles/focus = SubResource( 18 )
