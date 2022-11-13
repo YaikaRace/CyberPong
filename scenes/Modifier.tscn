@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scripts/Modifier.gd" type="Script" id=1]
 
-[node name="Modifier" type="CheckBox"]
+[node name="Modifier" type="CheckBox" groups=["menu_button"]]
 margin_right = 24.0
 margin_bottom = 24.0
 text = "modifier"

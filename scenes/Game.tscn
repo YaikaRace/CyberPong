@@ -1,6 +1,5 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=25 format=2]
 
-[ext_resource path="res://scenes/Ball.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/Game.gd" type="Script" id=3]
 [ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=4]
@@ -432,7 +431,7 @@ margin_left = -80.0
 margin_top = -45.0
 margin_right = 400.0
 margin_bottom = 225.0
-color = Color( 0, 0, 0, 1 )
+color = Color( 0.101961, 0.0980392, 0.196078, 1 )
 
 [node name="center" type="Position2D" parent="."]
 unique_name_in_owner = true
@@ -530,13 +529,16 @@ unique_name_in_owner = true
 
 [node name="Player1" parent="Players" instance=ExtResource( 2 )]
 unique_name_in_owner = true
-modulate = Color( 1.2, 1.2, 1.2, 1 )
+modulate = Color( 1.1, 1.1, 1.1, 1 )
 position = Vector2( -64, 88 )
 player_bullets_node_name = "%p1_bullets"
 
 [node name="Rectangle2D" parent="Players/Player1" index="0"]
 modulate = Color( 1.2, 1.2, 1.2, 1 )
 self_modulate = Color( 1, 0, 0.584314, 1 )
+
+[node name="thunder1" parent="Players/Player1/thunder" index="0"]
+frame = 1
 
 [node name="Player2" parent="Players" instance=ExtResource( 2 )]
 unique_name_in_owner = true
@@ -551,6 +553,9 @@ player_bullets_node_name = "%p2_bullets"
 modulate = Color( 1.2, 1.2, 1.2, 1 )
 self_modulate = Color( 0, 0.929412, 1, 1 )
 
+[node name="thunder1" parent="Players/Player2/thunder" index="0"]
+frame = 1
+
 [node name="StaticBody2D" type="StaticBody2D" parent="." groups=["barrier"]]
 position = Vector2( 160, -35 )
 
@@ -561,7 +566,7 @@ shape = SubResource( 1 )
 
 [node name="up_barrier" type="ColorRect" parent="StaticBody2D"]
 unique_name_in_owner = true
-self_modulate = Color( 0.2, 0.596078, 0.294118, 1 )
+self_modulate = Color( 0.0745098, 0.298039, 0.298039, 1 )
 margin_left = -240.0
 margin_top = -10.0
 margin_right = 240.0
@@ -577,7 +582,7 @@ shape = SubResource( 1 )
 
 [node name="down_barrier" type="ColorRect" parent="StaticBody2D2"]
 unique_name_in_owner = true
-self_modulate = Color( 0.2, 0.596078, 0.294118, 1 )
+self_modulate = Color( 0.0745098, 0.298039, 0.298039, 1 )
 margin_left = -240.0
 margin_top = -11.0
 margin_right = 240.0
@@ -587,18 +592,6 @@ margin_bottom = 10.0
 
 [node name="obstacle_pos" type="Position2D" parent="obstacle"]
 position = Vector2( 160, 90 )
-
-[node name="Ball" parent="." instance=ExtResource( 1 )]
-unique_name_in_owner = true
-modulate = Color( 1.1, 1.1, 1.1, 1 )
-position = Vector2( -54, 88 )
-circle_radius = 0.0
-
-[node name="Circle2D2" parent="Ball" index="2"]
-modulate = Color( 1.1, 1.1, 1.1, 1 )
-
-[node name="Circle2D" parent="Ball" index="3"]
-modulate = Color( 1.1, 1.1, 1.1, 1 )
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2( 448, 88 )
@@ -918,4 +911,3 @@ unique_name_in_owner = true
 
 [editable path="Players/Player1"]
 [editable path="Players/Player2"]
-[editable path="Ball"]

@@ -1,0 +1,85 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://theme/UI.tres" type="Theme" id=1]
+[ext_resource path="res://scripts/Volume.gd" type="Script" id=2]
+[ext_resource path="res://sounds/impact2.wav" type="AudioStream" id=3]
+
+[node name="Volume" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.101961, 0.0980392, 0.196078, 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -96.5
+margin_top = -34.0
+margin_right = 96.5
+margin_bottom = 34.0
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 193.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="General" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_top = 12.0
+margin_right = 56.0
+margin_bottom = 20.0
+text = "General"
+
+[node name="General_slider" type="HSlider" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 60.0
+margin_right = 193.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 36.0
+margin_right = 193.0
+margin_bottom = 68.0
+size_flags_horizontal = 3
+
+[node name="SFX" type="Label" parent="VBoxContainer/HBoxContainer2"]
+margin_top = 12.0
+margin_right = 56.0
+margin_bottom = 20.0
+text = "SFX    "
+
+[node name="SFX_slider" type="HSlider" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+margin_left = 60.0
+margin_right = 193.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+
+[node name="Button" type="Button" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = -18.0
+margin_right = 44.0
+margin_bottom = -4.0
+text = "Back"
+
+[node name="test_volume_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+bus = "Impact"
+
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/General_slider" to="." method="_on_General_slider_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer2/SFX_slider" to="." method="_on_SFX_slider_value_changed"]
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

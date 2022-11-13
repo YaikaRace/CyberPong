@@ -9,7 +9,7 @@ content_margin_left = 6.0
 content_margin_right = 6.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
-bg_color = Color( 0, 0, 0, 1 )
+bg_color = Color( 0.054902, 0.027451, 0.105882, 1 )
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -67,7 +67,7 @@ margin_left = 90.0
 margin_right = 176.0
 margin_bottom = 16.0
 text = "Rectangle"
-items = [ "Rectangle", null, false, 0, null, "U shape", null, false, 1, null, "Triangle", null, false, 2, null, "Cross", null, false, 3, null, "Portal", null, false, 4, null ]
+items = [ "Rectangle", null, false, 0, null, "U shape", null, false, 1, null, "Triangle", null, false, 2, null, "Cross", null, false, 3, null, "Portal", null, false, 4, null, "Flippers", null, false, 5, null ]
 selected = 0
 
 [node name="brick" parent="CenterContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource( 1 )]

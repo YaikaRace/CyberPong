@@ -7,7 +7,7 @@ var broke = false
 var hidden = false
 
 const colors = {
-	GREEN = Color(0.2, 0.596078, 0.294118),
+	GREEN = Color(0.07451, 0.298039, 0.298039),
 	YELLOW = Color(1, 0.784314, 0.145098),
 	RED = Color(0.768627, 0.141176, 0.188235)
 }
@@ -47,9 +47,19 @@ func hit(hit_number):
 		tween.set_trans(Tween.TRANS_LINEAR)
 		tween.tween_property(self, "modulate", modulate_color, 0)
 		tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 2)
-		$Timer.start(1.5)
+		$Timer.start(0.8)
 		new_hit_allowed = false
-	
+		rpc_unreliable("rhit", hit_number)
+
+remote func rhit(hit_number):
+	if new_hit_allowed:
+		hits += hit_number
+		var tween = create_tween()
+		tween.set_trans(Tween.TRANS_LINEAR)
+		tween.tween_property(self, "modulate", modulate_color, 0)
+		tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 2)
+		$Timer.start(0.8)
+		new_hit_allowed = false
 
 
 func _on_Timer_timeout():

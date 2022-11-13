@@ -7,19 +7,11 @@ onready var playback: AnimationNodeStateMachinePlayback = $AnimationTree.get("pa
 func _ready():
 	$AnimationTree.set_active(true)
 	playback.start("move")
+	$Timer.start(20)
 
 
-func _on_AnimationPlayer_animation_finished(anim_name):
-	rng.randomize()
-	var num = rng.randi_range(1, 100)
-	print(num)
-	if num in range(20):
-		rng.randomize()
-		var new_anim = rng.randi_range(0, 3)
-		playback.travel(ANIMS[new_anim])
+func _on_Timer_timeout():
+	if playback.get_current_node() == "move":
+		playback.travel("round")
 	else:
-		print(playback.get_current_node())
-		if playback.get_current_node() == "move":
-			playback.travel("move 2")
-		else:
-			playback.travel("move")
+		playback.travel("move")

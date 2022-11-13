@@ -1,7 +1,5 @@
 extends RigidBody2D
 
-export (float, 0, 20) var circle_radius = 5 setget set_polygon_points
-
 onready var aberration = get_parent().get_node("%aberration")
 onready var camera = get_parent().get_node("%Camera")
 onready var is_server = get_tree().is_network_server()
@@ -22,6 +20,24 @@ func _ready():
 	aberration.get_material().set("shader_param/g_displacement", Vector2.ZERO)
 	if get_tree().network_peer == null:
 		is_server = true
+	
+
+func _process(delta):
+	$R.global_rotation = 0
+	$L.global_rotation = 0
+	if Global.config.ball == "Soccer" or "soccer" in Global.game_opt.modifiers:
+		$"%Soccer".visible = true
+		$"%Basket".visible = false
+	elif Global.config.ball == "Basket" or "basket" in Global.game_opt.modifiers:
+		$"%Circle2D".color = Color(1, 0.635294, 0.078431)
+		$"%Basket".visible = true
+		$"%Soccer".visible = false
+	elif Global.config.ball == "Crystal":
+		$"%Crystal".visible = true
+	else:
+		$"%Soccer".visible = false
+		$"%Basket".visible = false
+		$"%Crystal".visible = false
 
 func _physics_process(delta):
 	if is_server:
@@ -44,20 +60,10 @@ func _physics_process(delta):
 				powers.erase("Wings")
 		if get_tree().network_peer != null:
 			rpc_unreliable("set_ball_pos", position)
-
-func set_polygon_points(new_radius):
-	circle_radius = new_radius
-
-func generate_circle_polygon(radius: float, num_sides: int, position: Vector2) -> PoolVector2Array:
-	var angle_delta: float = (PI * 2) / num_sides
-	var vector: Vector2 = Vector2(radius, 0)
-	var polygon: PoolVector2Array
-
-	for _i in num_sides:
-		polygon.append(vector + position)
-		vector = vector.rotated(angle_delta)
-
-	return polygon
+	else:
+		sleeping = true
+		linear_velocity = Vector2.ZERO
+		gravity_scale = 0
 
 remote func set_bal_pos(pos):
 	var new_trans = ball_state.get_transform()
@@ -76,12 +82,12 @@ func limit_velocity():
 		linear_velocity.y -= 1
 	if linear_velocity.y < -max_velocity:
 		linear_velocity.y += 1
-	if linear_velocity.x > 750 or linear_velocity.x < -750:
-		position = get_parent().get_node("%center").position
-		linear_velocity.x = 350 * last_player.front_direction.x
-	if linear_velocity.y > 750 or linear_velocity.y < -750:
-		position = get_parent().get_node("%center").position
-		linear_velocity.y = 200
+#	if linear_velocity.x > 750 or linear_velocity.x < -750:
+#		position = get_parent().get_node("%center").position
+#		linear_velocity.x = 350 * last_player.front_direction.x
+#	if linear_velocity.y > 750 or linear_velocity.y < -750:
+#		position = get_parent().get_node("%center").position
+#		linear_velocity.y = 200
 	if started:
 		if not "Freeze" in powers and not "Bubble" in powers and not "Wings" in powers and not "Fenix" in powers:
 			if linear_velocity.x >= 0 and linear_velocity.x < max_velocity:
@@ -89,7 +95,19 @@ func limit_velocity():
 			if linear_velocity.x <= 0 and linear_velocity.x > -max_velocity:
 				linear_velocity.x = -max_velocity
 
+func break_freeze():
+	linear_velocity = previous_velocity
+	$"%Circle2D".color = previous_modulate
+	$"%freeze_particles".emitting = false
+	$"%freeze_break".emitting = true
+	if "soccer" in Global.game_opt.modifiers:
+		gravity_scale = 3
+	if "basket" in Global.game_opt.modifiers:
+		gravity_scale = 7
+	powers.erase("Freeze")
+
 func _on_Ball_body_entered(body):
+	rotation = 0
 	var tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_LINEAR)
 	rotation = 0.0
@@ -101,6 +119,10 @@ func _on_Ball_body_entered(body):
 		$"%Circle2D".color = previous_modulate
 		$"%freeze_particles".emitting = false
 		$"%freeze_break".emitting = true
+		if "soccer" in Global.game_opt.modifiers:
+			gravity_scale = 3
+		if "basket" in Global.game_opt.modifiers:
+			gravity_scale = 7
 		powers.erase("Freeze")
 	if "Boomerang" in powers:
 		powers.erase("Boomerang")
@@ -108,10 +130,16 @@ func _on_Ball_body_entered(body):
 		powers.erase("Bubble")
 		linear_velocity = previous_velocity
 		sleeping = false
-		gravity_scale = 3
+		if "soccer" in Global.game_opt.modifiers:
+			gravity_scale = 3
+		if "basket" in Global.game_opt.modifiers:
+			gravity_scale = 7
 	if "Fenix" in powers:
-		linear_velocity = previous_velocity
 		sleeping = false
+		if "soccer" in Global.game_opt.modifiers:
+			gravity_scale = 3
+		if "basket" in Global.game_opt.modifiers:
+			gravity_scale = 7
 		loop = false
 		var tween2 = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC)
 		tween2.parallel().tween_property($"%fenix_particles", "modulate", Color(1, 1, 1, 0), 1)
@@ -124,6 +152,7 @@ func _on_Ball_body_entered(body):
 		$Circle2D2.color = body.rectangle.self_modulate
 		$"%fire_particles".get_process_material().color = body.rectangle.self_modulate
 		$Particles2D.self_modulate = body.rectangle.self_modulate
+		body.hit()
 		last_player = body
 	camera.shake(0.2, abs(linear_velocity.x + 1) / 4, 2)
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(2,2), 0).connect("finished", self, "_on_player_tween_finished")
@@ -139,6 +168,9 @@ func _on_Ball_body_entered(body):
 		barrier_hits = 1
 	if body.is_in_group("obstacle"):
 		body.impact()
+		$barrier_impact.play()
+	if body.is_in_group("flipper"):
+		body.play_anim()
 		$barrier_impact.play()
 
 func _on_barrier_tween_finished(body):
@@ -179,6 +211,7 @@ func check_powers():
 			var tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC)
 			previous_velocity = linear_velocity
 			linear_velocity = Vector2.ZERO
+			gravity_scale = 0
 			sleeping = true
 			tween.tween_property(self, "position", center.global_position, 1)
 			tween.parallel().tween_property(camera, "zoom", Vector2(0.5, 0.5), 1)
@@ -187,7 +220,9 @@ func check_powers():
 			tween.tween_property(camera, "zoom", Vector2(1.5, 1.5), 1)
 			tween.parallel().tween_property($Fenix, "modulate", Color(1, 1, 1, 0), 1)
 			camera.shake(1, 50, 5)
-			yield(get_tree().create_timer(3), "timeout")
+			yield(get_tree().create_timer(0.5), "timeout")
+			$"%phoenix_sfx".play()
+			yield(get_tree().create_timer(2.5), "timeout")
 			rng.randomize()
 			var bricks = bricks_nodes[rng.randi_range(0, 1)]
 			rng.randomize()
@@ -213,16 +248,21 @@ func get_player_color():
 func use_boomerang():
 	var tween = create_tween().set_trans(Tween.TRANS_LINEAR)
 	var new_vel = linear_velocity
+	$"%boomerang_sfx".play()
 	tween.tween_property(self, "linear_velocity", new_vel.rotated(deg2rad(-90)), 0.7)
 	yield(self,"body_entered")
 	tween.stop()
 
 func use_power_up(pup_name):
 	match pup_name:
+		"Slow_ball":
+			$"%slowdown_sfx".play()
+		"Fast_ball":
+			$"%speedup_sfx".play()
 		"Crystal":
 			if $Timer.is_stopped():
 				$crystall_ball.visible = true
-				$Circle2D.visible = false
+				$"%Circle2D".visible = false
 				var body = StaticBody2D.new()
 				var line = Line2D.new()
 				var col = CollisionShape2D.new()
@@ -237,6 +277,7 @@ func use_power_up(pup_name):
 				body.add_child(col)
 				body.add_child(line)
 				get_parent().add_child_below_node(self, body)
+				$"%crystal_sfx".play()
 				while not $Timer.is_stopped():
 					$crystall_ball.look_at(position * linear_velocity)
 					$crystall_ball.rotation_degrees += 90
@@ -244,6 +285,7 @@ func use_power_up(pup_name):
 					var vector_points = PoolVector2Array(points)
 					line.set_points(vector_points)
 					yield(get_tree(), "idle_frame")
+				$"%crystal_sfx".stop()
 				points.append(points[0])
 				var vector_points = PoolVector2Array(points)
 				line.set_points(vector_points)
@@ -251,7 +293,7 @@ func use_power_up(pup_name):
 				body.collision_layer = 2
 				body.collision_mask = 2
 				$crystall_ball.visible = false
-				$Circle2D.visible = true
+				$"%Circle2D".visible = true
 				$Timer.start(10)
 				while not $Timer.is_stopped():
 					yield(get_tree(), "idle_frame")
@@ -267,6 +309,7 @@ func use_power_up(pup_name):
 
 func finish_confusion(other_player):
 	var players = get_parent().get_node("%Players")
+	$"%confusion_sfx".play()
 	yield(get_tree().create_timer(8),"timeout")
 	for player in players.get_children():
 		if player != other_player:

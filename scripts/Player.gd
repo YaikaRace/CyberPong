@@ -25,7 +25,7 @@ var is_master
 onready var pup_picked_area = $up_power_up
 onready var rectangle = $Rectangle2D
 onready var ball = get_parent().get_node("%Ball")
-onready var ray = $RayCast2D
+onready var rays = [$RayCast2D, $RayCast2D2, $RayCast2D3]
 
 signal power_up_finished
 signal power_up_actived
@@ -79,27 +79,34 @@ func _physics_process(delta):
 			bullets_node.visible = false
 
 func hit():
-	var tween = create_tween()
-	var module = modulate + Color(1, 1, 1, 1)
-	tween.parallel().tween_property(self, "modulate", module, 0).connect("finished", self, "_on_modulate_tween_finished", [self])
+	var tween = create_tween().set_trans(Tween.TRANS_LINEAR)
+	var prev_mod = modulate
+	var module = Color(1.2, 1.2, 1.2, 1.2)
+	modulate = module
+	tween.tween_property(self, "modulate", prev_mod, 1)
 
 func _input(event):
 	if event is InputEventScreenDrag:
 		if player == 1:
 			if event.position.x < section:
-				move_and_collide(Vector2(0, event.position.y) - Vector2(0, global_position.y))
+				var direction = event.position.y+1 / event.position.y+1
+				move_and_collide(Vector2(0, direction * speed))
 		if player == 2:
 			if event.position.x > section:
-				move_and_collide(Vector2(0, event.position.y) - Vector2(0, global_position.y))
+				var direction = event.position.y+1 / event.position.y+1
+				move_and_collide(Vector2(0, direction * speed))
 
 func impulse_ball(from: int, to: int, body):
 	if body.is_in_group("ball"):
 		rng.randomize()
 		var velocity_y = 0
-		if body.linear_velocity.y > 0:
-			velocity_y = rng.randi_range(from, to)
-		elif body.linear_velocity.y < 0:
-			velocity_y = rng.randi_range(-to, -from)
+		if not "basket" in Global.game_opt.modifiers:
+			if body.linear_velocity.y > 0:
+				velocity_y = rng.randi_range(from, to)
+			elif body.linear_velocity.y < 0:
+				velocity_y = rng.randi_range(-to, -from)
+		else:
+			velocity_y = -ball_impulse * 0.5
 		body.linear_velocity = Vector2(ball_impulse, velocity_y)
 		if player == 2:
 			body.linear_velocity = Vector2(-ball_impulse, velocity_y)
@@ -165,32 +172,28 @@ func use_power_up(pup_name):
 			var previous_velocity = ball.linear_velocity
 			ball.powers.append(pup_name)
 			ball.linear_velocity = Vector2.ZERO
-			var previous_modulate = ball.modulate
-			tween.tween_property(ball.get_node("%Circle2D"), "color", Color(0.666667, 0.87451, 0.878431), 0.3).connect("finished", self, "_on_freeze_finished", [previous_velocity])
+			var previous_color = ball.get_node("%Circle2D")
+			ball.gravity_scale = 0
+			tween.tween_property(ball.get_node("%Circle2D"), "color", Color(0.666667, 0.87451, 0.878431), 0.3).connect("finished", self, "_on_freeze_finished", [previous_velocity, previous_color])
 			ball.get_node("%freeze_particles").emitting = true
+			ball.get_node("%freeze_sfx").play()
 		"Cloud":
-			var thunder = Line2D.new()
 			var players = get_parent().get_node("%Players")
 			var pups_render = get_parent().get_node("%pups_render")
 			var other_player
 			for player_node in players.get_children():
 				if player_node.player != player:
 					other_player = player_node
-			thunder.width = 2
-			thunder.add_point(position)
-			if player == 1:
-				thunder.add_point(position + ray.cast_to)
-			elif player == 2:
-				thunder.add_point(position - ray.cast_to)
-			thunder.default_color = Color.gold
-			pups_render.add_child(thunder)
-			ray.enabled = true
-			yield(get_tree().create_timer(0.1), "timeout")
-			if ray.is_colliding():
-				if ray.get_collider() == other_player:
-					other_player.can_move = false
-			pups_render.remove_child(thunder)
-			ray.enabled = false
+			$thunder.visible = true
+			$"%thunder_sfx".play()
+			yield(get_tree(), "idle_frame")
+			for ray in rays:
+				if ray.is_colliding():
+					if ray.get_collider() == other_player:
+						other_player.can_move = false
+						break
+			yield(get_tree().create_timer(0.3), "timeout")
+			$thunder.visible = false
 			yield(get_tree().create_timer(0.9), "timeout")
 			other_player.can_move = true
 		"Boxing_glove":
@@ -199,6 +202,7 @@ func use_power_up(pup_name):
 			var glove_ins = glove.instance()
 			glove_ins.position = position
 			glove_ins.last_player = self
+			glove_ins.ball = ball
 			pups_render.add_child(glove_ins)
 		"Portal_gun":
 			var portal_pup = load("res://scenes/Power ups/portals_pup.tscn")
@@ -224,47 +228,57 @@ func use_power_up(pup_name):
 				else:
 					new_pos = 160
 			#new_pos = Vector2(30, 0) * front_direction
+			$"%portal_gun_sfx".play()
 			tween2.tween_property($portal_particles, "global_position", Vector2(new_pos, $portal_particles.global_position.y), 0.05)
-			yield(tween2, "finished")
 			var portal_pup_ins = portal_pup.instance()
-			portal_pup_ins.global_position = $portal_particles.global_position
+			portal_pup_ins.global_position = Vector2(new_pos, $portal_particles.global_position.y)
 			portal_pup_ins.scale = self.scale
 			$portal_particles.emitting = false
 			get_parent().add_child(portal_pup_ins)
 		"Blaster":
-			var bullet = load("res://scenes/Power ups/blaster_bullet.tscn")
-			var bullet_ins = bullet.instance()
-			bullet_ins.global_position = global_position + (Vector2(12, 1) * front_direction)
-			bullet_ins.linear_velocity *= front_direction
-			get_parent().add_child(bullet_ins)
-			bullets_node.get_child(count).visible = false
-			if count > 0:
-				add_powerup("res://scenes/Power ups/Blaster.tscn", "Blaster")
-				count -= 1
+			if $Timer.is_stopped():
+				$Timer.start(2)
+				var bullet = load("res://scenes/Power ups/blaster_bullet.tscn")
+				var bullet_ins = bullet.instance()
+				bullet_ins.global_position = global_position + (Vector2(12, 1) * front_direction)
+				bullet_ins.linear_velocity *= front_direction
+				get_parent().add_child(bullet_ins)
+				bullets_node.get_child(count).visible = false
+				if count > 0:
+					add_powerup("res://scenes/Power ups/Blaster.tscn", "Blaster")
+					count -= 1
+				else:
+					bullets_node.visible = false
+					for node in bullets_node.get_children():
+						node.visible = true
+					count = 2
+					var pups_pos
+					if player == 1:
+						pups_pos = get_parent().get_node("%pup_p1_pos")
+					elif player == 2:
+						pups_pos = get_parent().get_node("%pup_p2_pos")
+					for pup in pups_children:
+						if not pup is Position2D:
+							if pup.global_position == pups_pos.global_position:
+								pup.queue_free()
+				$"%blaster_sfx".play()
 			else:
-				bullets_node.visible = false
-				for node in bullets_node.get_children():
-					node.visible = true
-				count = 2
-				var pups_pos
-				if player == 1:
-					pups_pos = get_parent().get_node("%pup_p1_pos")
-				elif player == 2:
-					pups_pos = get_parent().get_node("%pup_p2_pos")
-				for pup in pups_children:
-					if not pup is Position2D:
-						if pup.global_position == pups_pos.global_position:
-							pup.queue_free()
+				add_powerup("res://scenes/Power ups/Blaster.tscn", "Blaster")
 
-func _on_freeze_finished(previous_velocity):
+
+func _on_freeze_finished(previous_velocity, prev_col):
 	yield(get_tree().create_timer(1), "timeout")
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_LINEAR)
-	tween.tween_property(ball.get_node("%Circle2D"), "color", Color(1, 1, 1, 1), 0.3)
+	tween.tween_property(ball.get_node("%Circle2D"), "color", prev_col, 0.3)
 	ball.powers.erase("Freeze")
 	ball.get_node("%freeze_particles").emitting = false
 	if ball.linear_velocity == Vector2.ZERO:
 		ball.linear_velocity = previous_velocity
+	if "soccer" in Global.game_opt.modifiers:
+		ball.gravity_scale = 3
+	if "basket" in Global.game_opt.modifiers:
+		ball.gravity_scale = 7
 
 func _on_down_pup_body_entered(body):
 	if body.is_in_group("barrier"):

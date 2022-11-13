@@ -14,6 +14,7 @@ rotation = 3.14159
 portal_rotation = -90.0
 portal_size = Vector2( 38, 4 )
 group = "portal_pup"
+is_power_up = true
 
 [node name="Particles2D" parent="Portal" index="0"]
 position = Vector2( 2.38419e-07, 0 )
@@ -42,6 +43,7 @@ color = Color( 0, 0.596078, 0.862745, 1 )
 portal_rotation = -90.0
 portal_size = Vector2( 38, 4 )
 group = "portal_pup"
+is_power_up = true
 
 [node name="Particles2D" parent="Portal2" index="0"]
 modulate = Color( 0, 0.596078, 0.862745, 1 )

@@ -25,6 +25,10 @@ func reload_preview():
 	file.close()
 	get_tree().reload_current_scene()
 
+func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		reload_preview()
+
 
 func _on_Modifiers_gui_input(event):
 	if event is InputEventMouseButton:

@@ -2,14 +2,11 @@
 
 [ext_resource path="res://scripts/power_up_button.gd" type="Script" id=1]
 
-[node name="power_up_button" type="CheckBox"]
+[node name="power_up_button" type="CheckBox" groups=["menu_button"]]
 margin_right = 24.0
 margin_bottom = 24.0
 text = "power_up"
 script = ExtResource( 1 )
-points_w = 4
-freq_w = 4
-length_w = 4
 
 [node name="Line2D" type="Line2D" parent="."]
 

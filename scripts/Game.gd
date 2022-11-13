@@ -20,7 +20,8 @@ var obstacles = [
 	preload("res://scenes/obstacles/midle_u.tscn"),
 	preload("res://scenes/obstacles/Stairs.tscn"),
 	preload("res://scenes/obstacles/Cross.tscn"),
-	preload("res://scenes/obstacles/portal_obstacle.tscn")
+	preload("res://scenes/obstacles/portal_obstacle.tscn"),
+	preload("res://scenes/obstacles/Flippers.tscn")
 	]
 var powerups = {
 	"Blaster": preload("res://scenes/Power ups/Blaster.tscn"),
@@ -28,18 +29,19 @@ var powerups = {
 	"Boxing Glove": preload("res://scenes/Power ups/Boxing_glove.tscn"),
 	"Bubble": preload("res://scenes/Power ups/Bubble.tscn"),
 	"Thunder": preload("res://scenes/Power ups/Cloud.tscn"),
-	"Confusion": preload("res://scenes/Power ups/Cloud.tscn"),
+	"Confusion": preload("res://scenes/Power ups/Confusion.tscn"),
 	"Crystal": preload("res://scenes/Power ups/Crystal.tscn"),
 	"Speed Up": preload("res://scenes/Power ups/Fast_ball.tscn"),
 	"Speed Down": preload("res://scenes/Power ups/Slow_ball.tscn"),
 	"Phoenix": preload("res://scenes/Power ups/Fenix.tscn"),
 	"Freeze": preload("res://scenes/Power ups/Freeze.tscn"),
 	"Portal Gun": preload("res://scenes/Power ups/Portal_gun.tscn"),
-	"Wings": preload("res://scenes/Power ups/Wings.tscn")
 	}
-enum obstacles_idx {RECTANGLE, U, TRIANGLE, CROSS, PORTAL}
+enum obstacles_idx {RECTANGLE, U, TRIANGLE, CROSS, PORTAL, FLIPPERS}
 var can_move = false
 var timer_range = [5, 15]
+var rball = preload("res://scenes/Remote/Ball.tscn")
+var lball = preload("res://scenes/Ball.tscn")
 
 onready var mode = Global.game_opt.mode
 onready var round_mode = Global.game_opt.round_mode
@@ -65,11 +67,21 @@ func _ready():
 		$"%Player1".left = "a"
 		$"%Player1".right = "d"
 		$"%Player2".pup_key = "0"
+		var ball_ins = lball.instance()
+		add_child_below_node($obstacle, ball_ins, true)
+		ball = ball_ins
+		$"%Player1".ball = ball_ins
+		$"%Player2".ball = ball_ins
 	elif get_tree().network_peer != null:
+		var ball_ins
 		if get_tree().is_network_server():
 			$"%Player1".set_id(get_tree().get_network_unique_id())
+			ball_ins = lball.instance()
 		else:
 			$"%Player2".set_id(get_tree().get_network_unique_id())
+			ball_ins = rball.instance()
+		add_child_below_node($obstacle, ball_ins, true)
+		ball = ball_ins
 	connect("explosion_finished", self,"_on_explosion_finish")
 	$"%Player1".rectangle.self_modulate = Global.config.Player1.color
 	$"%Player2".rectangle.self_modulate = Global.config.Player2.color
@@ -186,10 +198,11 @@ func _on_Area2D2_body_entered(body):
 		explosion(1)
 
 func explosion(idx, finished = false):
-	$AudioStreamPlayer.play()
-	explosions[idx].global_position.y = ball.global_position.y
-	animation_player.play("explosion"+String(idx+1))
-	yield(animation_player, "animation_finished")
+	if not "basket" in modifiers:
+		$AudioStreamPlayer.play()
+		explosions[idx].global_position.y = ball.global_position.y
+		animation_player.play("explosion"+String(idx+1))
+		yield(animation_player, "animation_finished")
 	play_end_anim(finished)
 
 func play_end_anim(finished = false):
@@ -219,8 +232,10 @@ func check_start():
 			ball.linear_velocity = Vector2(initial_speed, initial_y)
 			ball.get_child(0).emitting = true
 			ball.last_player = initial_player
-			if "soccer" in modifiers or "basket" in modifiers:
+			if "soccer" in modifiers:
 				ball.gravity_scale = 3
+			if "basket" in modifiers:
+				ball.gravity_scale = 7
 			rng.randomize()
 			if "power_ups" in modifiers:
 				powerup_timer.start(rng.randi_range(timer_range[0], timer_range[1]))
@@ -311,29 +326,36 @@ func add_obstacle():
 
 func _on_powerup_timer_timeout():
 	if is_instance_valid(self):
-		var tween = create_tween()
-		tween.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN)
-		rng.randomize()
-		var power = rng.randi_range(0, powerups.values().size()-1)
-		var powerup = powerups.values()[power]
-		var unique_pos = false
-		var powerup_instance = powerup.instance()
-		while not unique_pos:
+		if powerups.size() > 0:
+			var tween = create_tween()
+			tween.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN)
 			rng.randomize()
-			var pos = powerup_pos.get_child(rng.randi_range(0, powerup_pos.get_child_count()-1)).position
-			powerup_instance.position = pos
-			var power_pos = Vector2.ZERO
-			for pup_pos in $"%powerups".get_children():
-				if pup_pos.position == pos:
-					power_pos = pup_pos.position
-			if power_pos == Vector2.ZERO:
-				unique_pos = true
-			else:
-				return
-		powerup_instance.scale = Vector2.ZERO
-		if not powerup_instance.is_in_group("powerup"):
-			powerup_instance.add_to_group("powerup")
-		$"%powerups".add_child(powerup_instance)
-		tween.tween_property(powerup_instance, "scale", Vector2(1, 1), 0.5)
-		rng.randomize()
-		powerup_timer.start(rng.randi_range(timer_range[0], timer_range[1]))
+			var power = rng.randi_range(0, powerups.values().size()-1)
+			var powerup = powerups.values()[power]
+			var bubble = Sprite.new()
+			var bubble_sprite = preload("res://textures/power ups/bubble2.png")
+			bubble.texture = bubble_sprite
+			bubble.scale = Vector2(1.5, 1.5)
+			var unique_pos = false
+			var powerup_instance = powerup.instance()
+			while not unique_pos:
+				rng.randomize()
+				var pos = powerup_pos.get_child(rng.randi_range(0, powerup_pos.get_child_count()-1)).position
+				powerup_instance.position = pos
+				var power_pos = Vector2.ZERO
+				for pup_pos in $"%powerups".get_children():
+					if pup_pos.position == pos:
+						power_pos = pup_pos.position
+				if power_pos == Vector2.ZERO:
+					unique_pos = true
+				else:
+					return
+			powerup_instance.scale = Vector2.ZERO
+			if not powerup_instance.is_in_group("powerup"):
+				powerup_instance.add_to_group("powerup")
+			if not powerups.keys()[power] == "Bubble":
+				powerup_instance.add_child(bubble)
+			$"%powerups".add_child(powerup_instance)
+			tween.tween_property(powerup_instance, "scale", Vector2(1, 1), 0.5)
+			rng.randomize()
+			powerup_timer.start(rng.randi_range(timer_range[0], timer_range[1]))

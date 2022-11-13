@@ -39,6 +39,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/color-palette/PaletteImporter.gd"
 }, {
+"base": "Polygon2D",
+"class": "PolygonCircle2D",
+"language": "GDScript",
+"path": "res://scripts/Utilities/PolygonCircle.gd"
+}, {
 "base": "CheckBox",
 "class": "PowerUpButton",
 "language": "GDScript",
@@ -56,6 +61,7 @@ _global_script_class_icons={
 "FlexGridContainer": "res://addons/color-palette/utilities/FlexGridContainerIcon.png",
 "Palette": "",
 "PaletteImporter": "",
+"PolygonCircle2D": "",
 "PowerUpButton": "",
 "Rectangle2D": ""
 }
@@ -87,7 +93,7 @@ version_control_plugin_name="GitAPI"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/color-palette/plugin.cfg", "res://addons/primitives2d/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/primitives2d/plugin.cfg" )
 
 [gdnative]
 

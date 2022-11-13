@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://textures/power ups/glove.png" type="Texture" id=1]
 [ext_resource path="res://scripts/power ups/glove_pup.gd" type="Script" id=2]
+[ext_resource path="res://sounds/punch.wav" type="AudioStream" id=3]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 7.5, 6.5 )
@@ -27,5 +28,11 @@ shape = SubResource( 5 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( -0.5, -0.5 )
 shape = SubResource( 6 )
+
+[node name="punch_sfx" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource( 3 )
+volume_db = 5.0
+bus = "Punch"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]

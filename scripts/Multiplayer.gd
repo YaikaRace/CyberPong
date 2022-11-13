@@ -3,6 +3,7 @@ extends Control
 var game_opt = preload("res://scenes/Gamecfg.tscn")
 
 func _ready():
+	$VBoxContainer2/HBoxContainer/Host.grab_focus()
 	get_tree().connect("network_peer_connected", self, "_on_sucess")
 
 
@@ -26,3 +27,4 @@ func _on_sucess(id):
 func _on_Button_pressed():
 	get_tree().network_peer = null
 	Global.player_ids.clear()
+	get_tree().change_scene("res://scenes/Menu.tscn")

@@ -26,4 +26,5 @@ func _on_Fast_ball_body_entered(body):
 		$CollisionShape2D.disabled = true
 		self.remove_from_group("powerup")
 		body.reset_ball_speed("Fast_ball")
+		body.use_power_up("Fast_ball")
 		queue_free()

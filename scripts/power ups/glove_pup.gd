@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-onready var ball = get_parent().get_node("%Ball")
+var ball
 onready var last_player
 
 var speed = Vector2(20, 0)
@@ -27,6 +27,8 @@ func tween_finish():
 
 func _on_Area2D_body_entered(body):
 	if body.is_in_group("ball"):
-		body.linear_velocity = (body.linear_velocity + Vector2(10, 10)).rotated(-rotation)
+		$"%punch_sfx".play()
+		body.linear_velocity = (body.linear_velocity + Vector2(20, 20)).rotated(-rotation)
 		body.set_color(last_player)
+		body.break_freeze()
 		stop_glove()

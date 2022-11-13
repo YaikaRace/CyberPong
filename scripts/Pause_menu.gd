@@ -6,9 +6,10 @@ func _ready():
 	pass 
 
 func _process(delta):
-	if Input.is_action_just_pressed("ui_cancel"):
-		visible = true
-		get_tree().paused = true
+	if get_tree().current_scene.name == "Game":
+		if Input.is_action_just_pressed("ui_cancel"):
+			visible = true
+			get_tree().paused = true
 
 func _on_Resume_pressed():
 	get_tree().paused = false

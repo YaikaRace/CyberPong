@@ -1,8 +1,11 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Basket.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/Basketball.gd" type="Script" id=3]
+[ext_resource path="res://addons/primitives2d/arc2d.gd" type="Script" id=4]
+[ext_resource path="res://addons/primitives2d/rectangle2d.gd" type="Script" id=5]
+[ext_resource path="res://addons/primitives2d/circle2d.gd" type="Script" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 20, 135 )
@@ -25,6 +28,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id=3]
 resource_name = "move"
 length = 20.0
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Basket:position")
 tracks/0/interp = 2
@@ -32,10 +36,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 5, 10, 15, 20 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 5, 10, 15 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 160, 90 ), Vector2( 160, -10 ), Vector2( 160, 90 ), Vector2( 160, 187 ), Vector2( 160, 90 ) ]
+"values": [ Vector2( 160, 90 ), Vector2( 160, -10 ), Vector2( 160, 90 ), Vector2( 160, 187 ) ]
 }
 
 [sub_resource type="Animation" id=6]
@@ -102,8 +106,22 @@ tracks/0/keys = {
 "values": [ Vector2( 160, 90 ), Vector2( 0, 90 ), Vector2( 160, 90 ) ]
 }
 
-[sub_resource type="AnimationNodeAnimation" id=23]
-animation = "move"
+[sub_resource type="Animation" id=23]
+resource_name = "round"
+length = 9.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Basket:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2, 3, 4, 5, 6, 7, 8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 160, 55 ), Vector2( 130, 72 ), Vector2( 127, 103 ), Vector2( 145, 121 ), Vector2( 160, 125 ), Vector2( 186, 113 ), Vector2( 194, 96 ), Vector2( 189, 71 ), Vector2( 176, 59 ) ]
+}
 
 [sub_resource type="AnimationNodeAnimation" id=10]
 animation = "move"
@@ -119,6 +137,9 @@ animation = "move4"
 
 [sub_resource type="AnimationNodeAnimation" id=14]
 animation = "move5"
+
+[sub_resource type="AnimationNodeAnimation" id=24]
+animation = "round"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=15]
 
@@ -144,17 +165,11 @@ auto_advance = true
 switch_mode = 2
 auto_advance = true
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=24]
-switch_mode = 2
-
 [sub_resource type="AnimationNodeStateMachineTransition" id=25]
-switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id=4]
 states/move/node = SubResource( 10 )
 states/move/position = Vector2( 556, 122 )
-"states/move 2/node" = SubResource( 23 )
-"states/move 2/position" = Vector2( 525, 35.2559 )
 states/move2/node = SubResource( 11 )
 states/move2/position = Vector2( 394, 38.6879 )
 states/move3/node = SubResource( 12 )
@@ -163,7 +178,9 @@ states/move4/node = SubResource( 13 )
 states/move4/position = Vector2( 378, 199.968 )
 states/move5/node = SubResource( 14 )
 states/move5/position = Vector2( 702, 196.968 )
-transitions = [ "move", "move2", SubResource( 15 ), "move", "move3", SubResource( 16 ), "move", "move5", SubResource( 17 ), "move", "move4", SubResource( 18 ), "move2", "move", SubResource( 19 ), "move4", "move", SubResource( 20 ), "move3", "move", SubResource( 21 ), "move5", "move", SubResource( 22 ), "move", "move 2", SubResource( 24 ), "move 2", "move", SubResource( 25 ) ]
+states/round/node = SubResource( 24 )
+states/round/position = Vector2( 799, 104.589 )
+transitions = [ "move", "move2", SubResource( 15 ), "move", "move3", SubResource( 16 ), "move", "move5", SubResource( 17 ), "move", "move4", SubResource( 18 ), "move2", "move", SubResource( 19 ), "move4", "move", SubResource( 20 ), "move3", "move", SubResource( 21 ), "move5", "move", SubResource( 22 ), "move", "round", SubResource( 25 ) ]
 graph_offset = Vector2( 0, -7.74407 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=5]
@@ -176,7 +193,143 @@ margin_left = -80.0
 margin_top = -45.0
 margin_right = 400.0
 margin_bottom = 225.0
-color = Color( 0.78, 0.27, 0.14, 0.7 )
+color = Color( 0.298039, 0.184314, 0.0745098, 1 )
+
+[node name="lines" type="Node2D" parent="."]
+modulate = Color( 1, 1, 1, 0.55 )
+
+[node name="Rectangle2D" type="Node2D" parent="lines"]
+position = Vector2( 160, 90 )
+script = ExtResource( 5 )
+width = 440.0
+height = 208.0
+line_width = 2.0
+centered = true
+
+[node name="Circle2D" type="Node2D" parent="lines"]
+position = Vector2( 160, 90 )
+script = ExtResource( 6 )
+radius = 35.0
+line_width = 2.0
+
+[node name="Line2D" type="Line2D" parent="lines"]
+points = PoolVector2Array( 160, -15, 160, 194 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="p1_goal" type="Node2D" parent="lines"]
+
+[node name="Arc2D" type="Node2D" parent="lines/p1_goal"]
+position = Vector2( 0, 90 )
+script = ExtResource( 4 )
+radius = 87.0
+start_degrees = -90.0
+end_degrees = 90.0
+line_width = 2.0
+detail = 50
+
+[node name="Line2D" type="Line2D" parent="lines/p1_goal"]
+points = PoolVector2Array( 0, 3, -59, 3 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D2" type="Line2D" parent="lines/p1_goal"]
+position = Vector2( 0, 174 )
+points = PoolVector2Array( 0, 3, -59, 3 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Rectangle2D2" type="Node2D" parent="lines/p1_goal"]
+position = Vector2( -10, 90 )
+script = ExtResource( 5 )
+width = 100.0
+height = 50.0
+line_width = 2.0
+centered = true
+
+[node name="Arc2D2" type="Node2D" parent="lines/p1_goal"]
+position = Vector2( 40, 90 )
+script = ExtResource( 4 )
+radius = 25.0
+start_degrees = -90.0
+end_degrees = 90.0
+line_width = 2.0
+
+[node name="Circle2D" type="Node2D" parent="lines/p1_goal"]
+position = Vector2( -35, 90 )
+script = ExtResource( 6 )
+radius = 7.0
+line_width = 2.0
+
+[node name="Line2D3" type="Line2D" parent="lines/p1_goal"]
+position = Vector2( -11, 0 )
+points = PoolVector2Array( -31, 90, -37, 90 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D4" type="Line2D" parent="lines/p1_goal"]
+position = Vector2( -8, 0 )
+points = PoolVector2Array( -40, 76, -40, 104 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="p2_goal" type="Node2D" parent="lines"]
+scale = Vector2( -1, 1 )
+
+[node name="Arc2D" type="Node2D" parent="lines/p2_goal"]
+position = Vector2( -320, 90 )
+script = ExtResource( 4 )
+radius = 87.0
+start_degrees = -90.0
+end_degrees = 90.0
+line_width = 2.0
+detail = 50
+
+[node name="Line2D" type="Line2D" parent="lines/p2_goal"]
+position = Vector2( -320, 0 )
+points = PoolVector2Array( 0, 3, -59, 3 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D2" type="Line2D" parent="lines/p2_goal"]
+position = Vector2( -320, 174 )
+points = PoolVector2Array( 0, 3, -59, 3 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Rectangle2D2" type="Node2D" parent="lines/p2_goal"]
+position = Vector2( -330, 90 )
+script = ExtResource( 5 )
+width = 100.0
+height = 50.0
+line_width = 2.0
+centered = true
+
+[node name="Arc2D2" type="Node2D" parent="lines/p2_goal"]
+position = Vector2( -280, 90 )
+script = ExtResource( 4 )
+radius = 25.0
+start_degrees = -90.0
+end_degrees = 90.0
+line_width = 2.0
+
+[node name="Circle2D" type="Node2D" parent="lines/p2_goal"]
+position = Vector2( -355, 90 )
+script = ExtResource( 6 )
+radius = 7.0
+line_width = 2.0
+
+[node name="Line2D3" type="Line2D" parent="lines/p2_goal"]
+position = Vector2( -331, 0 )
+points = PoolVector2Array( -31, 90, -37, 90 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="Line2D4" type="Line2D" parent="lines/p2_goal"]
+position = Vector2( -328, 0 )
+points = PoolVector2Array( -40, 76, -40, 104 )
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
 
 [node name="Basket" parent="." instance=ExtResource( 2 )]
 position = Vector2( 160, 90 )
@@ -188,7 +341,7 @@ margin_left = -112.0
 margin_top = -45.0
 margin_right = -72.0
 margin_bottom = 225.0
-color = Color( 0.2, 0.596078, 0.294118, 1 )
+color = Color( 0.0745098, 0.298039, 0.298039, 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="barrier1"]
 position = Vector2( -92, 90 )
@@ -201,7 +354,7 @@ margin_left = 392.0
 margin_top = -45.0
 margin_right = 432.0
 margin_bottom = 225.0
-color = Color( 0.2, 0.596078, 0.294118, 1 )
+color = Color( 0.0745098, 0.298039, 0.298039, 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="barrier2"]
 position = Vector2( 412, 90 )
@@ -212,6 +365,10 @@ position = Vector2( 160, 90 )
 current = false
 zoom = Vector2( 1.5, 1.5 )
 
+[node name="Timer" type="Timer" parent="."]
+wait_time = 20.0
+one_shot = true
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "move"
 anims/RESET = SubResource( 2 )
@@ -220,10 +377,17 @@ anims/move2 = SubResource( 6 )
 anims/move3 = SubResource( 7 )
 anims/move4 = SubResource( 8 )
 anims/move5 = SubResource( 9 )
+anims/round = SubResource( 23 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 4 )
 anim_player = NodePath("../AnimationPlayer")
 parameters/playback = SubResource( 5 )
 
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[node name="center" type="Position2D" parent="."]
+position = Vector2( 160, 90 )
+__meta__ = {
+"_gizmo_extents_": 400.0
+}
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

@@ -15,41 +15,41 @@ var end_angle = deg2rad(end_degrees);
 
 
 func _set_color(new_color: Color) -> void:
-    color = new_color;
-    update();
-    
+	color = new_color;
+	update();
+	
 
 func _set_radius(new_radius: float) -> void:
-    radius = new_radius;
-    update();
+	radius = new_radius;
+	update();
 
 
 func _set_start_degrees(new_start_degrees: float) -> void:
-    start_degrees = new_start_degrees;
-    start_angle = deg2rad(start_degrees);
-    update();
+	start_degrees = new_start_degrees;
+	start_angle = deg2rad(start_degrees);
+	update();
 
 
 func _set_end_degrees(new_end_degrees: float) -> void:
-    end_degrees = new_end_degrees;
-    end_angle = deg2rad(end_degrees);
-    update();
+	end_degrees = new_end_degrees;
+	end_angle = deg2rad(end_degrees);
+	update();
 
 
 func _set_line_width(new_line_width: float) -> void:
-    line_width = new_line_width;
-    update();
+	line_width = new_line_width;
+	update();
 
 
 func _set_antialiased(new_antialiased: bool) -> void:
-    antialiased = new_antialiased;
-    update();
+	antialiased = new_antialiased;
+	update();
 
 
 func _set_detail(new_detail: int) -> void:
-    detail = new_detail;
-    update();
+	detail = new_detail;
+	update();
 
 
 func _draw() -> void:
-    draw_arc(Vector2.ZERO, radius, start_angle, end_angle, detail, color, line_width, antialiased);
+	draw_arc(Vector2.ZERO, radius, start_angle, end_angle, detail, color, line_width, antialiased);

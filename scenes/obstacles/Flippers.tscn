@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/Camera.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/obstacles/Flipper.tscn" type="PackedScene" id=2]
+
+[node name="Flippers" type="Node2D"]
+
+[node name="Camera" parent="." instance=ExtResource( 1 )]
+current = false
+zoom = Vector2( 1.5, 1.5 )
+
+[node name="down_flippers" type="Node2D" parent="."]
+
+[node name="Flipper" parent="down_flippers" instance=ExtResource( 2 )]
+position = Vector2( -28, 115 )
+scale = Vector2( 3, 3 )
+
+[node name="Flipper2" parent="down_flippers" instance=ExtResource( 2 )]
+position = Vector2( 28, 115 )
+scale = Vector2( -3, 3 )
+anim = 2
+
+[node name="up_flippers" type="Node2D" parent="."]
+scale = Vector2( 1, -1 )
+
+[node name="Flipper" parent="up_flippers" instance=ExtResource( 2 )]
+position = Vector2( -28, 115 )
+scale = Vector2( 3, 3 )
+
+[node name="Flipper2" parent="up_flippers" instance=ExtResource( 2 )]
+position = Vector2( 28, 115 )
+scale = Vector2( -3, 3 )
+anim = 2

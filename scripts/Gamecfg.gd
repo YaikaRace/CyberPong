@@ -9,6 +9,10 @@ func _ready():
 	if get_tree().network_peer != null:
 		if not get_tree().is_network_server():
 			$Waiting.visible = true
+		else:
+			$ScrollContainer/VBoxContainer/Button.grab_focus()
+	else:
+		$ScrollContainer/VBoxContainer/Button.grab_focus()
 	var file = File.new()
 	if file.file_exists("user://game_options"):
 		file.open("user://game_options", File.READ)

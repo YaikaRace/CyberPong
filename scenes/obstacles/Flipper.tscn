@@ -1,0 +1,79 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://addons/primitives2d/circle2d.gd" type="Script" id=1]
+[ext_resource path="res://scripts/Obstacles/Flipper.gd" type="Script" id=2]
+
+[sub_resource type="Animation" id=1]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "rotation1"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -114.8, 0.0 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "rotation2"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 114.8, 0.0 ]
+}
+
+[node name="Flipper" type="StaticBody2D" groups=["flipper"]]
+script = ExtResource( 2 )
+
+[node name="Skin" type="Node2D" parent="."]
+
+[node name="Polygon2D" type="Polygon2D" parent="Skin"]
+position = Vector2( 1, 1 )
+polygon = PoolVector2Array( -1, 0, -2, -1, -2, -2, 7, -11, 8, -11, 8, -10, 0, 0 )
+
+[node name="Circle2D" type="Node2D" parent="Skin"]
+script = ExtResource( 1 )
+radius = 1.5
+filled = true
+
+[node name="Circle2D2" type="Node2D" parent="Skin"]
+script = ExtResource( 1 )
+color = Color( 0, 0, 0, 1 )
+radius = 0.7
+filled = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( 1.12822, 0.986422, 0.763227, 1.3097, 0.00195169, 1.51827, -0.561184, 1.41399, -1.08261, 1.05942, -1.34332, 0.663141, -1.5206, 0.0687206, -1.46709, -0.362062, -1.27672, -0.825577, -0.970471, -1.15666, -0.631111, -1.35531, 8, -10, 9, -10, 9, -9, 1.42987, 0.47392 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 1 )
+anims/rotation1 = SubResource( 2 )
+anims/rotation2 = SubResource( 3 )

@@ -12,6 +12,11 @@ var config = {
 	},
 	Player2 = {
 		color = Color(0.047059, 0.945098, 1)
+	},
+	ball = "Common",
+	volume = {
+		general = 1,
+		sfx = 1
 	}
 }
 var game_opt = {
@@ -35,6 +40,8 @@ var scored_player
 var new_round = true
 var player_ids = []
 var net_id
+var master_bus = AudioServer.get_bus_index("Master")
+var sfx_bus = AudioServer.get_bus_index("Sfx")
 
 
 func _ready():
@@ -78,3 +85,16 @@ func load_config():
 		config = data
 		file.close()
 	OS.window_fullscreen = config.fullscreen
+	AudioServer.set_bus_volume_db(master_bus, linear2db(config.volume.general))
+	AudioServer.set_bus_volume_db(sfx_bus, linear2db(config.volume.sfx))
+
+func restar_points() -> void:
+	player1_points = 0.0
+	player2_points = 0.0
+	player1_rounds = 0
+	player2_rounds = 0
+	rounds = 0
+	winner = "Undefined"
+	game_winner = "Undefined"
+	scored_player
+	new_round = true

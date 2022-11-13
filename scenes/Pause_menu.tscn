@@ -17,7 +17,7 @@ script = ExtResource( 2 )
 [node name="ColorRect" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.466667 )
+color = Color( 0.101961, 0.0980392, 0.196078, 0.466667 )
 
 [node name="Control" type="Control" parent="."]
 anchor_right = 1.0
@@ -38,6 +38,7 @@ margin_bottom = 25.0
 modulate = Color( 1.1, 1.1, 1.1, 1 )
 margin_right = 64.0
 margin_bottom = 14.0
+shortcut_in_tooltip = false
 shortcut = SubResource( 2 )
 text = "Resume"
 

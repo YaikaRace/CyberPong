@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://addons/primitives2d/circle2d.gd" type="Script" id=1]
 [ext_resource path="res://scripts/Ball.gd" type="Script" id=2]
@@ -10,6 +10,16 @@
 [ext_resource path="res://textures/power ups/minus.png" type="Texture" id=8]
 [ext_resource path="res://textures/power ups/fenix.png" type="Texture" id=9]
 [ext_resource path="res://textures/power ups/crystall_ball.png" type="Texture" id=10]
+[ext_resource path="res://sounds/freeze.wav" type="AudioStream" id=11]
+[ext_resource path="res://sounds/eagle.wav" type="AudioStream" id=12]
+[ext_resource path="res://sounds/bubbles.wav" type="AudioStream" id=13]
+[ext_resource path="res://sounds/slowdown.wav" type="AudioStream" id=14]
+[ext_resource path="res://sounds/speedup.wav" type="AudioStream" id=15]
+[ext_resource path="res://sounds/boomerang.wav" type="AudioStream" id=16]
+[ext_resource path="res://sounds/crystal.wav" type="AudioStream" id=17]
+[ext_resource path="res://sounds/confusion.wav" type="AudioStream" id=18]
+[ext_resource path="res://addons/primitives2d/arc2d.gd" type="Script" id=19]
+[ext_resource path="res://scripts/Utilities/PolygonCircle.gd" type="Script" id=20]
 
 [sub_resource type="PhysicsMaterial" id=2]
 friction = 0.0
@@ -18,7 +28,7 @@ bounce = 1.0
 [sub_resource type="Curve" id=6]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.125767 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=7]
+[sub_resource type="CurveTexture" id=27]
 curve = SubResource( 6 )
 
 [sub_resource type="ParticlesMaterial" id=5]
@@ -27,7 +37,7 @@ gravity = Vector3( 0, 0, 0 )
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 6.0
-scale_curve = SubResource( 7 )
+scale_curve = SubResource( 27 )
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.0
@@ -35,7 +45,7 @@ radius = 5.0
 [sub_resource type="Curve" id=15]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.405682 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=16]
+[sub_resource type="CurveTexture" id=28]
 curve = SubResource( 15 )
 
 [sub_resource type="ParticlesMaterial" id=8]
@@ -49,14 +59,14 @@ angular_velocity = 720.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 1.5
-scale_curve = SubResource( 16 )
+scale_curve = SubResource( 28 )
 hue_variation = 0.05
 hue_variation_random = 0.5
 
 [sub_resource type="Curve" id=18]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=19]
+[sub_resource type="CurveTexture" id=29]
 curve = SubResource( 18 )
 
 [sub_resource type="ParticlesMaterial" id=17]
@@ -67,12 +77,12 @@ gravity = Vector3( 0, 0, 0 )
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 3.0
-scale_curve = SubResource( 19 )
+scale_curve = SubResource( 29 )
 
 [sub_resource type="Curve" id=13]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.00613499 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=14]
+[sub_resource type="CurveTexture" id=30]
 curve = SubResource( 13 )
 
 [sub_resource type="ParticlesMaterial" id=12]
@@ -86,7 +96,7 @@ gravity = Vector3( 0, -4, 0 )
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 4.0
-scale_curve = SubResource( 14 )
+scale_curve = SubResource( 30 )
 color = Color( 0.968627, 1, 0.996078, 1 )
 hue_variation = -0.01
 hue_variation_random = 1.0
@@ -94,7 +104,7 @@ hue_variation_random = 1.0
 [sub_resource type="Curve" id=21]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=22]
+[sub_resource type="CurveTexture" id=31]
 curve = SubResource( 21 )
 
 [sub_resource type="ParticlesMaterial" id=20]
@@ -105,7 +115,7 @@ initial_velocity = 20.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 4.0
-scale_curve = SubResource( 22 )
+scale_curve = SubResource( 31 )
 
 [sub_resource type="ParticlesMaterial" id=23]
 trail_divisor = 2
@@ -123,7 +133,7 @@ hue_variation_random = 1.0
 [sub_resource type="Curve" id=9]
 _data = [ Vector2( 0, 0.496933 ), 0.0, 0.0, 0, 0, Vector2( 0.872857, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.998571, 0 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=10]
+[sub_resource type="CurveTexture" id=32]
 curve = SubResource( 9 )
 
 [sub_resource type="ParticlesMaterial" id=11]
@@ -134,13 +144,13 @@ gravity = Vector3( 0, 0, 0 )
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.75
-scale_curve = SubResource( 10 )
+scale_curve = SubResource( 32 )
 color = Color( 1, 1, 1, 0.658824 )
 
 [sub_resource type="Curve" id=24]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=25]
+[sub_resource type="CurveTexture" id=33]
 curve = SubResource( 24 )
 
 [sub_resource type="ParticlesMaterial" id=26]
@@ -153,12 +163,11 @@ orbit_velocity_random = 0.0
 angle = 720.0
 angle_random = 1.0
 scale = 10.0
-scale_curve = SubResource( 25 )
+scale_curve = SubResource( 33 )
 
 [node name="Ball" type="RigidBody2D" groups=["ball"]]
 collision_layer = 51
 collision_mask = 51
-mode = 2
 physics_material_override = SubResource( 2 )
 gravity_scale = 0.0
 contacts_reported = 1
@@ -181,17 +190,97 @@ scale = Vector2( 1.2, 1.2 )
 texture = ExtResource( 6 )
 
 [node name="Circle2D2" type="Node2D" parent="."]
+visible = false
 script = ExtResource( 1 )
 radius = 7.0
 filled = true
 
-[node name="Circle2D" type="Node2D" parent="."]
+[node name="Skins" type="Node2D" parent="."]
+
+[node name="Common" type="Node2D" parent="Skins"]
+
+[node name="Circle2D" type="Node2D" parent="Skins/Common"]
 unique_name_in_owner = true
 script = ExtResource( 1 )
 radius = 5.0
 filled = true
 
+[node name="Soccer" type="Node2D" parent="Skins"]
+unique_name_in_owner = true
+visible = false
+
+[node name="Circle2D" type="Node2D" parent="Skins/Soccer"]
+script = ExtResource( 1 )
+color = Color( 0, 0, 0, 1 )
+radius = 2.0
+filled = true
+
+[node name="Polygon2D" type="Polygon2D" parent="Skins/Soccer"]
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( -4.89063, -1, -3, -2, -2, -3, -1, -4, -1.01563, -4.89063, -1.48438, -4.77344, -1.9375, -4.625, -2.53125, -4.3125, -2.82031, -4.14063, -3.55469, -3.53125, -4, -3, -4.19531, -2.73438, -4.32813, -2.48438, -4.63281, -1.89844 )
+
+[node name="Polygon2D2" type="Polygon2D" parent="Skins/Soccer"]
+position = Vector2( 0, -0.0153141 )
+scale = Vector2( -1, 1 )
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( -4.89063, -1, -3, -2, -2, -3, -1, -4, -1.01563, -4.89063, -1.48438, -4.77344, -1.9375, -4.625, -2.53125, -4.3125, -2.82031, -4.14063, -3.55469, -3.53125, -4, -3, -4.19531, -2.73438, -4.32813, -2.48438, -4.63281, -1.89844 )
+
+[node name="Polygon2D3" type="Polygon2D" parent="Skins/Soccer"]
+position = Vector2( 0, -0.0153141 )
+scale = Vector2( -1, -1 )
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( -4.89063, -1, -3, -2, -2, -3, -1, -4, -1.01563, -4.89063, -1.48438, -4.77344, -1.9375, -4.625, -2.53125, -4.3125, -2.82031, -4.14063, -3.55469, -3.53125, -4, -3, -4.19531, -2.73438, -4.32813, -2.48438, -4.63281, -1.89844 )
+
+[node name="Polygon2D4" type="Polygon2D" parent="Skins/Soccer"]
+scale = Vector2( 1, -1 )
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( -4.89063, -1, -3, -2, -2, -3, -1, -4, -1.01563, -4.89063, -1.48438, -4.77344, -1.9375, -4.625, -2.53125, -4.3125, -2.82031, -4.14063, -3.55469, -3.53125, -4, -3, -4.19531, -2.73438, -4.32813, -2.48438, -4.63281, -1.89844 )
+
+[node name="Basket" type="Node2D" parent="Skins"]
+unique_name_in_owner = true
+visible = false
+
+[node name="Line2D" type="Line2D" parent="Skins/Basket"]
+points = PoolVector2Array( 0, -5, 0, 5 )
+width = 0.5
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="Line2D2" type="Line2D" parent="Skins/Basket"]
+points = PoolVector2Array( -5, 0, 5, 0 )
+width = 0.5
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="Arc2D" type="Node2D" parent="Skins/Basket"]
+position = Vector2( 5, 0 )
+script = ExtResource( 19 )
+color = Color( 0, 0, 0, 1 )
+radius = 3.0
+start_degrees = -107.0
+end_degrees = -253.0
+line_width = 1.1
+
+[node name="Arc2D2" type="Node2D" parent="Skins/Basket"]
+position = Vector2( -5, 0 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 19 )
+color = Color( 0, 0, 0, 1 )
+radius = 3.0
+start_degrees = -107.0
+end_degrees = -253.0
+line_width = 1.1
+
+[node name="Crystal" type="Polygon2D" parent="Skins"]
+unique_name_in_owner = true
+visible = false
+texture = ExtResource( 10 )
+texture_offset = Vector2( 16, 16 )
+texture_scale = Vector2( 0.5, 0.5 )
+polygon = PoolVector2Array( 5.1, 0, 4.98855, 1.06035, 4.65908, 2.07436, 4.12599, 2.9977, 3.41257, 3.79004, 2.55, 4.41673, 1.57599, 4.85039, 0.533095, 5.07206, -0.533095, 5.07206, -1.57599, 4.85039, -2.55, 4.41673, -3.41257, 3.79004, -4.12599, 2.9977, -4.65908, 2.07436, -4.98855, 1.06035, -5.1, -4.45856e-07, -4.98855, -1.06035, -4.65908, -2.07436, -4.12599, -2.9977, -3.41257, -3.79004, -2.55, -4.41673, -1.57599, -4.85039, -0.533094, -5.07206, 0.533096, -5.07206, 1.57599, -4.85039, 2.55, -4.41673, 3.41257, -3.79004, 4.12599, -2.9977, 4.65908, -2.07436, 4.98855, -1.06035 )
+script = ExtResource( 20 )
+radius = 5.1
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource( 1 )
 
 [node name="Impact" type="AudioStreamPlayer" parent="."]
@@ -308,6 +397,55 @@ lifetime = 1.5
 one_shot = true
 explosiveness = 0.8
 process_material = SubResource( 26 )
+
+[node name="sounds" type="Node" parent="."]
+
+[node name="freeze_sfx" type="AudioStreamPlayer" parent="sounds"]
+unique_name_in_owner = true
+stream = ExtResource( 11 )
+pitch_scale = 3.0
+bus = "Freeze"
+
+[node name="phoenix_sfx" type="AudioStreamPlayer" parent="sounds"]
+unique_name_in_owner = true
+stream = ExtResource( 12 )
+pitch_scale = 0.5
+bus = "Phoenix"
+
+[node name="bubble_sfx" type="AudioStreamPlayer" parent="sounds"]
+unique_name_in_owner = true
+stream = ExtResource( 13 )
+pitch_scale = 1.3
+bus = "Bubbles"
+
+[node name="slowdown_sfx" type="AudioStreamPlayer" parent="sounds"]
+unique_name_in_owner = true
+stream = ExtResource( 14 )
+pitch_scale = 3.0
+bus = "Speed_change"
+
+[node name="speedup_sfx" type="AudioStreamPlayer" parent="sounds"]
+unique_name_in_owner = true
+stream = ExtResource( 15 )
+pitch_scale = 4.0
+bus = "Speed_change"
+
+[node name="boomerang_sfx" type="AudioStreamPlayer" parent="sounds"]
+unique_name_in_owner = true
+stream = ExtResource( 16 )
+pitch_scale = 2.0
+bus = "Boomerang"
+
+[node name="crystal_sfx" type="AudioStreamPlayer" parent="sounds"]
+unique_name_in_owner = true
+stream = ExtResource( 17 )
+pitch_scale = 3.0
+bus = "Crystal"
+
+[node name="confusion_sfx" type="AudioStreamPlayer" parent="sounds"]
+unique_name_in_owner = true
+stream = ExtResource( 18 )
+bus = "Confusion"
 
 [connection signal="body_entered" from="." to="." method="_on_Ball_body_entered"]
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

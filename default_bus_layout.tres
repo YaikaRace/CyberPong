@@ -1,4 +1,68 @@
-[gd_resource type="AudioBusLayout" load_steps=12 format=2]
+[gd_resource type="AudioBusLayout" load_steps=33 format=2]
+
+[sub_resource type="AudioEffectReverb" id=21]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectReverb" id=22]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectPitchShift" id=23]
+resource_name = "PitchShift"
+pitch_scale = 0.3
+
+[sub_resource type="AudioEffectReverb" id=24]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectFilter" id=25]
+resource_name = "Filter"
+
+[sub_resource type="AudioEffectReverb" id=26]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectPitchShift" id=27]
+resource_name = "PitchShift"
+pitch_scale = 0.5
+
+[sub_resource type="AudioEffectPitchShift" id=28]
+resource_name = "PitchShift"
+pitch_scale = 0.3
+
+[sub_resource type="AudioEffectReverb" id=29]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectFilter" id=31]
+resource_name = "Filter"
+resonance = 0.73
+
+[sub_resource type="AudioEffectDelay" id=32]
+resource_name = "Delay"
+
+[sub_resource type="AudioEffectReverb" id=33]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectReverb" id=34]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
 
 [sub_resource type="AudioEffectDelay" id=2]
 resource_name = "Delay"
@@ -60,6 +124,49 @@ ratio = 13.4
 attack_us = 200.0
 release_ms = 450.0
 
+[sub_resource type="AudioEffectReverb" id=13]
+resource_name = "Reverb"
+predelay_msec = 50.0
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectLimiter" id=14]
+resource_name = "Limiter"
+ceiling_db = -13.0
+threshold_db = -30.0
+soft_clip_db = 0.0
+
+[sub_resource type="AudioEffectFilter" id=15]
+resource_name = "Filter"
+resonance = 0.8
+
+[sub_resource type="AudioEffectReverb" id=16]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectReverb" id=17]
+resource_name = "Reverb"
+room_size = 0.5
+spread = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectDelay" id=18]
+resource_name = "Delay"
+tap1/delay_ms = 450.0
+
+[sub_resource type="AudioEffectReverb" id=19]
+resource_name = "Reverb"
+room_size = 0.5
+hipass = 1.0
+wet = 0.3
+
+[sub_resource type="AudioEffectFilter" id=20]
+resource_name = "Filter"
+
 [resource]
 bus/1/name = "Sfx"
 bus/1/solo = false
@@ -113,3 +220,117 @@ bus/5/effect/2/effect = SubResource( 11 )
 bus/5/effect/2/enabled = true
 bus/5/effect/3/effect = SubResource( 12 )
 bus/5/effect/3/enabled = true
+bus/6/name = "Freeze"
+bus/6/solo = false
+bus/6/mute = false
+bus/6/bypass_fx = false
+bus/6/volume_db = -7.03091
+bus/6/send = "Sfx"
+bus/6/effect/0/effect = SubResource( 13 )
+bus/6/effect/0/enabled = true
+bus/6/effect/1/effect = SubResource( 14 )
+bus/6/effect/1/enabled = true
+bus/6/effect/2/effect = SubResource( 15 )
+bus/6/effect/2/enabled = true
+bus/7/name = "Blaster"
+bus/7/solo = false
+bus/7/mute = false
+bus/7/bypass_fx = false
+bus/7/volume_db = -9.63278
+bus/7/send = "Sfx"
+bus/7/effect/0/effect = SubResource( 16 )
+bus/7/effect/0/enabled = true
+bus/8/name = "Phoenix"
+bus/8/solo = false
+bus/8/mute = false
+bus/8/bypass_fx = false
+bus/8/volume_db = 0.0
+bus/8/send = "Sfx"
+bus/8/effect/0/effect = SubResource( 17 )
+bus/8/effect/0/enabled = true
+bus/8/effect/1/effect = SubResource( 18 )
+bus/8/effect/1/enabled = true
+bus/9/name = "Bubbles"
+bus/9/solo = false
+bus/9/mute = false
+bus/9/bypass_fx = false
+bus/9/volume_db = -10.8341
+bus/9/send = "Sfx"
+bus/9/effect/0/effect = SubResource( 19 )
+bus/9/effect/0/enabled = true
+bus/9/effect/1/effect = SubResource( 20 )
+bus/9/effect/1/enabled = true
+bus/10/name = "Thunder"
+bus/10/solo = false
+bus/10/mute = false
+bus/10/bypass_fx = false
+bus/10/volume_db = -9.63278
+bus/10/send = "Sfx"
+bus/10/effect/0/effect = SubResource( 21 )
+bus/10/effect/0/enabled = true
+bus/11/name = "Jingle"
+bus/11/solo = false
+bus/11/mute = false
+bus/11/bypass_fx = false
+bus/11/volume_db = -8.52817
+bus/11/send = "Sfx"
+bus/11/effect/0/effect = SubResource( 22 )
+bus/11/effect/0/enabled = true
+bus/12/name = "Speed_change"
+bus/12/solo = false
+bus/12/mute = false
+bus/12/bypass_fx = false
+bus/12/volume_db = -6.57885
+bus/12/send = "Sfx"
+bus/12/effect/0/effect = SubResource( 23 )
+bus/12/effect/0/enabled = true
+bus/12/effect/1/effect = SubResource( 24 )
+bus/12/effect/1/enabled = true
+bus/12/effect/2/effect = SubResource( 25 )
+bus/12/effect/2/enabled = true
+bus/13/name = "Boomerang"
+bus/13/solo = false
+bus/13/mute = false
+bus/13/bypass_fx = false
+bus/13/volume_db = -7.5114
+bus/13/send = "Sfx"
+bus/13/effect/0/effect = SubResource( 26 )
+bus/13/effect/0/enabled = true
+bus/13/effect/1/effect = SubResource( 27 )
+bus/13/effect/1/enabled = true
+bus/14/name = "Crystal"
+bus/14/solo = false
+bus/14/mute = false
+bus/14/bypass_fx = false
+bus/14/volume_db = -6.14301
+bus/14/send = "Sfx"
+bus/14/effect/0/effect = SubResource( 28 )
+bus/14/effect/0/enabled = true
+bus/14/effect/1/effect = SubResource( 29 )
+bus/14/effect/1/enabled = true
+bus/15/name = "Confusion"
+bus/15/solo = false
+bus/15/mute = false
+bus/15/bypass_fx = false
+bus/15/volume_db = -2.24584
+bus/15/send = "Sfx"
+bus/15/effect/0/effect = SubResource( 31 )
+bus/15/effect/0/enabled = true
+bus/15/effect/1/effect = SubResource( 32 )
+bus/15/effect/1/enabled = true
+bus/16/name = "Punch"
+bus/16/solo = false
+bus/16/mute = false
+bus/16/bypass_fx = false
+bus/16/volume_db = 0.0
+bus/16/send = "Sfx"
+bus/16/effect/0/effect = SubResource( 33 )
+bus/16/effect/0/enabled = true
+bus/17/name = "Portal gun"
+bus/17/solo = false
+bus/17/mute = false
+bus/17/bypass_fx = false
+bus/17/volume_db = -7.5114
+bus/17/send = "Sfx"
+bus/17/effect/0/effect = SubResource( 34 )
+bus/17/effect/0/enabled = true

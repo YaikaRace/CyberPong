@@ -7,6 +7,8 @@ export var color: Color setget set_color, get_color
 export (float, -360, 360) var portal_rotation setget set_portal_rot
 export (Vector2) var portal_size = Vector2(64, 4) setget set_portal_size
 export var group = "portal"
+export var is_power_up: bool = false
+export var allow_bullets: bool = false
 
 var portal
 
@@ -19,14 +21,20 @@ func _ready():
 
 func _on_Portal_body_entered(body):
 	if body.is_in_group("ball"):
-		var ball_transform = body.ball_state.get_transform()
-		ball_transform.origin = portal.exit_pos.global_position
-		body.ball_state.set_transform(ball_transform)
+		tp_body(body, body.ball_state.get_transform())
+	if allow_bullets:
+		if body.is_in_group("bullet"):
+			tp_body(body, body.bullet_state.get_transform())
+
+func tp_body(body, transforms):
+		transforms.origin = portal.exit_pos.global_position
+		body.ball_state.set_transform(transforms)
 		body.linear_velocity = body.linear_velocity.rotated(deg2rad(rotation_degrees))
 		portal.monitoring = false
 		monitoring = false
 		yield(get_tree().create_timer(2),"timeout")
-		get_parent().queue_free()
+		if is_power_up:
+			get_parent().queue_free()
 		portal.monitoring = true
 		monitoring = true
 
