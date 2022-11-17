@@ -3,7 +3,7 @@
 [![GitHub release](https://img.shields.io/github/release/YaikaRace/cyberpong?include_prereleases=&sort=semver&color=blue)](https://github.com/YaikaRace/cyberpong/releases/) [![License](https://img.shields.io/badge/License-GPL--3.0-blue)](#license)
 ![Last commit](https://badgen.net/github/last-commit/yaikarace/cyberpong/main)
 
-CyberPong is an open source game made in godot 3 inspired by pong that tries to "adapt" it to cyberpunk style with a few extra additions to make the game more fun!
+CyberPong is an open source game made in Godot Engine 3, based on pong and adding a lot of neon effects with extra additions to make the game more fun!
 
 ![](./splash.png)
 
