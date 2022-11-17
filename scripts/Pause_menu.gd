@@ -10,14 +10,18 @@ func _process(delta):
 		if Input.is_action_just_pressed("ui_cancel"):
 			visible = true
 			get_tree().paused = true
+			BgMusic.emit_signal("scene_changed", self.name)
 
 func _on_Resume_pressed():
 	get_tree().paused = false
 	visible = false
+	BgMusic.emit_signal("scene_changed", "Game")
 
 
 func _on_Config_pressed():
-	self.add_child(config.instance())
+	$Control/Popup.popup()
+	yield($Control/Popup/Config, "config_back")
+	$Control/Popup.visible = false
 
 
 func _on_Menu_pressed():

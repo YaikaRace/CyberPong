@@ -6,12 +6,10 @@ onready var color_picker = $"%Color_picker"
 var p1_color = Global.config.Player1.color
 var p2_color = Global.config.Player2.color
 
+signal config_back
+
 func _ready():
 	$CenterContainer/VBoxContainer/glow.grab_focus()
-
-func _process(delta):
-	world_environment.environment.glow_enabled = Global.config.glow
-
 
 func _on_Back_pressed():
 	Global.save_config()
@@ -23,7 +21,7 @@ func _on_Back_pressed():
 	if get_tree().current_scene.name == "Config":
 		get_tree().change_scene("res://scenes/Menu.tscn")
 	else:
-		queue_free()
+		emit_signal("config_back")
 
 func _on_Color_picker_close():
 	$Popup.visible = false
@@ -39,4 +37,6 @@ func _on_pixel_gui_input(event):
 
 
 func _on_Volume_pressed():
-	get_tree().change_scene("res://scenes/Volume.tscn")
+	$Popup.popup()
+	yield($Popup/Volume, "back")
+	$Popup.visible = false

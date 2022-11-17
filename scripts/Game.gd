@@ -13,7 +13,7 @@ var started = false
 var initial_player
 var rng = RandomNumberGenerator.new()
 var initial_speed = 200
-var keys = ["ui_accept", "0"]
+var keys = ["space", "0"]
 var init_key
 var obstacles = [
 	preload("res://scenes/obstacles/barrier_middle.tscn"),
@@ -59,6 +59,9 @@ onready var player2_rounds = Global.player2_rounds
 signal explosion_finished
 
 func _ready():
+	if get_tree().current_scene.name == self.name:
+		BgMusic.emit_signal("scene_changed", self.name)
+		BgMusic.pitch_scale = 1.0
 	for excluded in Global.game_opt.exclude_power_ups:
 		powerups.erase(excluded)
 	if get_tree().network_peer == null:
@@ -92,10 +95,10 @@ func _ready():
 	init_game()
 	randomize_player()
 	play_init_animation()
+	world_environment.environment.glow_enabled = Global.config.glow
 	pass
 
 func _physics_process(delta):
-	world_environment.environment.glow_enabled = Global.config.glow
 	$Round.bbcode_text = "[center][shake]Round " + String(played_rounds + 1)
 	$rounds1.text = String(player1_rounds)
 	$rounds2.text = String(player2_rounds)
@@ -115,9 +118,6 @@ func _physics_process(delta):
 		check_mode()
 	
 
-func _process(delta):
-	$"%Label".text = String(1/delta)
-
 func play_init_animation():
 	if get_tree().current_scene.name == "Game":
 		if Global.new_round:
@@ -135,8 +135,6 @@ func init_game():
 	if get_tree().current_scene.name == "Game":
 		can_move = true
 	world_environment.environment.glow_enabled = Global.config.glow
-	$"%Label".visible = Global.config.fps
-	$"%aberration".visible = Global.config.shaders
 	$Label2.text = String(player1) + " - " + String(player2)
 	if not "brick" in modifiers:
 		for brick in $bricks1.get_children():
@@ -180,7 +178,8 @@ func randomize_player():
 
 func _input(event):
 	if event is InputEventScreenTouch:
-		Input.action_press("ui_accept")
+		Input.action_press("space")
+		Input.action_press("0")
 
 
 func _on_Area2D_body_entered(body):

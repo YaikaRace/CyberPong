@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://sounds/music/FightScene.mp3" type="AudioStream" id=1]
+[ext_resource path="res://scripts/BgMusic.gd" type="Script" id=2]
+[ext_resource path="res://sounds/music/FightScene-start.mp3" type="AudioStream" id=3]
+
+[node name="BgMusic" type="AudioStreamPlayer"]
+pause_mode = 2
+stream = ExtResource( 1 )
+bus = "Music"
+script = ExtResource( 2 )
+
+[node name="Start" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+autoplay = true
+bus = "Music"
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="finished" from="Start" to="." method="Start_finished"]

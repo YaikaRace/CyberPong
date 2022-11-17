@@ -419,9 +419,8 @@ background_mode = 4
 glow_enabled = true
 glow_intensity = 2.19
 glow_strength = 0.96
-glow_blend_mode = 0
+glow_blend_mode = 1
 glow_bicubic_upscale = true
-glow_high_quality = true
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 3 )
@@ -459,15 +458,6 @@ lifetime = 1.5
 one_shot = true
 explosiveness = 0.8
 process_material = SubResource( 5 )
-
-[node name="Label" type="Label" parent="."]
-unique_name_in_owner = true
-margin_left = -69.0
-margin_top = 188.0
-margin_right = 19.0
-margin_bottom = 202.0
-custom_fonts/font = ExtResource( 5 )
-text = "aaaaaaaaaaa"
 
 [node name="bricks2" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -533,12 +523,9 @@ modulate = Color( 1.1, 1.1, 1.1, 1 )
 position = Vector2( -64, 88 )
 player_bullets_node_name = "%p1_bullets"
 
-[node name="Rectangle2D" parent="Players/Player1" index="0"]
+[node name="Rectangle2D" parent="Players/Player1" index="17"]
 modulate = Color( 1.2, 1.2, 1.2, 1 )
 self_modulate = Color( 1, 0, 0.584314, 1 )
-
-[node name="thunder1" parent="Players/Player1/thunder" index="0"]
-frame = 1
 
 [node name="Player2" parent="Players" instance=ExtResource( 2 )]
 unique_name_in_owner = true
@@ -549,12 +536,9 @@ player = 2
 front_direction = Vector2( -1, 1 )
 player_bullets_node_name = "%p2_bullets"
 
-[node name="Rectangle2D" parent="Players/Player2" index="0"]
+[node name="Rectangle2D" parent="Players/Player2" index="17"]
 modulate = Color( 1.2, 1.2, 1.2, 1 )
 self_modulate = Color( 0, 0.929412, 1, 1 )
-
-[node name="thunder1" parent="Players/Player2/thunder" index="0"]
-frame = 1
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." groups=["barrier"]]
 position = Vector2( 160, -35 )

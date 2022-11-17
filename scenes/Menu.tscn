@@ -2,8 +2,8 @@
 
 [ext_resource path="res://scripts/Menu.gd" type="Script" id=1]
 [ext_resource path="res://theme/UI.tres" type="Theme" id=2]
-[ext_resource path="res://scenes/fps_label.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/Menu_camera.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/Config.tscn" type="PackedScene" id=5]
 
 [sub_resource type="ButtonGroup" id=2]
 
@@ -15,7 +15,6 @@ glow_strength = 0.96
 glow_blend_mode = 0
 glow_hdr_threshold = 0.71
 glow_bicubic_upscale = true
-glow_high_quality = true
 
 [node name="Menu" type="Control"]
 anchor_right = 1.0
@@ -37,51 +36,48 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-margin_left = 98.0
-margin_top = 47.0
-margin_right = 221.0
-margin_bottom = 133.0
+margin_left = 122.0
+margin_top = 56.0
+margin_right = 197.0
+margin_bottom = 124.0
 
 [node name="Local" type="Button" parent="CenterContainer/VBoxContainer" groups=["menu_button"]]
-margin_right = 123.0
+margin_right = 75.0
 margin_bottom = 14.0
 group = SubResource( 2 )
 text = "Local"
 
-[node name="Multiplayer" type="Button" parent="CenterContainer/VBoxContainer" groups=["menu_button"]]
-margin_top = 18.0
-margin_right = 123.0
-margin_bottom = 32.0
-group = SubResource( 2 )
-text = "LAN Multiplayer"
-
 [node name="Customize" type="Button" parent="CenterContainer/VBoxContainer" groups=["menu_button"]]
-margin_top = 36.0
-margin_right = 123.0
-margin_bottom = 50.0
+margin_top = 18.0
+margin_right = 75.0
+margin_bottom = 32.0
 text = "Customize"
 
 [node name="Config" type="Button" parent="CenterContainer/VBoxContainer" groups=["menu_button"]]
-margin_top = 54.0
-margin_right = 123.0
-margin_bottom = 68.0
+margin_top = 36.0
+margin_right = 75.0
+margin_bottom = 50.0
 text = "Config"
 
 [node name="Exit" type="Button" parent="CenterContainer/VBoxContainer" groups=["menu_button"]]
-margin_top = 72.0
-margin_right = 123.0
-margin_bottom = 86.0
+margin_top = 54.0
+margin_right = 75.0
+margin_bottom = 68.0
 text = "Exit"
 
-[node name="fps_label" parent="." instance=ExtResource( 3 )]
+[node name="Popup" type="Popup" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Config" parent="Popup" instance=ExtResource( 5 )]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
 
 [node name="Menu_camera" parent="." instance=ExtResource( 4 )]
+current = false
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Local" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/Multiplayer" to="." method="_on_Multiplayer_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Customize" to="." method="_on_Customize_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Config" to="." method="_on_Config_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Exit" to="." method="_on_Exit_pressed"]

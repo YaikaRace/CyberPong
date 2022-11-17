@@ -28,7 +28,7 @@ bounce = 1.0
 [sub_resource type="Curve" id=6]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.125767 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=27]
+[sub_resource type="CurveTexture" id=34]
 curve = SubResource( 6 )
 
 [sub_resource type="ParticlesMaterial" id=5]
@@ -37,7 +37,7 @@ gravity = Vector3( 0, 0, 0 )
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 6.0
-scale_curve = SubResource( 27 )
+scale_curve = SubResource( 34 )
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.0
@@ -446,6 +446,9 @@ bus = "Crystal"
 unique_name_in_owner = true
 stream = ExtResource( 18 )
 bus = "Confusion"
+
+[node name="speed_timer" type="Timer" parent="."]
+one_shot = true
 
 [connection signal="body_entered" from="." to="." method="_on_Ball_body_entered"]
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

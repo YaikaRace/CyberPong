@@ -4,3 +4,4 @@ export_presets.cfg
 override.cfg
 .list
 addons/color-palette/
+android/

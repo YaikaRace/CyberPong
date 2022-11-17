@@ -20,11 +20,6 @@ func _ready():
 	aberration.get_material().set("shader_param/g_displacement", Vector2.ZERO)
 	if get_tree().network_peer == null:
 		is_server = true
-	
-
-func _process(delta):
-	$R.global_rotation = 0
-	$L.global_rotation = 0
 	if Global.config.ball == "Soccer" or "soccer" in Global.game_opt.modifiers:
 		$"%Soccer".visible = true
 		$"%Basket".visible = false
@@ -38,9 +33,16 @@ func _process(delta):
 		$"%Soccer".visible = false
 		$"%Basket".visible = false
 		$"%Crystal".visible = false
+	
+
+func _process(delta):
+	$R.global_rotation = 0
+	$L.global_rotation = 0
+	
 
 func _physics_process(delta):
 	if is_server:
+		$Fenix.global_rotation = 0
 		if linear_velocity.x == 0:
 			$Circle2D2.visible = false
 			$"%fire_particles".emitting = false
@@ -96,15 +98,16 @@ func limit_velocity():
 				linear_velocity.x = -max_velocity
 
 func break_freeze():
-	linear_velocity = previous_velocity
-	$"%Circle2D".color = previous_modulate
-	$"%freeze_particles".emitting = false
-	$"%freeze_break".emitting = true
-	if "soccer" in Global.game_opt.modifiers:
-		gravity_scale = 3
-	if "basket" in Global.game_opt.modifiers:
-		gravity_scale = 7
-	powers.erase("Freeze")
+	if "Freeze" in powers:
+		linear_velocity = previous_velocity
+		$"%Circle2D".color = previous_modulate
+		$"%freeze_particles".emitting = false
+		$"%freeze_break".emitting = true
+		if "soccer" in Global.game_opt.modifiers:
+			gravity_scale = 3
+		if "basket" in Global.game_opt.modifiers:
+			gravity_scale = 7
+		powers.erase("Freeze")
 
 func _on_Ball_body_entered(body):
 	rotation = 0
@@ -155,8 +158,10 @@ func _on_Ball_body_entered(body):
 		body.hit()
 		last_player = body
 	camera.shake(0.2, abs(linear_velocity.x + 1) / 4, 2)
-	tween.parallel().tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(2,2), 0).connect("finished", self, "_on_player_tween_finished")
-	tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(-2, -2), 0)
+	if Global.config.shaders:
+		aberration.visible = true
+		tween.parallel().tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(2,2), 0).connect("finished", self, "_on_player_tween_finished")
+		tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(-2, -2), 0)
 	if body.is_in_group("barrier"):
 		var tween2 = create_tween().set_trans(Tween.TRANS_BOUNCE)
 		if tween2.is_running():
@@ -183,6 +188,8 @@ func _on_player_tween_finished():
 	tween.set_trans(Tween.TRANS_LINEAR)
 	tween.tween_property(aberration.get_material(), "shader_param/r_displacement", Vector2(0,0), 0.3)
 	tween.parallel().tween_property(aberration.get_material(), "shader_param/g_displacement", Vector2(0, 0), 0.3)
+	yield(tween, "finished")
+	aberration.visible = false
 
 func check_powers():
 	if "Fast_ball" in powers:
@@ -323,7 +330,11 @@ func finish_confusion(other_player):
 func reset_ball_speed(pup):
 	var body = self
 	var players = get_tree().get_nodes_in_group("Player")
-	yield(get_tree().create_timer(8), "timeout")
+	$speed_timer.stop()
+	$speed_timer.start(8)
+	while not $speed_timer.is_stopped():
+		yield(get_tree(), "idle_frame")
+		continue
 	if is_instance_valid(body):
 		if "fast_ball" in Global.game_opt.modifiers:
 			body.max_velocity = 450
@@ -338,6 +349,7 @@ func reset_ball_speed(pup):
 			for player in players:
 				player.ball_impulse = 450
 		body.powers.erase(pup)
+	BgMusic.emit_signal("power_up_finished", pup)
 
 func active_player_pup(texture, pup_name):
 	last_player.power_up_picked(texture, pup_name)

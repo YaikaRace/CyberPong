@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/FightScene-start.mp3-4f5a82ef11d12c545107fddf03dda051.mp3str"
+
+[deps]
+
+source_file="res://sounds/music/FightScene-start.mp3"
+dest_files=[ "res://.import/FightScene-start.mp3-4f5a82ef11d12c545107fddf03dda051.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -1,6 +1,7 @@
 extends StaticBody2D
 
 onready var color_rect = $ColorRect
+onready var is_network = get_tree().network_peer != null
 
 var hits = 0
 var broke = false
@@ -49,7 +50,8 @@ func hit(hit_number):
 		tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 2)
 		$Timer.start(0.8)
 		new_hit_allowed = false
-		rpc_unreliable("rhit", hit_number)
+		if is_network:
+			rpc_unreliable("rhit", hit_number)
 
 remote func rhit(hit_number):
 	if new_hit_allowed:

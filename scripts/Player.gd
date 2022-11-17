@@ -21,6 +21,8 @@ var bullets_node
 var count = 2
 var id = 0
 var is_master
+var velocity = Vector2.ZERO
+
 
 onready var pup_picked_area = $up_power_up
 onready var rectangle = $Rectangle2D
@@ -52,8 +54,9 @@ func _physics_process(delta):
 			elif Input.is_action_pressed(down):
 				motion.y = speed
 			else:
-				motion.y = 0
+				motion.y = velocity.y * speed
 			move_and_collide(motion, inertia)
+			velocity.y = 0
 			if Input.is_action_just_pressed(pup_key):
 				use_power_up(power_up)
 			if player == 1:
@@ -89,12 +92,20 @@ func _input(event):
 	if event is InputEventScreenDrag:
 		if player == 1:
 			if event.position.x < section:
-				var direction = event.position.y+1 / event.position.y+1
-				move_and_collide(Vector2(0, direction * speed))
+				if event.relative.y > 0:
+					velocity.y = 1
+				elif event.relative.y < 0:
+					velocity.y = -1
+				else:
+					velocity.y = 0
 		if player == 2:
 			if event.position.x > section:
-				var direction = event.position.y+1 / event.position.y+1
-				move_and_collide(Vector2(0, direction * speed))
+				if event.relative.y > 0:
+					velocity.y = 1
+				elif event.relative.y < 0:
+					velocity.y = -1
+				else:
+					velocity.y = 0
 
 func impulse_ball(from: int, to: int, body):
 	if body.is_in_group("ball"):
@@ -185,6 +196,7 @@ func use_power_up(pup_name):
 				if player_node.player != player:
 					other_player = player_node
 			$thunder.visible = true
+			tween.tween_property($thunder/thunder1, "frame", 5, 0.2).set_trans(Tween.TRANS_ELASTIC)
 			$"%thunder_sfx".play()
 			yield(get_tree(), "idle_frame")
 			for ray in rays:
@@ -192,8 +204,9 @@ func use_power_up(pup_name):
 					if ray.get_collider() == other_player:
 						other_player.can_move = false
 						break
-			yield(get_tree().create_timer(0.3), "timeout")
+			yield(get_tree().create_timer(0.4), "timeout")
 			$thunder.visible = false
+			$thunder/thunder1.frame = 0
 			yield(get_tree().create_timer(0.9), "timeout")
 			other_player.can_move = true
 		"Boxing_glove":
@@ -206,8 +219,9 @@ func use_power_up(pup_name):
 			pups_render.add_child(glove_ins)
 		"Portal_gun":
 			var portal_pup = load("res://scenes/Power ups/portals_pup.tscn")
+			var prev_pos = $portal_particles.global_position
 			$bullet.visible = true
-			tween.tween_property($bullet, "scale", Vector2(0.2, 0.2), 0.05)
+			tween.tween_property($bullet, "scale", Vector2(0.2, 0.2), 0.2)
 			yield(tween,"finished")
 			$bullet.visible = false
 			$portal_particles.emitting = true
@@ -229,18 +243,26 @@ func use_power_up(pup_name):
 					new_pos = 160
 			#new_pos = Vector2(30, 0) * front_direction
 			$"%portal_gun_sfx".play()
-			tween2.tween_property($portal_particles, "global_position", Vector2(new_pos, $portal_particles.global_position.y), 0.05)
+			tween2.tween_property($portal_particles, "global_position", Vector2(new_pos, $portal_particles.global_position.y), 0.2)
 			var portal_pup_ins = portal_pup.instance()
 			portal_pup_ins.global_position = Vector2(new_pos, $portal_particles.global_position.y)
-			portal_pup_ins.scale = self.scale
-			$portal_particles.emitting = false
+			portal_pup_ins.scale *= front_direction
 			get_parent().add_child(portal_pup_ins)
+			yield(tween2, "finished")
+			$portal_particles.emitting = false
+			$portal_particles.global_position = prev_pos
+			$bullet.scale = Vector2(4, 4)
 		"Blaster":
 			if $Timer.is_stopped():
 				$Timer.start(2)
 				var bullet = load("res://scenes/Power ups/blaster_bullet.tscn")
 				var bullet_ins = bullet.instance()
 				bullet_ins.global_position = global_position + (Vector2(12, 1) * front_direction)
+				tween.tween_property($Blaster_charge, "scale", Vector2(0.3, 0.3), 0.2)
+				$Blaster_charge.visible = true
+				if count > 0:
+					add_powerup("res://scenes/Power ups/Blaster.tscn", "Blaster")
+				yield(tween, "finished")
 				bullet_ins.linear_velocity *= front_direction
 				get_parent().add_child(bullet_ins)
 				bullets_node.get_child(count).visible = false
@@ -258,10 +280,13 @@ func use_power_up(pup_name):
 					elif player == 2:
 						pups_pos = get_parent().get_node("%pup_p2_pos")
 					for pup in pups_children:
-						if not pup is Position2D:
-							if pup.global_position == pups_pos.global_position:
-								pup.queue_free()
+						if is_instance_valid(pup):
+							if not pup is Position2D:
+								if pup.global_position == pups_pos.global_position:
+									pup.queue_free()
 				$"%blaster_sfx".play()
+				$Blaster_charge.visible = false
+				$Blaster_charge.scale = Vector2(4, 4)
 			else:
 				add_powerup("res://scenes/Power ups/Blaster.tscn", "Blaster")
 

@@ -11,12 +11,13 @@ var config = {
 		color = Color(1, 0, 0.25098)
 	},
 	Player2 = {
-		color = Color(0.047059, 0.945098, 1)
+		color = Color(0.188235, 0.011765, 0.85098)
 	},
 	ball = "Common",
 	volume = {
 		general = 1,
-		sfx = 1
+		sfx = 1,
+		music = 1,
 	}
 }
 var game_opt = {
@@ -42,6 +43,7 @@ var player_ids = []
 var net_id
 var master_bus = AudioServer.get_bus_index("Master")
 var sfx_bus = AudioServer.get_bus_index("Sfx")
+var music_bus = AudioServer.get_bus_index("Music")
 
 
 func _ready():
@@ -58,6 +60,7 @@ func _ready():
 		data = parse_json(text)
 		game_opt = str2var(data)
 		file.close()
+	
 
 remote func sync_game_opt(opt):
 	game_opt = opt
@@ -74,6 +77,9 @@ func save_config():
 	file.store_line(var2str(config))
 	file.close()
 	OS.window_fullscreen = config.fullscreen
+	AudioServer.set_bus_volume_db(master_bus, linear2db(config.volume.general))
+	AudioServer.set_bus_volume_db(sfx_bus, linear2db(config.volume.sfx))
+	AudioServer.set_bus_volume_db(music_bus, linear2db(config.volume.music))
 
 func load_config():
 	var file = File.new()
@@ -87,6 +93,7 @@ func load_config():
 	OS.window_fullscreen = config.fullscreen
 	AudioServer.set_bus_volume_db(master_bus, linear2db(config.volume.general))
 	AudioServer.set_bus_volume_db(sfx_bus, linear2db(config.volume.sfx))
+	AudioServer.set_bus_volume_db(music_bus, linear2db(config.volume.music))
 
 func restar_points() -> void:
 	player1_points = 0.0

@@ -4,6 +4,7 @@
 
 [node name="fps_label" type="Label"]
 unique_name_in_owner = true
+visible = false
 margin_top = 165.0
 margin_right = 88.0
 margin_bottom = 179.0

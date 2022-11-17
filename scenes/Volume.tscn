@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://theme/UI.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/Volume.gd" type="Script" id=2]
 [ext_resource path="res://sounds/impact2.wav" type="AudioStream" id=3]
+[ext_resource path="res://scenes/Menu_camera.tscn" type="PackedScene" id=4]
 
 [node name="Volume" type="Control"]
 anchor_right = 1.0
@@ -13,6 +14,10 @@ script = ExtResource( 2 )
 [node name="ColorRect" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -10.0
+margin_top = -10.0
+margin_right = 10.0
+margin_bottom = 10.0
 color = Color( 0.101961, 0.0980392, 0.196078, 1 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -21,9 +26,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -96.5
-margin_top = -34.0
+margin_top = -52.0
 margin_right = 96.5
-margin_bottom = 34.0
+margin_bottom = 52.0
 size_flags_horizontal = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
@@ -52,13 +57,13 @@ margin_right = 193.0
 margin_bottom = 68.0
 size_flags_horizontal = 3
 
-[node name="SFX" type="Label" parent="VBoxContainer/HBoxContainer2"]
+[node name="Music" type="Label" parent="VBoxContainer/HBoxContainer2"]
 margin_top = 12.0
 margin_right = 56.0
 margin_bottom = 20.0
-text = "SFX    "
+text = "Music  "
 
-[node name="SFX_slider" type="HSlider" parent="VBoxContainer/HBoxContainer2"]
+[node name="Music_slider" type="HSlider" parent="VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 margin_left = 60.0
 margin_right = 193.0
@@ -66,6 +71,29 @@ margin_bottom = 32.0
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.1
+ticks_on_borders = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 72.0
+margin_right = 193.0
+margin_bottom = 104.0
+size_flags_horizontal = 3
+
+[node name="SFX" type="Label" parent="VBoxContainer/HBoxContainer3"]
+margin_top = 12.0
+margin_right = 56.0
+margin_bottom = 20.0
+text = "SFX    "
+
+[node name="SFX_slider" type="HSlider" parent="VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+margin_left = 60.0
+margin_right = 193.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+ticks_on_borders = true
 
 [node name="Button" type="Button" parent="."]
 anchor_top = 1.0
@@ -80,6 +108,9 @@ text = "Back"
 stream = ExtResource( 3 )
 bus = "Impact"
 
+[node name="Menu_camera" parent="." instance=ExtResource( 4 )]
+
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/General_slider" to="." method="_on_General_slider_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/HBoxContainer2/SFX_slider" to="." method="_on_SFX_slider_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer2/Music_slider" to="." method="_on_Music_slider_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer3/SFX_slider" to="." method="_on_SFX_slider_value_changed"]
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

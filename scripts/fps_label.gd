@@ -5,6 +5,8 @@ func _ready():
 	pass
 
 func _process(delta):
-	visible = Global.config.fps
-	if visible:
+	if Global.config.fps:
+		visible = true
 		text = String(1/delta)
+	else:
+		visible = false
